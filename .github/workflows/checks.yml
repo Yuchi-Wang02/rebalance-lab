@@ -11,27 +11,38 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install IANA timezone data for Windows
+        if: runner.os == 'Windows'
+        run: python -m pip install tzdata==2026.4
       - name: Validate protocol, evidence status and links
-        run: python3 scripts/validate_design.py
+        run: python -X utf8 scripts/validate_design.py
       - name: Validate published market-pilot results and independent-replay provenance
-        run: python3 scripts/validate_pilot_artifacts.py
+        run: python -X utf8 scripts/validate_pilot_artifacts.py
       - name: Validate stock-pilot results and independent replay
-        run: python3 scripts/validate_stock_pilot_artifacts.py
+        run: python -X utf8 scripts/validate_stock_pilot_artifacts.py
       - name: Test ingestion and research engine with synthetic inputs only
-        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+        run: python -X utf8 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Exercise every synthetic strategy and cost scenario
-        run: python3 scripts/run_synthetic.py --output-dir "$RUNNER_TEMP/spmo-synthetic"
+        run: python -X utf8 scripts/run_synthetic.py --output-dir "$RUNNER_TEMP/spmo-synthetic"
       - name: Exercise all prespecified semiannual calendar phases
-        run: python3 scripts/run_calendar_sensitivity.py --output-dir "$RUNNER_TEMP/spmo-calendar-sensitivity"
+        run: python -X utf8 scripts/run_calendar_sensitivity.py --output-dir "$RUNNER_TEMP/spmo-calendar-sensitivity"
       - name: Check site JavaScript syntax
         run: node --check site/app.js
       - name: Check market-pilot report JavaScript syntax
         run: node --check site/pilot.js
       - name: Check stock-pilot report JavaScript syntax
         run: node --check site/stocks.js
+      - name: Reject incomplete or stale ETF explorer results
+        run: node --test tests/test_pilot_ui.mjs

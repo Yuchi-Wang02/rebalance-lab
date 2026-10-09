@@ -1,13 +1,13 @@
 # Rebalance Lab research index
 
-[Open the research site](https://yuchi-wang02.github.io/SPMO-ETF-test/) or [return to the repository](../README.md). Start with a result, then follow its own method and evidence. These studies answer related questions under different assumptions; they are not interchangeable versions of one backtest.
+[Open the research site](https://yuchi-wang02.github.io/rebalance-lab/) or [return to the repository](../README.md). Start with a result, then follow its own method and evidence. These studies answer related questions under different assumptions; they are not interchangeable versions of one backtest.
 
 ## Read the results
 
 | Study | Start here | Inspect the saved evidence |
 |---|---|---|
-| Fixed 100-issuer cohort, selecting 20 stocks | [Stock findings](studies/stock-pilot.md) · [interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/stocks.html) | [Summary](../site/data/stock-pilot-summary.json) · [reconstruction sensitivity](../site/data/stock-pilot-sensitivity.json) · [independent replay](../site/data/stock-pilot-validation.json) |
-| Nine sector ETFs, selecting up to three | [ETF findings](studies/sector-etf-pilot.md) · [interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html) | [Summary](../site/data/etf-pilot-summary.json) · [all long-period comparisons](../site/data/etf-pilot-full_period.csv) · [annual comparisons](../site/data/etf-pilot-annual.csv) · [2026 comparisons](../site/data/etf-pilot-ytd2026.csv) |
+| Fixed 100-issuer cohort, selecting 20 stocks | [Stock findings](studies/stock-pilot.md) · [interactive report](https://yuchi-wang02.github.io/rebalance-lab/stocks.html) | [Summary](../site/data/stock-pilot-summary.json) · [reconstruction sensitivity](../site/data/stock-pilot-sensitivity.json) · [independent replay](../site/data/stock-pilot-validation.json) |
+| Nine sector ETFs, selecting up to three | [ETF findings](studies/sector-etf-pilot.md) · [interactive report](https://yuchi-wang02.github.io/rebalance-lab/pilot.html) | [Summary](../site/data/etf-pilot-summary.json) · [all long-period comparisons](../site/data/etf-pilot-full_period.csv) · [annual comparisons](../site/data/etf-pilot-annual.csv) · [2026 comparisons](../site/data/etf-pilot-ytd2026.csv) |
 
 The stock study reports 2025 formation/burn-in and 2026 through October 2 separately, with continuous accounts. The ETF study reports the 25 complete years 2001–2025 and keeps its 2026 partial year separate. Read costs, drawdowns, trading activity and source limitations alongside returns.
 
@@ -36,7 +36,7 @@ Install the pinned [market-workflow dependencies](../requirements-pilot.txt) in 
 | ETF independent replay | [Validation findings and commands](validation/pilot-validation.md) · [independent verifier](../scripts/validate_etf_pilot_independent.py) · [saved receipt](../site/data/etf-pilot-validation.json) |
 | Original synthetic engine | [Engine guide](validation/engine.md) · [primary fixture runner](../scripts/run_synthetic.py) · [calendar fixture runner](../scripts/run_calendar_sensitivity.py) |
 | Price-ingestion diagnostics | [Pipeline guide](data/pipeline.md) · [diagnostic runner](../scripts/ingest_diagnostic.py) |
-| Website | [Local preview and publishing](project/publishing.md) · [presentation design](project/site-strategy.md) |
+| Website | [Local preview and publishing](project/publishing.md) · [Windows reproduction](project/local-reproduction.md) · [presentation design](project/site-strategy.md) |
 
 An independent replay checks computation on the same preserved inputs. It does not substitute for independent price, corporate-action or historical-availability evidence. Synthetic tests validate software behavior and do not establish market performance.
 
@@ -54,13 +54,13 @@ Public files contain permitted derived portfolio series, aggregate results, code
 
 - [Evidence record](validation/evidence.md) records source and implementation checks as they happened.
 - The original [protocol](methods/original-stock-protocol.md) and [synthetic engine guide](validation/engine.md) explain the starting design and its remaining acceptance requirements.
-- The [stock freeze](../configs/stock-pilot.design-freeze.json) and [ETF freeze commit](https://github.com/Yuchi-Wang02/SPMO-ETF-test/commit/8bb2e11) preserve each pilot's earlier specification. A retrospective freeze is not prospective registration.
+- The [stock freeze](../configs/stock-pilot.design-freeze.json) and [ETF freeze commit](https://github.com/Yuchi-Wang02/rebalance-lab/commit/8bb2e11) preserve each pilot's earlier specification. A retrospective freeze is not prospective registration.
 - [Machine-readable status](../results/status.json) records the studies separately.
 
 ## Contribute and maintain
 
 - [Contributing guide](../CONTRIBUTING.md): propose a research question, report a problem or prepare a reproducible change.
-- [Repository settings](project/repository-settings.md): the proposed repository name, description and topics, with the owner action still needed to apply them.
+- [Repository settings](project/repository-settings.md): the applied repository name, description and topics, and the publication checks that keep links consistent.
 - [Publishing guide](project/publishing.md): preview and verify the deployed site.
 
 The public identity is **Rebalance Lab**. Historical artifact names remain stable so configurations and source hashes stay traceable.

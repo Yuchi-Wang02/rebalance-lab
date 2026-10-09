@@ -18,9 +18,12 @@ python3 -m unittest discover -s tests -p 'test_*.py' -q
 node --check site/app.js
 node --check site/pilot.js
 node --check site/stocks.js
+node --test tests/test_pilot_ui.mjs
 ```
 
 They check saved artifacts and software behavior. They do not download the private research inputs or independently establish that vendor observations are correct. See the [publishing guide](docs/project/publishing.md) for a local site preview and the [data guide](docs/data/sources.md) for source access.
+
+For PowerShell commands, UTF-8 mode and the exact-byte line-ending policy, see [local checks on Windows](docs/project/local-reproduction.md).
 
 ## Keep results auditable
 

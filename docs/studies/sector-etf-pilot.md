@@ -6,7 +6,7 @@ This is a completed run on historical market prices under an adjusted-price prox
 
 ## The experiment we actually ran
 
-The [pilot protocol](../methods/sector-etf-protocol.md) and [configuration](../../configs/sector-etf-pilot.v1.json) were frozen in commit [`8bb2e11`](https://github.com/Yuchi-Wang02/SPMO-ETF-test/commit/8bb2e11) before calculating this pilot's performance. The research question and historical window were chosen retrospectively. Freezing the implementation does **not** make the results out of sample or prospectively preregistered.
+The [pilot protocol](../methods/sector-etf-protocol.md) and [configuration](../../configs/sector-etf-pilot.v1.json) were frozen in commit [`8bb2e11`](https://github.com/Yuchi-Wang02/rebalance-lab/commit/8bb2e11) before calculating this pilot's performance. The research question and historical window were chosen retrospectively. Freezing the implementation does **not** make the results out of sample or prospectively preregistered.
 
 The investable set is the original nine Select Sector SPDR funds: XLB, XLE, XLF, XLI, XLK, XLP, XLU, XLV and XLY. At each signal date, rank positive risk-adjusted momentum scores and select at most three funds, allocating one-third of post-fee value to each. Unfilled slots stay in zero-interest cash. Monthly and semiannual arms use the same selection, weights and execution rule; frequency is the changed treatment within each signal pair. The primary signal is 252-session momentum skipping the latest 21 sessions; the blended check combines 252/126/63-session scores at 50/30/20 weights.
 

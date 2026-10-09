@@ -4,10 +4,10 @@
 
 **The answer changes with the period, the portfolio and the cost of trading.** Two published pilot experiments compare monthly momentum selection with a fixed March/September schedule. One found a small cumulative advantage for monthly selection; the longer study found lower annualized returns. Both publish the unfavorable comparisons alongside the favorable ones.
 
-[![Research checks](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/workflows/checks.yml/badge.svg)](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/workflows/checks.yml)
-[![Website deployment](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/workflows/pages.yml/badge.svg)](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/workflows/pages.yml)
+[![Research checks](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/checks.yml/badge.svg)](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/checks.yml)
+[![Website deployment](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/pages.yml/badge.svg)](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/pages.yml)
 
-[Explore the research](https://yuchi-wang02.github.io/SPMO-ETF-test/) · [Stock experiment](https://yuchi-wang02.github.io/SPMO-ETF-test/stocks.html) · [ETF experiment](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html) · [Methods and reproduction](docs/README.md)
+[Explore the research](https://yuchi-wang02.github.io/rebalance-lab/) · [Stock experiment](https://yuchi-wang02.github.io/rebalance-lab/stocks.html) · [ETF experiment](https://yuchi-wang02.github.io/rebalance-lab/pilot.html) · [Methods and reproduction](docs/README.md)
 
 ### Two experiments, two different answers
 
@@ -24,8 +24,8 @@ Five basis points means a modeled cost of **0.05% on each purchase or sale**. Ev
 
 ### Inspect an answer, then inspect its limits
 
-- **Stocks:** [interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/stocks.html), [written findings](docs/studies/stock-pilot.md), [aggregate results](site/data/stock-pilot-summary.json), [independent replay](site/data/stock-pilot-validation.json).
-- **ETFs:** [interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html), [written findings](docs/studies/sector-etf-pilot.md), [all calendar/cost comparisons](site/data/etf-pilot-full_period.csv), [independent replay](docs/validation/pilot-validation.md).
+- **Stocks:** [interactive report](https://yuchi-wang02.github.io/rebalance-lab/stocks.html), [written findings](docs/studies/stock-pilot.md), [aggregate results](site/data/stock-pilot-summary.json), [independent replay](site/data/stock-pilot-validation.json).
+- **ETFs:** [interactive report](https://yuchi-wang02.github.io/rebalance-lab/pilot.html), [written findings](docs/studies/sector-etf-pilot.md), [all calendar/cost comparisons](site/data/etf-pilot-full_period.csv), [independent replay](docs/validation/pilot-validation.md).
 
 Both use vendor-adjusted price proxies. Independent implementations reproduce the saved calculations; they do not independently verify every source price or reconstruct dividend payment and spin-off entitlements. The stock study also uses a restricted baseline cohort, issuer capitalization without certified historical publication vintages, and one disclosed price reconstruction. These limitations stay attached to the results.
 

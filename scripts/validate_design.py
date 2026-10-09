@@ -74,7 +74,7 @@ def validate(root: Path) -> list[str]:
     require(engine["run_count"] == 16 and engine["strategy_ids"] == list(arms) and engine["cost_bps"] == common["cost_bps_per_side_scenarios"], "Synthetic receipt must include every arm and cost scenario.")
     require(engine["checks"] and all(v is True for v in engine["checks"].values()), "Synthetic engineering checks must pass.")
     require(engine["config_sha256"] == hashlib.sha256((root / "configs/experiment.v1.json").read_bytes()).hexdigest(), "Synthetic receipt uses a different configuration.")
-    expected_code = {"scripts/run_synthetic.py", *[str(p.relative_to(root)) for p in (root / "spmo_lab").glob("*.py")]}
+    expected_code = {"scripts/run_synthetic.py", *[p.relative_to(root).as_posix() for p in (root / "spmo_lab").glob("*.py")]}
     require(set(engine["code_sha256"]) == expected_code, "Synthetic receipt must identify every engine module.")
     for name, digest in engine["code_sha256"].items():
         require(name in expected_code and hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, "Synthetic receipt code hash mismatch; rerun the fixture.")
