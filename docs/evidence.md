@@ -4,9 +4,11 @@ Source review: October 8, 2026 (America/New_York). Reproducible diagnostic run: 
 
 ## Synthetic engine validation
 
-The October 9 implementation adds the four-arm synthetic engine. A deterministic fictional fixture exercised all 16 strategy/cost combinations. All 9 run-level checks passed; 76 offline tests covered ingestion, signals, portfolio accounting, point-in-time selection and reporting boundaries. Independent accounting checks also reconciled mixed action scenarios against the asset-value identity. These are engineering results, not market performance.
+The October 9 implementation exercises the four-arm synthetic engine and the separate calendar-sensitivity track. A deterministic fictional fixture exercised all 16 primary strategy/cost combinations and 56 supplementary paths: 8 shared monthly controls and 48 semiannual paths. All 9 primary and 14 supplementary run-level checks passed; 88 offline tests covered ingestion, signals, portfolio accounting, point-in-time selection, reporting boundaries and calendar controls. Independent accounting checks also reconciled mixed action scenarios against the asset-value identity. These are engineering results, not market performance.
 
-The [public engineering receipt](../site/data/engine-status.json) records code, configuration and fixture hashes, scenario counts and individual checks without publishing fictional return figures. The [engine guide](engine.md) documents the runnable command and remaining acceptance work. Detailed synthetic ledgers stay in ignored generated-output directories. All 98 files covered by the local run manifest had matching checksums, and daily NAV reconciled to cash plus receivables plus securities value for every path.
+The [primary engineering receipt](../site/data/engine-status.json) and [calendar receipt](../site/data/calendar-sensitivity-status.json) record code, configuration and fixture hashes, scenario counts and individual checks without publishing fictional return figures. The [engine guide](engine.md) and [calendar guide](calendar-sensitivity.md) document runnable commands and remaining acceptance work. Detailed synthetic ledgers stay in ignored generated-output directories. All 98 primary and 339 supplementary files covered by the local manifests had matching checksums. Daily NAV reconciled to cash plus receivables plus securities value for every primary path. All 16 overlapping monthly and March/September paths matched their primary results exactly for ledgers, signals, snapshots and metrics. The primary configuration file remained unchanged.
+
+The calendar exercise retains all 48 comparison rows, with each monthly control referenced six times. These shared controls and overlapping market exposures cannot be counted as independent replications. The homepage foregrounds the primary pair and reports historical-input acceptance, formal engine reconciliation and completed market comparisons as separate outstanding gates.
 
 ## What has been inspected
 
@@ -53,7 +55,7 @@ The source registry distinguishes this sample from authenticated downloads and r
 | Diagnostic reproduced | Fixed inputs pass structural checks and replay produces the same files | SPMO/SPY diagnostic passed; calendar, adjustments and point-in-time semantics remain unaudited |
 | Licensed extraction completed | Entitled data were retrieved for a named query/window | Not completed |
 | Data audit completed | IDs, time semantics, coverage and actions passed acceptance | Not completed |
-| Engine prototype tested | Deterministic tests establish specified accounting and timing behavior | Synthetic implementation and all 16 paths exercised; formal market-engine acceptance remains pending |
+| Engine prototype tested | Deterministic tests establish specified accounting and timing behavior | 16 primary and 56 supplementary synthetic paths exercised; formal market-engine acceptance remains pending |
 | Historical experiment completed | Audited data and frozen code produced the full result set | Not run |
 | Site deployed | A public Pages deployment succeeded and its URL was checked | Determined separately from research readiness |
 

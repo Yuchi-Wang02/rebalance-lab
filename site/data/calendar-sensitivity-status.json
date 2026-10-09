@@ -1,0 +1,87 @@
+{
+  "calendar_is_verified_exchange_calendar": false,
+  "checks": {
+    "all_48_paired_contrasts_retained": true,
+    "cash_initialization_and_no_negative_cash": true,
+    "each_monthly_control_reused_for_six_phases": true,
+    "each_phase_run_has_one_contrast": true,
+    "exactly_48_semiannual_phase_runs": true,
+    "exactly_56_unique_runs": true,
+    "exactly_8_primary_reference_rows": true,
+    "exactly_8_reused_monthly_controls": true,
+    "fees_match_executed_notional": true,
+    "monthly_controls_have_no_phase_override": true,
+    "only_fixed_semiannual_signal_months": true,
+    "reporting_boundaries_and_burn_in_preserved": true,
+    "scheduled_fills_after_decision": true,
+    "synthetic_supplementary_labels_only": true
+  },
+  "code_sha256": {
+    "scripts/run_calendar_sensitivity.py": "e9393113d376316bce125ce2a89fac567c602b5700acf1ab7141d4845dc244b3",
+    "spmo_lab/__init__.py": "354d569a0fff7030fbf87fe5cbefc45e26aec01bed3b7c9eff8a39f67eb7b9ac",
+    "spmo_lab/ledger.py": "fb39f421687d9205824327caf737262d3e98840c1a8752ce01af12d5970a3e04",
+    "spmo_lab/signals.py": "9a6fcef67acce9671a9fe96eb3259ad3268a014712a54c6163fb55f28a4a0aa0",
+    "spmo_lab/simulation.py": "93ee8876c0c735c4d8e1fad70bcaf11aa6f364171bc54b9bb3d572faee1bc412",
+    "spmo_lab/synthetic.py": "38d71ab964796176f231a189525755206ee63389beb0c920f80611f990e11dbf"
+  },
+  "cost_bps_per_side_scenarios": [
+    0,
+    5,
+    10,
+    25
+  ],
+  "data_track": "synthetic",
+  "experiment_track": "calendar_phase_sensitivity",
+  "fixture_sha256": "f3480f132c90ce51bf55b9169711a6073f6327ff7fc5ca443f1d462fb4348dcc",
+  "generated_at_utc": "2026-10-09T02:10:28.989294+00:00",
+  "inference_scope": "within_study_robustness_not_independent_replication",
+  "limitations": [
+    "Fictional securities and prices only",
+    "Fictional calendar is not an exchange calendar",
+    "No audited market-data adapter",
+    "No independent replication or best-phase selection"
+  ],
+  "market_backtest_executed": false,
+  "monthly_control_count": 8,
+  "paired_contrast_count": 48,
+  "phase_pairs": [
+    [
+      1,
+      7
+    ],
+    [
+      2,
+      8
+    ],
+    [
+      3,
+      9
+    ],
+    [
+      4,
+      10
+    ],
+    [
+      5,
+      11
+    ],
+    [
+      6,
+      12
+    ]
+  ],
+  "primary_config_sha256": "0754c1f425d65382457f3a006ca74235f416f5d205f42c1847c8f98f6a0c86b9",
+  "primary_reference_phase": [
+    3,
+    9
+  ],
+  "promote_best_phase": false,
+  "report_all_phases": true,
+  "research_ready": false,
+  "run_id": "20261009T021020852324Z-29e65c15fcfa",
+  "schema_version": 1,
+  "semiannual_run_count": 48,
+  "sensitivity_config_sha256": "fe3fa8e78c19f3c2a1be312615a5586f6d5c9f7fd2cd46af3dd78ffa3bbe50bd",
+  "status": "synthetic_validation_only",
+  "unique_run_count": 56
+}

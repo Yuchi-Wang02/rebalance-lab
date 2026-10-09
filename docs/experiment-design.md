@@ -20,7 +20,7 @@ A second change fixes the YTD interpretation. Buying everything from cash at the
 All other rules are identical. Initial formation, corporate actions, constituent exits and dividend reinvestment are common maintenance exceptions; semiannual does not mean literally two transactions a year.
 
 - **Primary hypothesis:** monthly selection improves net total return under the 12–1 signal. Estimate `return(M12) − return(S12)` in percentage points.
-- **Prespecified replication:** estimate `return(MMIX) − return(SMIX)` under the blended signal.
+- **Within-study robustness:** estimate `return(MMIX) − return(SMIX)` under the blended signal. The pairs share securities, market conditions, data and implementation; agreement is not independent replication.
 - **Secondary interaction:** `(MMIX − SMIX) − (M12 − S12)`. Describe whether the frequency effect changes with the signal; do not select whichever pair happened to win as a new primary result.
 - **Product comparison:** report all four arms beside actual SPMO and SPY. Differences from a real ETF include more than frequency and must not be called frequency alpha.
 
@@ -97,16 +97,32 @@ Apply **5 bps per side** to actual executed notional: each buy and each sell pay
 |---|---|
 | Net total return | Reporting-end NAV / reporting-anchor NAV − 1 |
 | Primary frequency spread | `100 × (net return M12 − net return S12)`, percentage points |
-| Replication and interaction | Same units and same window; definitions above |
+| Within-study robustness and interaction | Same units and same window; definitions above |
 | Maximum drawdown | Minimum of NAV / prior running maximum − 1, using reporting-period daily closes including anchor |
 | Gross traded notional | Sum of absolute executed buy and sell values; also sum each event's traded value / pretrade NAV; no hidden division by two |
-| Cost sensitivity | The same contrasts under all four cost scenarios; separate gross and net paths |
+| Cost sensitivity | Rerun every account under all four cost scenarios; separate gross and net paths |
 | Diagnostics | Monthly returns, holdings count, cash weight, weight drift, issuer concentration, failures and stale marks |
 
 Do not annualize a partial-year realized return and label it a multi-year CAGR. Sharpe is optional only with an explicit risk-free series and short-sample caveat. Net-return spreads are not factor-adjusted alpha. A single observed year, more bootstrap draws or a longer list of strategies cannot erase design-selection bias.
+
+Read net return together with drawdown, extra traded notional and cash exposure. A shallower drawdown accompanied by much more cash is a different tradeoff from the same drawdown at similar exposure. No unagreed risk tolerance converts these measures into a single winner score. Costs affect cash and later trades, so a fee break-even point cannot be inferred by subtracting a linear annual fee estimate from one run; a claimed crossing requires actual reruns and a stated search procedure.
 
 ## 9. Release and extension rules
 
 Before any market result: audit the [data contract](feasibility.md), verify the chosen [source route](data-sources.md), implement and test accounting, freeze the code/configuration/data manifest, and execute every prespecified arm/cost pair. Store the full reporting and burn-in ledgers separately.
 
 The initial release deliberately does not test buffers, a 200-day filter, weekly stops, Turbo variants, parameter sweeps or live trading. They become separate future protocols only after the four-arm result is understood. Report negative outcomes as readily as positive ones.
+
+## 10. Supplementary calendar sensitivity
+
+Keep March/September as the primary semiannual schedule. The supplementary [calendar configuration](../configs/calendar-sensitivity.v1.json) prespecifies all six month pairs: January/July, February/August, March/September, April/October, May/November and June/December. Use each month's last exchange-session close and the same next-open execution rule. Apply the full burn-in separately to every account; changing the schedule also changes its reporting-anchor holdings.
+
+For each signal and cost scenario, report the monthly-minus-semiannual contrast for every pair, including the original March/September pair. Also report the descriptive mean and minimum/maximum of those six contrasts. Do not select the most favorable phase, redefine the primary comparison or present the phases as six independent experiments. They reuse prices, overlap in holdings and share the same market episodes. The mean of phase-level results is not the return of a tradable blended portfolio. See the [calendar sensitivity guide](calendar-sensitivity.md) for execution and output details.
+
+## 11. Longer-history research plan
+
+The fixed 2026 cutoff remains a retrospective case study. A stronger claim about persistence needs a separately frozen multi-year extension after historical coverage is audited. Before running it, publish the exact covered dates, warm-up, initial formation, burn-in, eligible complete calendar years, data versions, all comparisons and cost scenarios. Select the interval by a documented coverage rule rather than by which dates produce attractive returns. No dates or results for that extension are implied by this release.
+
+Use continuing accounts through the accepted interval and report annual paired frequency effects alongside the full-period result. Annual measurement anchors normalize existing portfolios without resetting holdings or charging initial formation again. Show losing years, drawdown episodes, traded notional and cash exposure; adjacent years and different calendar phases are not independent observations. Partial years remain separately labeled. Earlier historical windows are still retrospective research, not automatically untouched holdouts. A genuinely prospective track begins only after a timestamped freeze.
+
+The [research blueprint](research-blueprint.md) explains the decision and presentation priorities. The [data acceptance sample](data-acceptance-sample.md) defines the next evidence needed before a market run.

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "experiment_track": "calendar_phase_sensitivity",
+  "status": "synthetic_validation_only",
+  "primary_config": "configs/experiment.v1.json",
+  "primary_config_sha256": "0754c1f425d65382457f3a006ca74235f416f5d205f42c1847c8f98f6a0c86b9",
+  "primary_reference_phase": [3, 9],
+  "phase_pairs": [[1, 7], [2, 8], [3, 9], [4, 10], [5, 11], [6, 12]],
+  "comparisons": [
+    {"signal": "12-1", "monthly_control": "M12", "semiannual": "S12"},
+    {"signal": "mixed", "monthly_control": "MMIX", "semiannual": "SMIX"}
+  ],
+  "cost_bps_per_side_scenarios": [0, 5, 10, 25],
+  "monthly_control_count": 8,
+  "semiannual_run_count": 48,
+  "unique_run_count": 56,
+  "paired_contrast_count": 48,
+  "only_changed_policy": "semiannual_signal_months",
+  "inference_scope": "within_study_robustness_not_independent_replication",
+  "report_all_phases": true,
+  "promote_best_phase": false,
+  "market_backtest_executed": false,
+  "research_ready": false
+}

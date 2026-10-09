@@ -20,17 +20,17 @@ const arms = {
     compare: 'S12 · change frequency only',
   },
   SMIX: {
-    tag: 'Replication control',
+    tag: 'Within-study robustness control',
     title: 'A broader lens, a slower rhythm.',
-    description: 'Blend long, medium, and shorter momentum horizons while retaining semiannual rebalancing. This is the control for the second frequency comparison.',
+    description: 'Blend long, medium, and shorter momentum horizons while retaining semiannual rebalancing. This is the control for a within-study robustness check, not independent replication.',
     signal: '50% 12–1 + 30% 6–1 + 20% 3–1',
     schedule: 'March / September month-end → next open',
     compare: 'MMIX · change frequency only',
   },
   MMIX: {
-    tag: 'Replication comparison',
-    title: 'Does the finding travel?',
-    description: 'Rebalance the blended signal monthly. Compare with SMIX to see whether the frequency effect also appears under a different, prespecified signal.',
+    tag: 'Within-study robustness comparison',
+    title: 'The same question, a blended signal.',
+    description: 'Rebalance the blended signal monthly. Compare with SMIX to see whether the frequency effect also appears under a different, prespecified signal. Both comparisons use the same market history.',
     signal: '50% 12–1 + 30% 6–1 + 20% 3–1',
     schedule: 'Every month-end → next open',
     compare: 'SMIX · change frequency only',
@@ -98,6 +98,24 @@ document.addEventListener('keydown', (event) => {
     menuToggle.focus();
   }
 });
+
+// Keep deep links usable when the requested evidence lives in a closed section.
+function revealHashTarget() {
+  const target = document.getElementById(window.location.hash.slice(1));
+  if (!target) return;
+  let parent = target;
+  let opened = false;
+  while (parent) {
+    if (parent.tagName === 'DETAILS' && !parent.open) {
+      parent.open = true;
+      opened = true;
+    }
+    parent = parent.parentElement;
+  }
+  if (opened) requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+}
+window.addEventListener('hashchange', revealHashTarget);
+revealHashTarget();
 
 function validateDiagnosticSummary(summary) {
   const countFields = ['rows', 'complete_ohlc_rows', 'missing_ohlc_rows', 'invalid_ohlc_rows', 'error_count', 'warning_count'];

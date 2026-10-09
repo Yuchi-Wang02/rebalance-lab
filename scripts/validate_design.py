@@ -62,7 +62,7 @@ def validate(root: Path) -> list[str]:
     require(common["execution_time"] == "next_exchange_session_open", "Closing signals cannot trade at that same close.")
     require(common["cost_bps_per_side_base"] == 5 and sorted(common["cost_bps_per_side_scenarios"]) == [0, 5, 10, 25], "Prespecified cost scenarios changed.")
     comparisons = config["comparisons"]
-    require(comparisons["primary_frequency"] == ["M12", "S12"] and comparisons["replication_frequency"] == ["MMIX", "SMIX"], "Primary and replication comparisons must not be swapped after seeing outcomes.")
+    require(comparisons["primary_frequency"] == ["M12", "S12"] and comparisons["replication_frequency"] == ["MMIX", "SMIX"], "Primary and within-study robustness comparisons must not be swapped after seeing outcomes.")
     require(comparisons["interaction"] == {"positive_pair": ["MMIX", "SMIX"], "negative_pair": ["M12", "S12"]}, "Interaction definition disagrees with the protocol.")
     known = set(arms) | set(config["benchmarks"]["tradeable"])
     for pair in comparisons["product_context"]:
@@ -78,6 +78,24 @@ def validate(root: Path) -> list[str]:
     require(set(engine["code_sha256"]) == expected_code, "Synthetic receipt must identify every engine module.")
     for name, digest in engine["code_sha256"].items():
         require(name in expected_code and hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, "Synthetic receipt code hash mismatch; rerun the fixture.")
+    sensitivity_path = root / "configs/calendar-sensitivity.v1.json"
+    sensitivity = json.loads(sensitivity_path.read_text())
+    calendar = json.loads((root / "site/data/calendar-sensitivity-status.json").read_text())
+    primary_hash = hashlib.sha256((root / "configs/experiment.v1.json").read_bytes()).hexdigest()
+    phases = [[month, month + 6] for month in range(1, 7)]
+    require(sensitivity["phase_pairs"] == calendar["phase_pairs"] == phases, "Calendar sensitivity must retain all six prespecified phases.")
+    require(sensitivity["primary_reference_phase"] == calendar["primary_reference_phase"] == [3, 9], "The primary March/September schedule cannot change.")
+    require(sensitivity["primary_config_sha256"] == calendar["primary_config_sha256"] == primary_hash, "Calendar sensitivity must reference the unchanged primary configuration.")
+    require(calendar["sensitivity_config_sha256"] == hashlib.sha256(sensitivity_path.read_bytes()).hexdigest(), "Calendar receipt uses a different supplementary specification.")
+    for record in (sensitivity, calendar):
+        require(record["experiment_track"] == "calendar_phase_sensitivity" and record["market_backtest_executed"] is False and record["research_ready"] is False, "Calendar sensitivity must remain a separately labeled non-market exercise.")
+        require(record["report_all_phases"] is True and record["promote_best_phase"] is False, "Every phase must be reported without promoting a winner.")
+        require([record[k] for k in ("monthly_control_count", "semiannual_run_count", "unique_run_count", "paired_contrast_count")] == [8, 48, 56, 48], "Calendar counts must reflect reused monthly controls and all paired contrasts.")
+    require(calendar["data_track"] == "synthetic" and calendar["checks"] and all(v is True for v in calendar["checks"].values()), "Calendar receipt must retain passing synthetic checks.")
+    calendar_code = (expected_code - {"scripts/run_synthetic.py"}) | {"scripts/run_calendar_sensitivity.py"}
+    require(set(calendar["code_sha256"]) == calendar_code, "Calendar receipt must identify the supplementary runner and every engine module.")
+    for name, digest in calendar["code_sha256"].items():
+        require(name in calendar_code and hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, "Calendar receipt code hash mismatch; rerun the supplementary fixture.")
     summary = json.loads((root / "site/data/ingestion-summary.json").read_text())
     diagnostic = status["price_ingestion_diagnostic"]
     require(summary["research_ready"] is False and diagnostic["research_ready"] is False and diagnostic["full_dataset_audited"] is False, "Price diagnostics cannot certify the research dataset.")
@@ -138,7 +156,7 @@ def main():
         print(f"FAIL: {error}", file=sys.stderr)
     if errors:
         return 1
-    print("PASS: limited protocol, factorial controls, source registry, status and local link checks.")
+    print("PASS: limited protocol, primary/supplementary controls, source registry, status and local link checks.")
     print("NOT RUN by this command: engine tests, market-data audit or market backtest. Synthetic execution has a separate receipt.")
     return 0
 

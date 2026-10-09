@@ -6,7 +6,7 @@ Daily research on several hundred securities is technically manageable. The limi
 
 ## What the data must support
 
-The [experiment design](experiment-design.md) defines four arms: S12 and M12 use 12–1 momentum; SMIX and MMIX use the 50/30/20 blend. Within each signal pair, only the selection frequency changes. The primary contrast is M12−S12; MMIX−SMIX is the prespecified replication. Actual SPMO and SPY provide product context, not evidence that frequency alone caused a difference.
+The [experiment design](experiment-design.md) defines four arms: S12 and M12 use 12–1 momentum; SMIX and MMIX use the 50/30/20 blend. Within each signal pair, only the selection frequency changes. The primary contrast is M12−S12; MMIX−SMIX is a prespecified within-study robustness check. These pairs share observations and exposures, so the second pair is not independent replication. Actual SPMO and SPY provide product context, not evidence that frequency alone caused a difference.
 
 All four arms select the top 75 eligible positive-score securities, with no selection buffer, trend filter, or weekly risk overlay. Weights are proportional to `positive score × sqrt(security-class total market capitalization)`. Normalize the selected weights and iteratively redistribute amounts above the 8% security cap; retain only amounts that cannot be allocated within the cap. There is **no N/75 equity budget**. With no eligible securities, hold cash. A supplier data gap is an audit failure, not permission to omit a security quietly.
 
@@ -68,9 +68,11 @@ No tier may disguise missing data as zero returns. Preserve unavailable states a
 | 3. Audit inputs | Normalized tables, source hashes, coverage and exception reports | Required burn-in and signal history are present; membership, identifiers, opening prices, actions, and historical cap reconcile. No unexplained critical gaps or silent omissions. |
 | 4. Validate engine | Deterministic accounting and timing checks | The synthetic prototype exercises signals, splits, dividends, fees, point-in-time selection, cash conservation and unfilled orders. Formal acceptance still requires broader event coverage and independent reconciliation; the implemented checks are described in the [engine guide](engine.md). |
 | 5. Reconcile market run | Inspectable fills, positions, NAV, and reference comparisons | Trace representative trades and events to sources. Explain material differences between reconstructed ETF returns and published reference conventions. |
-| 6. Publish results | All four arms and cost scenarios, diagnostics, limitations | Reproduce from the same code/config/data versions. Present primary, replication, and interaction contrasts without selecting only favorable outcomes. |
+| 6. Publish results | All four arms and cost scenarios, diagnostics, limitations | Reproduce from the same code/config/data versions. Present the primary, within-study robustness and interaction contrasts without selecting only favorable outcomes. |
 
 A future paper track begins after a frozen version is published, with signals recorded before their intended fills. It must not backfill predictions or relabel the retrospective 2026 run as prospective validation.
+
+The [acceptance-sample request](data-acceptance-sample.md) turns the data contract into a small, reviewable provider sample before full extraction. The [research blueprint](research-blueprint.md) defines the evidence hierarchy; the separately labeled [calendar-sensitivity protocol](calendar-sensitivity.md) assesses all six semiannual schedules without changing the primary March/September control.
 
 ## Output contract
 

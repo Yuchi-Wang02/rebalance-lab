@@ -19,6 +19,33 @@ NY = ZoneInfo("America/New_York")
 POLICY_KEYS = ("protocol_version", "timezone", "currency", "universe", "signal_definition",
                "common", "arms", "benchmarks", "comparisons", "metrics", "deferred")
 SUPPORTED_POLICY_SHA256 = "c181a0a92be68a1a74bbbc1212fbc38ff6e6cb47d613ff714030154e5ed97c70"
+PRIMARY_CONFIG_SHA256 = "0754c1f425d65382457f3a006ca74235f416f5d205f42c1847c8f98f6a0c86b9"
+PRIMARY_CONFIG_CANONICAL_SHA256 = "5055917956fceb22a0a6d4d9e5fe8c856a9e17d25bec18b74b5b7c6d48df942f"
+CALENDAR_PHASES = ((1, 7), (2, 8), (3, 9), (4, 10), (5, 11), (6, 12))
+CALENDAR_SENSITIVITY_SPEC = {
+    "schema_version": 1,
+    "experiment_track": "calendar_phase_sensitivity",
+    "status": "synthetic_validation_only",
+    "primary_config": "configs/experiment.v1.json",
+    "primary_config_sha256": PRIMARY_CONFIG_SHA256,
+    "primary_reference_phase": [3, 9],
+    "phase_pairs": [list(pair) for pair in CALENDAR_PHASES],
+    "comparisons": [
+        {"signal": "12-1", "monthly_control": "M12", "semiannual": "S12"},
+        {"signal": "mixed", "monthly_control": "MMIX", "semiannual": "SMIX"},
+    ],
+    "cost_bps_per_side_scenarios": [0, 5, 10, 25],
+    "monthly_control_count": 8,
+    "semiannual_run_count": 48,
+    "unique_run_count": 56,
+    "paired_contrast_count": 48,
+    "only_changed_policy": "semiannual_signal_months",
+    "inference_scope": "within_study_robustness_not_independent_replication",
+    "report_all_phases": True,
+    "promote_best_phase": False,
+    "market_backtest_executed": False,
+    "research_ready": False,
+}
 
 
 class SimulationError(ValueError):
@@ -33,6 +60,22 @@ def validate_protocol(config):
         raise SimulationError("Incomplete or malformed experiment policy.") from error
     if hashlib.sha256(policy.encode()).hexdigest() != SUPPORTED_POLICY_SHA256:
         raise SimulationError("Only the frozen v0.2 policy is implemented; policy changes require implementation review.")
+
+
+def validate_calendar_sensitivity(config, sensitivity, primary_config_sha256):
+    """Bind this supplementary track to the complete, unchanged primary file."""
+    validate_protocol(config)
+    try:
+        primary = json.dumps(config, sort_keys=True, separators=(",", ":"), allow_nan=False)
+        supplied = json.dumps(sensitivity, sort_keys=True, separators=(",", ":"), allow_nan=False)
+        expected = json.dumps(CALENDAR_SENSITIVITY_SPEC, sort_keys=True, separators=(",", ":"))
+    except (TypeError, ValueError) as error:
+        raise SimulationError("Malformed calendar sensitivity configuration.") from error
+    if (primary_config_sha256 != PRIMARY_CONFIG_SHA256
+            or hashlib.sha256(primary.encode()).hexdigest() != PRIMARY_CONFIG_CANONICAL_SHA256):
+        raise SimulationError("Calendar sensitivity requires the unchanged primary configuration and file hash.")
+    if supplied != expected:
+        raise SimulationError("Only the fixed six-phase calendar sensitivity specification is implemented.")
 
 
 @dataclass(frozen=True)
@@ -206,7 +249,8 @@ def metrics_for(daily, trades, anchor, end):
             "reporting_close_count": len(report)}
 
 
-def run_arm(data: Dataset, config: Mapping, strategy_id: str, cost_bps: float, initial_cash=1_000_000.0):
+def run_arm(data: Dataset, config: Mapping, strategy_id: str, cost_bps: float, initial_cash=1_000_000.0,
+            *, experiment_track="primary", calendar_phase=None):
     validate_protocol(config)
     validate_dataset(data)
     if strategy_id not in config["arms"] or cost_bps not in config["common"]["cost_bps_per_side_scenarios"]:
@@ -222,6 +266,22 @@ def run_arm(data: Dataset, config: Mapping, strategy_id: str, cost_bps: float, i
     if initial_index < max(config["signal_definition"]["lookback_sessions"]):
         raise SimulationError("Fixture does not include the configured signal warmup.")
     arm = config["arms"][strategy_id]
+    if experiment_track not in ("primary", "calendar_phase_sensitivity"):
+        raise SimulationError("Unknown experiment track.")
+    if experiment_track == "primary":
+        if calendar_phase is not None:
+            raise SimulationError("A calendar phase override requires the explicit supplementary experiment track.")
+        semiannual_months = config["common"]["semiannual_signal_months"]
+    elif arm["rebalance"] == "semiannual":
+        if (not isinstance(calendar_phase, (list, tuple))
+                or any(type(month) is not int for month in calendar_phase)
+                or tuple(calendar_phase) not in CALENDAR_PHASES):
+            raise SimulationError("A supplementary semiannual run requires one of the six fixed calendar phases.")
+        semiannual_months = calendar_phase
+    else:
+        if calendar_phase is not None:
+            raise SimulationError("Monthly controls cannot have a calendar phase override.")
+        semiannual_months = config["common"]["semiannual_signal_months"]
     ledger = Ledger(initial_cash, cost_bps=cost_bps)
     cap_index = {}
     for cap in data.capitalizations:
@@ -266,14 +326,16 @@ def run_arm(data: Dataset, config: Mapping, strategy_id: str, cost_bps: float, i
             snapshots[session.day] = {"positions": dict(ledger.positions), "cash": ledger.cash,
                                       "receivables": snapshot["receivables"], "nav": snapshot["nav"]}
         if index == initial_index or selection_due(data.sessions, index, arm["rebalance"],
-                                                  config["common"]["semiannual_signal_months"]):
+                                                  semiannual_months):
             if session.day < period["report_end_close"]:
                 pending_targets, records = _signal_targets(data, config, arm, index, cap_index)
                 pending_decision = session.day
                 decisions.extend(records)
         previous_members = current_members
     metrics = metrics_for(daily, ledger.trades, period["report_anchor_close"], period["report_end_close"])
-    return {"data_track": "synthetic", "strategy_id": strategy_id, "cost_bps": cost_bps,
+    return {"data_track": "synthetic", "experiment_track": experiment_track,
+            "calendar_phase": list(semiannual_months) if arm["rebalance"] == "semiannual" else None,
+            "strategy_id": strategy_id, "cost_bps": cost_bps,
             "daily": daily, "trades": ledger.trades, "signals": decisions,
             "corporate_actions": ledger.events, "exceptions": ledger.exceptions,
             "snapshots": snapshots, "metrics": metrics}
@@ -283,3 +345,51 @@ def run_matrix(data, config):
     return [run_arm(data, config, strategy, cost)
             for strategy in config["arms"]
             for cost in config["common"]["cost_bps_per_side_scenarios"]]
+
+
+def run_calendar_matrix(data, config, sensitivity, *, primary_config_sha256):
+    """Run every fixed phase, reusing each monthly control across six contrasts.
+
+    These synthetic comparisons check implementation and within-study calendar
+    sensitivity. They are not independent evidence or a schedule-selection rule.
+    """
+    validate_calendar_sensitivity(config, sensitivity, primary_config_sha256)
+    monthly_controls, phase_runs, phase_table = [], [], []
+    for comparison in sensitivity["comparisons"]:
+        monthly_strategy, slow_strategy = comparison["monthly_control"], comparison["semiannual"]
+        for cost in sensitivity["cost_bps_per_side_scenarios"]:
+            monthly = run_arm(data, config, monthly_strategy, cost,
+                              experiment_track="calendar_phase_sensitivity")
+            monthly["strategy_run_id"] = f"{monthly_strategy}-{cost}bps-monthly-control"
+            monthly["run_role"] = "monthly_control"
+            monthly_controls.append(monthly)
+            for pair in sensitivity["phase_pairs"]:
+                slow = run_arm(data, config, slow_strategy, cost,
+                               experiment_track="calendar_phase_sensitivity", calendar_phase=pair)
+                slow["strategy_run_id"] = f"{slow_strategy}-{cost}bps-phase-{pair[0]:02d}-{pair[1]:02d}"
+                slow["run_role"] = "semiannual_phase"
+                phase_runs.append(slow)
+                fast_metrics, slow_metrics = monthly["metrics"], slow["metrics"]
+                phase_table.append({
+                    "data_track": "synthetic", "experiment_track": "calendar_phase_sensitivity",
+                    "signal": comparison["signal"], "calendar_phase": list(pair),
+                    "is_primary_reference_phase": pair == sensitivity["primary_reference_phase"],
+                    "cost_bps": cost, "monthly_control_id": monthly["strategy_run_id"],
+                    "semiannual_run_id": slow["strategy_run_id"],
+                    "monthly_strategy": monthly_strategy, "semiannual_strategy": slow_strategy,
+                    "monthly_net_total_return": fast_metrics["net_total_return"],
+                    "semiannual_net_total_return": slow_metrics["net_total_return"],
+                    "net_return_difference_percentage_points": 100 * (
+                        fast_metrics["net_total_return"] - slow_metrics["net_total_return"]),
+                    "monthly_maximum_drawdown": fast_metrics["maximum_drawdown"],
+                    "semiannual_maximum_drawdown": slow_metrics["maximum_drawdown"],
+                    "drawdown_difference_percentage_points": 100 * (
+                        fast_metrics["maximum_drawdown"] - slow_metrics["maximum_drawdown"]),
+                    "monthly_two_sided_turnover": fast_metrics["two_sided_turnover"],
+                    "semiannual_two_sided_turnover": slow_metrics["two_sided_turnover"],
+                    "extra_two_sided_turnover": fast_metrics["two_sided_turnover"] - slow_metrics["two_sided_turnover"],
+                    "monthly_reporting_cost": fast_metrics["reporting_cost"],
+                    "semiannual_reporting_cost": slow_metrics["reporting_cost"],
+                    "extra_reporting_cost": fast_metrics["reporting_cost"] - slow_metrics["reporting_cost"],
+                })
+    return {"monthly_controls": monthly_controls, "phase_runs": phase_runs, "phase_table": phase_table}

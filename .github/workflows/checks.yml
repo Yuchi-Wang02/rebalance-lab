@@ -23,5 +23,7 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Exercise every synthetic strategy and cost scenario
         run: python3 scripts/run_synthetic.py --output-dir "$RUNNER_TEMP/spmo-synthetic"
+      - name: Exercise all prespecified semiannual calendar phases
+        run: python3 scripts/run_calendar_sensitivity.py --output-dir "$RUNNER_TEMP/spmo-calendar-sensitivity"
       - name: Check site JavaScript syntax
         run: node --check site/app.js

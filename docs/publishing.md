@@ -17,7 +17,7 @@ Inspect the local server in a browser. Stop it when finished. A local preview do
 
 ## GitHub Pages
 
-The independent **Research checks** workflow validates the protocol, ingestion/engine tests and JavaScript syntax on pushes and pull requests. It also executes all 16 synthetic strategy/cost paths in the runner's temporary directory. It does not require Pages activation or live provider requests.
+The independent **Research checks** workflow validates the protocol, ingestion/engine tests and JavaScript syntax on pushes and pull requests. It executes the 16 primary synthetic paths and the separate six-phase sensitivity exercise in the runner's temporary directory. It does not require Pages activation or live provider requests.
 
 The **Validate and publish research site** workflow validates the design and uploads only `site/` after a push to `main` or a manual dispatch. It then checks Pages configuration through GitHub's API. If no site exists, the build keeps its downloadable static artifact, adds an explicit activation notice, and skips deployment. If the source is GitHub Actions, it deploys using GitHub's official Pages action. Other publishing sources are left unchanged; unexpected API errors fail visibly.
 

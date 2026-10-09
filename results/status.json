@@ -6,6 +6,13 @@
   "engine_status": "synthetic_prototype",
   "formal_engine_accepted": false,
   "synthetic_validation_summary": "site/data/engine-status.json",
+  "calendar_phase_sensitivity": {
+    "specification": "configs/calendar-sensitivity.v1.json",
+    "summary_path": "site/data/calendar-sensitivity-status.json",
+    "data_track": "synthetic",
+    "market_backtest_executed": false,
+    "research_ready": false
+  },
   "data_audit_completed": false,
   "returns": null,
   "reason": "Price diagnostics and a synthetic-only engine are implemented; audited historical-universe data, full corporate-action support and market reconciliation remain pending.",
