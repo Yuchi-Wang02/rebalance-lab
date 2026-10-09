@@ -1,88 +1,88 @@
 # SPMO Fast Lab
 
-**保留 SPMO 风格，更频繁地换仓，是否值得付出额外交易成本？**
+**Can momentum move faster without paying away the edge?**
 
-这是一个自定义动量组合的研究项目，第一步聚焦 2026 年的探索性实验。它不是已发行 ETF，也不代表 Invesco 或 S&P Dow Jones Indices 的官方产品。
+A reproducible research project about faster portfolio rotation within the S&P 500. The aim is to test a plausible idea—not to advertise an ETF, recommend trades, or assume that more trading produces better returns.
 
-> **当前状态：实验设计 v0.1。没有真实市场回测结果，也没有已验证的策略收益。**
-> 本仓库提供研究方案、数据验收要求和机器可读配置；回测引擎、行情接入和结果图表尚未实现。配置检查通过不等于策略有效。
+**Current release: protocol v0.2 and website preview. No market backtest has been run.** Source documentation has been reviewed, but historical datasets have not been acquired or audited. The repository contains a research design, source registry, validation tools, and a static GitHub Pages site; it does not yet contain a backtest engine.
 
-## 要回答的问题
+## The research question
 
-1. **频率有没有价值？** 对完全相同的 Fast 规则，只把半年调仓改为月度，比较扣费后的结果。
-2. **整体方案是否有竞争力？** 将月度 Fast 与实际 SPMO、SPY 在相同可成交起点下比较。
-3. **改动分别贡献什么？** 分步加入多周期信号、持股数与缓冲、平方根市值权重、入场趋势过滤。周度风控留到第二阶段。
+Holding the investment universe, portfolio construction, and cost model constant, does monthly selection improve net results over semiannual selection? Does the answer change when a shorter-horizon momentum blend replaces a single 12–1 signal?
 
-“更快发现赢家”“更早退出旧趋势”是待检验假设。频率提高也可能带来更多噪声交易、成本和反转损失。
+| | 12–1 momentum | 50/30/20 blend of 12–1, 6–1, 3–1 |
+|---|---|---|
+| Semiannual selection | **S12** | **SMIX** |
+| Monthly selection | **M12** | **MMIX** |
 
-## 实验结构
+All four arms use the same Top 75 rule, positive-score eligibility, score × square-root historical security market capitalization, and 8% target security cap. Buffers, moving-average entry filters, and weekly exits are deferred. This makes the primary comparison easier to interpret than changing several rules at once.
 
-```mermaid
-flowchart LR
-    D[当时可知的成分、价格、市值与公司行动] --> Q{数据验收}
-    Q -->|通过| S[冻结规则与时间戳]
-    Q -->|不通过| X[停止正式收益比较]
-    S --> L[Fast 规则：半年调仓]
-    S --> F[相同 Fast 规则：月度调仓]
-    S --> B[实际 SPMO / SPY]
-    L --> R[统一成交、成本和记账后比较]
-    F --> R
-    B --> R
-    R --> O[收益、回撤、成交额、成本与局限]
-```
+- **Primary contrast:** M12 minus S12, after trading costs.
+- **Prespecified replication:** MMIX minus SMIX.
+- **Descriptive interaction:** the difference between those two frequency effects.
+- **Real-world context:** actual SPMO and SPY. Neither is a controlled test of selection frequency.
 
-| 项目 | 本版建议默认值 |
-|---|---|
-| 探索窗口 | 2025-12-31 收盘至 2026-10-02 收盘；保留此前讨论的截止日 |
-| 初始资金 | 所有可交易比较组合均从现金开始，2026 年首个交易日开盘建仓 |
-| 股票池 | 当时有效且当时可知的 S&P 500 成分证券，不能用今天的名单回填 |
-| Fast 信号 | 12–1 / 6–1 / 3–1 交易月风险调整动量，50% / 30% / 20% |
-| 选股与权重 | 目标 75 只，明确的 60/100 缓冲规则；正动量分数 × 历史市值平方根 |
-| 仓位限制 | 调仓目标单证券上限 8%；漂移期间不自动触发日内交易 |
-| 成交 | 月末收盘生成信号，下一交易日开盘执行；不以同一收盘价成交 |
-| 成本 | 买卖各 5 bps；另看 0 / 10 / 25 bps 单边成本情景 |
-| 主指标 | 净总回报差，单位为百分点；风险与成交额同时披露 |
+These are proposed research rules, not an official replication of the SPMO index. Read the [full experiment protocol](docs/experiment-design.md).
 
-这些参数是**研究建议**，不是用户已经选定的最优参数，也不是官方 SPMO 规则。完整定义见[实验设计](docs/experiment-design.md)。所有组合的交易成本都计入首次建仓；期末按市值计价，不假装完成清算。标准 ETF 年末收盘到截止日收盘的 YTD 另列参考，不与首日开盘建仓的策略混作公平主比较。
+## A proper YTD starting point
 
-## 可行性判断
+The original investigation ends on **October 2, 2026**, and that cutoff remains fixed. Each portfolio is initialized from cash at the first trading open of 2025 and runs through 2025 to establish its own holdings. Its December 31, 2025 closing NAV is then normalized to 100 for the 2026 YTD measurement.
 
-**研究工程可以推进；严谨回测的关键前提是历史数据。** 日频、数百只证券的规则策略适合普通 Python 开发环境。当前尚未做性能基准，不能把工程判断当作实测运行结果。
+This avoids granting the semiannual strategy an extra January 2026 formation. Request data from **December 1, 2023** to cover the first signal's warmup. Initialization costs remain in the 2025 ledger; they are not charged again at the reporting boundary. The 2026 period is **retrospective and exploratory**, because its market developments informed the idea.
 
-历史成分、当时可知的市值、退市与公司行动缺一不可。当前成分 + 免费行情可以帮助调试，但不能悄悄升级为无幸存者偏差的正式结论。2026 年行情已经影响了策略构思，因此这段回测是探索性的，不能称为真正未见过的样本外证据。
+## Where the data will come from
 
-详见[数据要求与可行性](docs/feasibility.md)、[证据与来源边界](docs/evidence.md)。
+| Route | Practical connection | What it can support | Remaining gate |
+|---|---|---|---|
+| Free diagnostic | [yfinance](https://pypi.org/project/yfinance/) | Small price/action samples and benchmark pipeline development | Not a historical constituent, delisting, or point-in-time capitalization solution; usage rights require review |
+| Institutional research | [WRDS](https://wrds-www.wharton.upenn.edu/) / licensed CRSP export | Candidate integrated identifiers, membership, returns, actions and share histories | Entitlement, exact tables, opening prices, vintage semantics and coverage must be verified; the SDK uses PostgreSQL, not HTTPS |
+| Licensed API components | [Nasdaq Data Link](https://data.nasdaq.com/) / SHARADAR candidates | HTTPS table extraction for candidate prices, fundamentals and identifiers | Table contracts and subscription unverified; a separate audited historical-membership source is still required |
+| Windows-assisted export | [Norgate Data](https://pypi.org/project/norgatedata/) | Documented historical-constituent and price APIs with appropriate subscription | Requires Windows updater; documented market-cap fundamentals are current values, not a historical PIT cap series |
 
-## 仓库导航
+**Recommended next step:** audit a small institutional export if access already exists. Otherwise start with a clearly labeled free diagnostic and obtain a licensed-data coverage sample before committing to a provider. No subscription purchase or institutional access is assumed.
 
-| 文件 | 用途 |
-|---|---|
-| [实验设计](docs/experiment-design.md) | 对照组、规则、指标、决策标准及统计限制 |
-| [可行性与数据契约](docs/feasibility.md) | 数据门槛、工程阶段与验收条件 |
-| [证据说明](docs/evidence.md) | 哪些内容已读取、哪些尚未核实 |
-| [实验配置](configs/experiment.v1.json) | 版本化候选规则、比较关系、成本情景 |
-| [状态文件](results/status.json) | 明确标记尚无市场回测结果 |
-| [配置检查器](scripts/validate_design.py) | 检查控制组只改变频率、信号权重、时间和本地文档链接 |
+The [data connection guide](docs/data-sources.md) gives links, SDK entry points, authentication requirements, expected outputs, and unresolved gaps. The [data contract](docs/feasibility.md) defines what must pass before a result can be published. A successful API request is not a data-quality certificate.
 
-## 本地检查
+## The public site
 
-需要 Python 3.12 或更高版本，无第三方依赖：
+The [static site source](site/index.html) is designed for curious ETF investors first and quantitative reviewers second. It explains the hypothesis, lets visitors explore the four-arm design, illustrates cost arithmetic, and makes data readiness visible. It intentionally has no invented equity curves.
+
+![SPMO Fast Lab website preview: research question and scheduled selection calendar](docs/assets/site-preview.png)
+
+[Audience and page strategy](docs/site-strategy.md) explains the design. [Pages deployment instructions](docs/publishing.md) distinguish a local preview from a verified public deployment. A deployment workflow is included; hosting still depends on repository Pages permissions and settings.
+
+## Run the available checks
+
+Python 3.12+; no third-party dependencies are needed for the design checks or static site.
 
 ```bash
-cd /workspace/SPMO-ETF-test
 python3 scripts/validate_design.py
+python3 scripts/check_source_access.py
 ```
 
-其他机器在克隆后的仓库根目录运行第二行即可。这个命令只验证**研究配置与文档一致性的有限检查项**，不会下载行情、运行回测或生成收益。云任务使用已有 checkout，无需额外创建 Git worktree。
+The first command checks a limited set of protocol invariants, factorial contrasts, source-registry structure, and local links. The second makes credential-free documentation requests and reports reachability; it does not acquire market data or prove subscription access. Network errors are reported as failed probes, not as evidence that a dataset does not exist.
 
-## 下一步与结果发布门槛
+To inspect the site locally, run `python3 -m http.server 8000 --directory site` from the repository root and use a local browser. Cloud tasks use the existing checkout; an extra Git worktree is unnecessary.
 
-- [x] 阅读原始讨论，明确研究目标及既有结果缺口。
-- [x] 写出候选规则、频率对照、消融方案和数据要求。
-- [ ] 获取有来源与时间戳的历史数据，完成覆盖和公司行动审计。
-- [ ] 实现回测引擎，验证成交延迟、现金、分红、拆分、退市和费用记账。
-- [ ] 冻结代码、配置和数据版本，执行真实市场实验。
-- [ ] 发布由代码生成的净值曲线、月度收益、交易记录和全部预设比较。
-- [ ] 从规则冻结后的首个可用交易日起记录前瞻模拟；不能回填成实时记录。
+## Repository map
 
-结果必须包含代码提交号、配置哈希、数据清单、明确的价格/总回报口径和失败记录。没有完成数据验收的数字不进入正式排名。原始聊天、凭据和未经许可的市场数据不放入仓库。
+| Path | Purpose |
+|---|---|
+| [Experiment protocol](docs/experiment-design.md) | Hypotheses, exact rules, timing, evaluation and limitations |
+| [Data connection guide](docs/data-sources.md) | Concrete provider routes and verification status |
+| [Feasibility and data contract](docs/feasibility.md) | Fields, quality gates, implementation stages and output schema |
+| [Evidence record](docs/evidence.md) | What was actually inspected and what remains unverified |
+| [Experiment configuration](configs/experiment.v1.json) | Machine-readable protocol v0.2; filename retained for existing links |
+| [Source registry](configs/data-sources.json) | Provider documentation, connection routes and gaps |
+| [Research status](results/status.json) | Explicit machine-readable absence of market results |
+| [Website](site/index.html) | Static, dependency-free public presentation |
+
+## Release gates
+
+1. **Protocol and source plan:** documented in this release; parameters remain proposed until frozen before a market run.
+2. **Data acceptance:** permanent-ID mapping, historical membership, original prices, corporate actions, capitalization vintages and benchmark reconstruction.
+3. **Engine acceptance:** look-ahead prevention, share/cash conservation, split and dividend accounting, fees, caps and unfilled orders.
+4. **Historical experiment:** all four arms and all prespecified cost scenarios, with ledgers and reproducible manifests.
+5. **Forward observation:** signals saved before execution after the final protocol/implementation freeze. Never relabel retrospective results as live observations.
+
+Returns, drawdowns and costs will be published together, including unfavorable results. Raw chat, credentials and data without redistribution rights stay out of Git. See [the evidence boundary](docs/evidence.md).

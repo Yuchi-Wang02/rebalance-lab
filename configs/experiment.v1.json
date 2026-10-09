@@ -1,17 +1,21 @@
 {
-  "schema_version": 1,
-  "protocol_version": "0.1.0",
+  "schema_version": 2,
+  "protocol_version": "0.2.0",
   "status": "proposed_design_not_backtest",
   "timezone": "America/New_York",
   "currency": "USD",
   "period": {
-    "anchor_close": "2025-12-31",
-    "end_close": "2026-10-02",
-    "warmup_request_start": "2024-12-01",
+    "warmup_request_start": "2023-12-01",
     "warmup_min_price_points": 253,
-    "classification": "retrospective_exploratory",
+    "initial_signal_close": "2024-12-31",
+    "initial_execution": "first_exchange_session_open_after_initial_signal",
     "initial_state": "cash",
-    "initial_execution": "first_exchange_session_open_after_anchor",
+    "burn_in_year": 2025,
+    "report_anchor_close": "2025-12-31",
+    "report_end_close": "2026-10-02",
+    "classification": "retrospective_exploratory",
+    "anchor_action": "normalize_existing_nav_without_trading",
+    "initialization_costs_recharged_at_anchor": false,
     "terminal_liquidation": false
   },
   "universe": {
@@ -24,7 +28,11 @@
   "signal_definition": {
     "price": "split_adjusted_excluding_cash_dividends",
     "skip_sessions": 21,
-    "lookback_sessions": [252, 126, 63],
+    "lookback_sessions": [
+      252,
+      126,
+      63
+    ],
     "formula": "P[t-21] / P[t-L] - 1",
     "volatility_window": "daily_simple_returns_t-L+1_through_t-21_inclusive",
     "volatility_ddof": 1,
@@ -37,7 +45,10 @@
   "common": {
     "signal_time": "scheduled_session_close",
     "execution_time": "next_exchange_session_open",
-    "semiannual_signal_months": [3, 9],
+    "semiannual_signal_months": [
+      3,
+      9
+    ],
     "semiannual_signal_day": "last_exchange_session_of_month",
     "monthly_signal_day": "last_exchange_session_of_month",
     "security_weight_cap": 0.08,
@@ -54,7 +65,11 @@
     "forced_exit_proceeds": "cash_until_scheduled_rebalance",
     "dividend_accounting": "receivable_on_ex_date_cash_on_pay_date",
     "dividend_reinvestment": "new_dividend_cash_only_next_open_proportional_to_prior_close_eligible_existing_holdings_else_cash",
-    "same_open_event_priority": ["corporate_actions", "forced_membership_exits", "scheduled_rebalance_else_dividend_reinvestment"],
+    "same_open_event_priority": [
+      "corporate_actions",
+      "forced_membership_exits",
+      "scheduled_rebalance_else_dividend_reinvestment"
+    ],
     "same_security_orders": "net_before_execution_and_cost",
     "unfilled_regular_orders": "cancel_same_day_no_automatic_retry",
     "unfilled_forced_exit": "retry_next_tradable_open",
@@ -62,45 +77,136 @@
     "opening_fill_model": "idealized_full_fill_at_raw_open_fractional_shares_after_cost_no_capacity_claim",
     "missing_execution_price": "no_fill_record_exception_no_trade_forward_fill",
     "cost_bps_per_side_base": 5,
-    "cost_bps_per_side_scenarios": [0, 5, 10, 25],
+    "cost_bps_per_side_scenarios": [
+      0,
+      5,
+      10,
+      25
+    ],
     "cost_denominator": "absolute_executed_notional",
-    "insufficient_candidates_equity_budget": "min(1, eligible_selected_count / target_count)",
     "cap_residual": "iterative_proportional_redistribution_else_cash",
-    "selection_buffer": "top60_first_then_existing_rank_at_most100_then_best_remaining_to_target",
-    "trend_filter": "new_entries_only_split_adjusted_close_above_sma200",
-    "weekly_risk_overlay": false
+    "weekly_risk_overlay": false,
+    "target_count": 75,
+    "weighting": "positive_score_times_sqrt_historical_security_total_market_cap",
+    "selection": "top75_positive_eligible_scores_ties_security_id",
+    "insufficient_candidates": "normalize_selected_weights_subject_to_cap_else_cash",
+    "buffer": false,
+    "entry_trend_filter": false,
+    "supplier_data_gaps": "block_formal_result_not_silent_eligibility_exclusion"
   },
   "arms": {
-    "B0": {"rebalance": "semiannual", "signal_weights": [1.0, 0.0, 0.0], "target_count": 100, "buffer": false, "cap_exponent": 1.0, "entry_trend_filter": false},
-    "B1": {"rebalance": "monthly", "signal_weights": [1.0, 0.0, 0.0], "target_count": 100, "buffer": false, "cap_exponent": 1.0, "entry_trend_filter": false},
-    "B2": {"rebalance": "monthly", "signal_weights": [0.5, 0.3, 0.2], "target_count": 100, "buffer": false, "cap_exponent": 1.0, "entry_trend_filter": false},
-    "B3": {"rebalance": "monthly", "signal_weights": [0.5, 0.3, 0.2], "target_count": 75, "buffer": true, "cap_exponent": 1.0, "entry_trend_filter": false},
-    "B4": {"rebalance": "monthly", "signal_weights": [0.5, 0.3, 0.2], "target_count": 75, "buffer": true, "cap_exponent": 0.5, "entry_trend_filter": false},
-    "F_FAST": {"rebalance": "monthly", "signal_weights": [0.5, 0.3, 0.2], "target_count": 75, "buffer": true, "cap_exponent": 0.5, "entry_trend_filter": true},
-    "F_SLOW": {"rebalance": "semiannual", "signal_weights": [0.5, 0.3, 0.2], "target_count": 75, "buffer": true, "cap_exponent": 0.5, "entry_trend_filter": true}
+    "S12": {
+      "rebalance": "semiannual",
+      "signal_weights": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    "M12": {
+      "rebalance": "monthly",
+      "signal_weights": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    "SMIX": {
+      "rebalance": "semiannual",
+      "signal_weights": [
+        0.5,
+        0.3,
+        0.2
+      ]
+    },
+    "MMIX": {
+      "rebalance": "monthly",
+      "signal_weights": [
+        0.5,
+        0.3,
+        0.2
+      ]
+    }
   },
-  "aliases": {"B5": "F_FAST"},
   "benchmarks": {
-    "tradeable": ["SPMO", "SPY"],
-    "same_initial_execution_and_external_trade_cost": true,
+    "tradeable": [
+      "SPMO",
+      "SPY"
+    ],
+    "same_initialization_and_external_trade_cost": true,
+    "same_dividend_cash_convention": true,
     "embedded_fund_expenses_subtracted_again": false,
-    "standard_close_to_close_ytd": "reference_only_separate_table"
+    "vendor_total_return_series": "separate_reference_with_reinvestment_convention_labeled"
   },
   "comparisons": {
-    "primary_frequency": ["F_FAST", "F_SLOW"],
-    "primary_real_world": ["F_FAST", "SPMO"],
-    "secondary_market": ["F_FAST", "SPY"],
-    "ablation_chain": [["B1", "B0"], ["B2", "B1"], ["B3", "B2"], ["B4", "B3"], ["F_FAST", "B4"]]
+    "primary_frequency": [
+      "M12",
+      "S12"
+    ],
+    "replication_frequency": [
+      "MMIX",
+      "SMIX"
+    ],
+    "interaction": {
+      "positive_pair": [
+        "MMIX",
+        "SMIX"
+      ],
+      "negative_pair": [
+        "M12",
+        "S12"
+      ]
+    },
+    "product_context": [
+      [
+        "S12",
+        "SPMO"
+      ],
+      [
+        "M12",
+        "SPMO"
+      ],
+      [
+        "SMIX",
+        "SPMO"
+      ],
+      [
+        "MMIX",
+        "SPMO"
+      ],
+      [
+        "MMIX",
+        "SPY"
+      ]
+    ]
   },
   "metrics": {
     "primary": "net_total_return_difference_percentage_points",
-    "risk_guardrail": "maximum_drawdown",
+    "risk_guardrail": "reporting_period_daily_close_maximum_drawdown",
     "execution_guardrail": "two_sided_traded_notional_over_pretrade_nav",
-    "diagnostics": ["gross_total_return", "monthly_returns", "cost_drag", "cash_weight", "holdings_count", "largest_security_weight"],
-    "sharpe": "secondary_only_requires_explicit_risk_free_series",
+    "diagnostics": [
+      "monthly_returns",
+      "cash_weight",
+      "holdings_count",
+      "cost_sensitivity",
+      "largest_security_weight",
+      "issuer_exposure",
+      "unfilled_orders"
+    ],
     "performance_target": null,
     "significance_claim_from_ytd_alone": false
   },
-  "deferred": ["weekly_risk_overlay", "turbo", "parameter_search", "live_trading"],
-  "results": {"executed": false, "market_returns": null}
+  "deferred": [
+    "entry_exit_buffer",
+    "entry_trend_filter",
+    "weekly_risk_overlay",
+    "turbo",
+    "equal_weight_separate_protocol",
+    "parameter_search",
+    "live_trading"
+  ],
+  "results": {
+    "executed": false,
+    "market_returns": null
+  }
 }

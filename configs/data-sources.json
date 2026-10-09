@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "catalog_status": "documentation_review_only",
+  "review_date": "2026-10-08",
+  "review_timezone": "America/New_York",
+  "selected_provider_route": null,
+  "market_dataset_validated": false,
+  "credentials_available_at_review": false,
+  "authenticated_market_download_completed": false,
+  "purchase_or_signup_performed": false,
+  "storage": {
+    "raw_pattern": "data/raw/<provider>/<snapshot-id>/",
+    "normalized_pattern": "data/processed/<snapshot-id>/",
+    "market_data_publication_default": "do_not_publish_without_license_permission",
+    "required_manifest_fields": ["provider", "product", "release", "requested_dates", "returned_dates", "retrieved_at", "schema", "units", "adjustments", "timezone", "row_counts", "sha256", "license_restrictions", "unresolved_fields"],
+    "credential_values_allowed": false
+  },
+  "required_components": ["security_master", "historical_membership", "raw_prices", "split_adjusted_signal_prices", "historical_security_class_market_caps", "corporate_actions", "benchmark_prices_actions", "exchange_sessions"],
+  "point_in_time_policy": {
+    "retrieved_at_is_not_known_at": true,
+    "effective_date_alone_proves_announcement_time": false,
+    "current_fundamentals_backfill_allowed": false,
+    "current_constituents_backfill_allowed": false,
+    "later_revisions_require_vintage_audit": true
+  },
+  "routes": [
+    {
+      "id": "yahoo_yfinance_diagnostic",
+      "role": "no_cost_price_ingestion_diagnostic_only",
+      "documentation_verified": true,
+      "documentation_sources": [
+        "https://github.com/ranaroussi/yfinance/blob/main/README.md",
+        "https://github.com/ranaroussi/yfinance/blob/main/yfinance/multi.py"
+      ],
+      "documentation_evidence": "Official maintainer files read successfully through raw.githubusercontent.com; hosted documentation failed at proxy CONNECT.",
+      "sdk_entrypoint": "yfinance.download",
+      "explicit_parameters": {"auto_adjust": false, "back_adjust": false, "actions": true, "repair": false, "keepna": true, "threads": false},
+      "sample_request": "https://query1.finance.yahoo.com/v8/finance/chart/SPMO?range=5d&interval=1d",
+      "sample_result": "proxy_connect_403_no_market_rows",
+      "authenticated_full_coverage_verified": false,
+      "point_in_time_verified": false,
+      "secret_requirement_added": false,
+      "gaps": ["historical_index_membership", "historical_class_market_caps", "announcement_timestamps", "verified_delisting_proceeds", "verified_raw_open_adjustment", "dividend_pay_dates"],
+      "terms": "Client license does not grant data redistribution rights; maintainer points to Yahoo terms and personal-use restrictions."
+    },
+    {
+      "id": "wrds_crsp_institutional",
+      "role": "preferred_candidate_if_existing_institutional_entitlement",
+      "documentation_verified": true,
+      "product_contract_verified": false,
+      "documentation_sources": [
+        "https://github.com/wharton/wrds/blob/main/README.md",
+        "https://github.com/wharton/wrds/blob/main/wrds/sql.py"
+      ],
+      "unread_product_references": [
+        "https://wrds-www.wharton.upenn.edu/pages/grid-items/downloading-sp-500-index-constituents/",
+        "https://www.crsp.org/products/documentation/"
+      ],
+      "product_docs_result": "proxy_connect_403_origin_content_not_read",
+      "default_connection_plan": "authorized_institutional_export_then_private_import",
+      "sdk_entrypoint": "wrds.Connection",
+      "schema_discovery_methods": ["list_libraries", "list_tables", "describe_table", "get_table"],
+      "direct_transport": {"protocol": "postgresql", "host": "wrds-pgdata.wharton.upenn.edu", "port": 9737, "sdk_default_sslmode": "require", "connectivity_tested": false, "https_allowlist_sufficient": false, "https_proxy_secret_is_postgres_credential": false},
+      "access_requirement": "Institutional WRDS account and entitlement to the specific CRSP datasets/release; not verified.",
+      "market_sample_result": "not_attempted",
+      "authenticated_full_coverage_verified": false,
+      "point_in_time_verified": false,
+      "open_checks": ["current_release_and_tables", "historical_membership_and_known_at", "raw_open_coverage", "shares_units_and_security_class_scope", "SPMO_SPY_coverage", "whether_returns_already_include_delisting", "revision_vintages"]
+    },
+    {
+      "id": "nasdaq_sharadar_components",
+      "role": "commercial_https_candidate_requires_membership_and_coverage_validation",
+      "documentation_verified": true,
+      "product_contract_verified": false,
+      "documentation_sources": [
+        "https://github.com/Nasdaq/data-link-python/blob/main/README.md",
+        "https://github.com/Nasdaq/data-link-python/blob/main/nasdaqdatalink/api_config.py",
+        "https://github.com/Nasdaq/data-link-python/blob/main/nasdaqdatalink/get_table.py"
+      ],
+      "unread_product_references": [
+        "https://docs.data.nasdaq.com/docs/collections-sharadar",
+        "https://data.nasdaq.com/databases/SEP/documentation"
+      ],
+      "product_docs_result": "proxy_connect_403_origin_content_not_read",
+      "api_base": "https://data.nasdaq.com/api/v3",
+      "sdk_entrypoint": "nasdaqdatalink.get_table",
+      "sdk_pagination_parameter": {"paginate": true},
+      "sdk_tls_verification_default": true,
+      "credential_binding_candidate": "NASDAQ_DATA_LINK_API_KEY",
+      "credential_binding_added": false,
+      "access_requirement": "API key and entitlement to each required product; no paid access assumed.",
+      "candidate_table_mappings_verified": false,
+      "candidate_tables": {
+        "SHARADAR/SEP": "daily_stock_prices_adjustments_and_raw_open_must_be_verified",
+        "SHARADAR/DAILY": "historical_daily_market_caps_units_scope_vintages_must_be_verified",
+        "SHARADAR/SF1": "optional_fundamentals_only_if_needed_and_as_reported_timing_verified",
+        "SHARADAR/TICKERS": "security_metadata_not_proof_of_historical_index_membership"
+      },
+      "membership_dependency": {"resolved": false, "primary_candidate": "licensed_SP_historical_constituents_and_announcement_events", "alternate_candidate": "FMP_historical_constituent_events_requires_contract_validation", "alternate_documentation_reference": "https://financialmodelingprep.com/developer/docs/stable/historical-sp-500-constituents", "alternate_documentation_result": "proxy_connect_403_origin_content_not_read", "alternate_api_endpoint_verified": false},
+      "market_sample_result": "not_attempted",
+      "authenticated_full_coverage_verified": false,
+      "point_in_time_verified": false,
+      "open_checks": ["all_table_field_contracts", "membership_initial_snapshot_and_complete_events", "SPMO_SPY_coverage", "raw_open_versus_split_adjusted_OHLC", "market_cap_units_and_class_scope", "filing_known_at_and_restatement_dimensions", "corporate_action_pay_dates_and_delisting_cashflows"]
+    },
+    {
+      "id": "norgate_windows_export",
+      "role": "conditional_authorized_Windows_export_with_additional_historical_cap_source",
+      "documentation_verified": true,
+      "documentation_sources": ["https://pypi.org/project/norgatedata/", "https://pypi.org/pypi/norgatedata/json"],
+      "documentation_evidence": "Provider-published package description inspected from PyPI JSON.",
+      "provider_site_result": "proxy_connect_403_origin_content_not_read",
+      "runtime_requirement": "Windows Norgate Data Updater running with active subscription; documented VM/WSL options do not establish native Linux service.",
+      "historical_constituents_documented_requirement": "Stocks Platinum or Diamond subscription",
+      "connection_plan": "export_on_supported_authorized_machine_then_private_import",
+      "sdk_entrypoints": ["price_timeseries", "index_constituent_timeseries", "assetid"],
+      "membership_example": "index_constituent_timeseries(assetid, 'S&P 500', ...)",
+      "explicit_price_adjustment_modes": ["NONE", "CAPITAL"],
+      "default_adjustment_requires_override": "TOTALRETURN",
+      "padding": "PaddingType.NONE",
+      "dividend_date_semantics": "day_before_ex_date_not_pay_date; column depends on adjustment mode",
+      "fundamental_mktcap_semantics": "current_fundamentals_not_verified_historical_PIT_series",
+      "market_sample_result": "not_attempted",
+      "authenticated_full_coverage_verified": false,
+      "point_in_time_verified": false,
+      "gaps": ["historical_market_cap_source", "membership_announcement_timestamps", "dividend_pay_dates", "validated_delisting_cashflows", "licensed_export_and_redistribution_permissions"]
+    }
+  ],
+  "network_observation_policy": "A proxy CONNECT403 is not an origin authentication or subscription response; retry only after a meaningful supported change.",
+  "readiness_gates": ["documentation_contract_review", "authorized_small_sample", "full_history_coverage_audit", "identifier_and_adjustment_audit", "known_at_and_revision_audit", "corporate_actions_and_benchmark_reconciliation"]
+}

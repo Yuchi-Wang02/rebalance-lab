@@ -1,197 +1,112 @@
-# SPMO Fast：实验设计与可行性
+# Experiment protocol v0.2
 
-版本：研究提案 v0.1。**尚未执行真实市场回测，没有可报告的收益结果。**
+**Status: proposed protocol, not an implemented or completed market backtest.** The purpose is to test faster momentum rotation, not to establish in advance that a faster strategy wins. This release supersedes the v0.1 cumulative ablation chain; the previous commit remains in Git history.
 
-研究目标是检验：保留 SPMO 风格的股票动量策略、提高调仓频率，能否在交易成本和风险约束下改善投资结果。这是一个自定义模拟组合研究，不是发行 ETF，也不宣称复制官方 SPMO 指数。
+## 1. What changed and why
 
-本文的参数是建议默认值，并非用户已经逐项指定的要求。它们应在获取完整数据、编写实现和查看本次回测结果之前，通过版本记录冻结。若随后修改规则，需要保留修改原因、时间和先前结果。
+The first design mixed selection frequency, signal horizons, position count, buffering, weighting and trend filters. The revised primary experiment is a four-arm **2 × 2 factorial design**. It separates the frequency effect under two signals and removes optional overlays from the main claim.
 
-## 1. 研究范围与证据边界
+A second change fixes the YTD interpretation. Buying everything from cash at the first 2026 open is a legitimate new-account experiment, but it is not the calendar YTD of an already-running strategy. The main protocol now establishes holdings during 2025, then measures their 2026 performance.
 
-- 固定探索窗口：**2025-12-31 收盘至 2026-10-02 收盘**，采用美国股票交易日历。
-- 2026 年走势已参与策略构思。因此，这段数据用于探索性评估，不能称为真正未见过的样本外验证。
-- 历史讨论没有提供已验证的真实市场收益。旧对话中关于程序、合成测试或附件的描述，不能代替本仓库实际可运行的代码、数据和测试记录。
-- “更早捕捉新赢家”“更早退出旧趋势”“缓冲区减少无效换手”都是待检验假设。
-- 官方 SPMO 方法、持仓和收益必须从可追溯资料独立核验；聊天里的数字不作为研究数据。
-- 本阶段交付方案、数据要求和评估协议；不把尚未实现的回测、风控或结果写成已完成。
+## 2. Hypotheses and comparisons
 
-## 2. 问题、主比较与成功标准
-
-**主产品问题：**扣除同口径交易成本后，完整月度版本 F-Fast 相对实际 SPMO 的期末收益差是多少？
-
-各组初始资金相同，并以 1 归一化。主指标为：
-
-`100 × (F-Fast期末资产 / F-Fast初始资产 − SPMO期末资产 / SPMO初始资产)`，单位为**百分点**。
-
-它是净收益差，不是两条净值之比，也不是风险调整 alpha。实际 SPY 同时作为宽基参照。
-
-**主要频率归因问题：**F-Fast 与 F-Slow 采用完全相同的信号、选股、缓冲、权重和入场过滤，只改变正式调仓频率。两者的净收益差用于判断在这套完整规则下提高频率的影响。B1−B0 是较简单规则下的辅助频率对照。
-
-正的净收益差只支持“该窗口、该数据和这些假设下表现较好”。必须同时展示最大回撤、双边成交额和成本，不能仅凭正收益差认定策略整体更优。可接受的回撤恶化幅度和换手上限尚未设定；如需要二元“通过/失败”判断，必须在看结果前另行冻结这些阈值。
-
-## 3. 预先限定的实验组
-
-以下代理组使用同一历史股票池、交易日历、8% 单股上限和成本模型。除表中指定的改动外，其他规则保持一致。每项新增规则累积到后续组。
-
-| 组别 | 相对上一组的改动 | 用途 |
+| Arm | Scheduled selection | Momentum signal |
 |---|---|---|
-| 实际 SPMO | 实际 ETF，使用可交易价格和分红记录 | 主现实基准 |
-| 实际 SPY | 实际 ETF，使用可交易价格和分红记录 | 宽基参照 |
-| B0 | 半年度调仓；12–1 动量；目标100只；正动量分数 × 市值；无缓冲、无趋势过滤 | 受控代理起点 |
-| B1 | 仅改为每月调仓 | 简单规则下的频率对照 |
-| B2 | 改为12–1、6–1、3–1动量按50%/30%/20%混合 | 检验信号组合 |
-| B3 | 目标改为75只，并采用60/100选股缓冲规则 | 检验持股数量与缓冲这一组改动 |
-| B4 | 市值指数从1改为0.5，即平方根市值权重 | 检验权重结构 |
-| B5 / F-Fast | 仅对新入场股票增加200日均线过滤 | 完整月度候选方案 |
-| F-Slow | 与F-Fast规则完全相同，仅改为半年度调仓 | **主要频率归因对照** |
-| B6，第二期 | 在F-Fast上增加周度风险检查 | 独立扩展，本期不执行 |
+| S12 | Last trading close of March and September | 12–1 |
+| M12 | Last trading close of every month | 12–1 |
+| SMIX | Last trading close of March and September | 50% 12–1 + 30% 6–1 + 20% 3–1 |
+| MMIX | Last trading close of every month | Same blend |
 
-B0 并非官方 SPMO 复制，不能用 B0 的结果代替实际 ETF 表现。B0–B5 是预先限定的逐步消融，不是所有参数组合的搜索。B3 同时改变持股数量与缓冲规则，其差值不能单独归因于其中一项。
+All other rules are identical. Initial formation, corporate actions, constituent exits and dividend reinvestment are common maintenance exceptions; semiannual does not mean literally two transactions a year.
 
-这里的“频率影响”是相同历史路径下、固定模型中的受控对比，不是现实市场的随机因果实验。对照组持仓路径不同，会自然产生后续缓冲状态、成本和现金比例差异。
+- **Primary hypothesis:** monthly selection improves net total return under the 12–1 signal. Estimate `return(M12) − return(S12)` in percentage points.
+- **Prespecified replication:** estimate `return(MMIX) − return(SMIX)` under the blended signal.
+- **Secondary interaction:** `(MMIX − SMIX) − (M12 − S12)`. Describe whether the frequency effect changes with the signal; do not select whichever pair happened to win as a new primary result.
+- **Product comparison:** report all four arms beside actual SPMO and SPY. Differences from a real ETF include more than frequency and must not be called frequency alpha.
 
-## 4. 数据门槛与最短历史
+The null is no improvement after modeled costs. A positive realized spread is descriptive evidence for this window, not proof of statistical significance, long-run superiority or risk-adjusted alpha. No overall pass/fail threshold is invented without an agreed drawdown and turnover tolerance.
 
-必须具备下列数据，且保留来源、字段定义、获取时间、文件校验值和可再分发条件。
+## 3. Timeline and initialization
 
-| 数据 | 必须验证的内容 | 不满足时的处理 |
-|---|---|---|
-| 历史S&P 500成分 | 有效日期、当时已公开的信息、证券类别和永久标识 | 不能以当前成分冒充无幸存者偏差的回测 |
-| 日价格 | 原始开盘/收盘、拆分、停牌、退市；共同交易日历 | 不得将缺失价格直接当成零收益或删除亏损标的 |
-| 历史市值 | 截至信号日可获的股数及价格，或有时间戳的历史市值 | 不得用当前股数或当前市值倒推历史 |
-| 公司行动和分红 | 拆股、并购、退市支付、现金分红及支付日 | 无法核实时，不发布精确真实市场收益结论 |
-| SPMO、SPY | 同期可交易开盘/收盘、分红和公司行动 | 不得混用价格收益与总回报 |
-
-首次信号为2025-12-31收盘，12–1信号需要截至该日向前252个交易日间隔，即至少253个完整价格点。建议请求数据从**2024-12-01或更早**开始，再由交易日覆盖审计确认是否足够。日期只是下载余量，不能替代覆盖检查。若以后改为历史预运行组合，还需继续向前扩展。
-
-历史价格沿用共同市场交易日索引，不能把某只股票有成交记录的最近252行当成252个市场交易日。新上市、停牌或数据不足的证券不能悄悄缩短回看窗口。
-
-本版市值固定为证券层面的总市值（原始价格乘以该证券类别当时已知的流通在外股数），不使用自由流通市值。不同股类必须避免把同一公司完整市值重复赋给每一条证券；8%上限默认是单一证券上限，另行报告合并后的发行人暴露。若来源无法支持该口径，原配置视为数据未满足；自由流通市值或等权方案只能作为另行命名的变体。
-
-## 5. 信号定义
-
-令`t`为信号日的共同交易日索引。`P`为处理拆分后的价格序列；信号使用价格动量，投资收益记账另行包含分红，不能混淆这两个口径。
-
-| 信号 | 价格收益 | 对应日收益样本 |
-|---|---|---|
-| 12–1 | `P[t−21] / P[t−252] − 1` | 从`t−252`到`t−21`之间的231个日收益 |
-| 6–1 | `P[t−21] / P[t−126] − 1` | 同区间105个日收益 |
-| 3–1 | `P[t−21] / P[t−63] − 1` | 同区间42个日收益 |
-
-各`M`等于对应价格收益，除以**同区间日收益的样本标准差（ddof=1）×√252**。波动率为零、价格缺失、数据无效或结果非有限数的证券视为信号不完整。
-
-- B0、B1：`score = M12−1`。
-- B2及以后：`score = 0.50×M12−1 + 0.30×M6−1 + 0.20×M3−1`。
-- 直接混合上述原值，不在部分步骤改用z-score、百分位或其他标准化。
-- 只有`score > 0`且所需信号完整的股票可进入可用池。只检查权重大于零的窗口；B0、B1不因未启用的6–1或3–1窗口无效而额外排除证券。
-- 排名按score降序，平分时按稳定的永久证券标识排序，确保可复现。
-
-这些是研究定义，不是已核验的官方指数定义。原值混合也不意味着三个期限具有相同风险贡献。
-
-## 6. 可用池、趋势过滤与持仓选择
-
-每个正式信号日，先取当时有效且当时可知的历史股票池，再检查信号完整性、正score，以及可获历史市值是否为正且有限。必须区分正常缺少足够上市历史与供应商漏数；供应商漏数不能通过静默排除股票来掩盖，应先修复，或将该次运行明确标为数据不完整。
-
-启用趋势过滤的B5、F-Fast和F-Slow进一步区分：
-
-- **已有持仓**：不因为跌破200日均线就被排除，但仍必须属于历史股票池并满足完整、正score要求。
-- **新入场候选**：要求`P[t] > MA200[t]`。均线包含截至`t`的最近200个市场交易日收盘价格。
-- 将通过条件的新候选与合格旧持仓合并，按score统一排名。过滤会改变可用池及其排名；本文不在过滤前固定另一套Top60/Top100排名。
-- 未启用过滤的组，不应用200日均线条件。
-
-“已有持仓”指信号日收盘实际有正持仓数量的证券，不能把曾经持有、目前已清仓的股票视为旧持仓。
-
-B0–B2直接选择可用池中排名最高的100只，不足100只则选择全部。
-
-B3及以后采用以下确定性规则，目标75只：
-
-1. 优先选择可用池Top60，最多60只。
-2. 从尚未选中的旧持仓中，按排名依次保留位于Top100的股票，直到达到75只。
-3. 仍不足75只时，从其余可用股票中按排名补满。
-4. 可用股票总数不足75只时，保留实际可用的`N`只，不强行买入信号无效或负score股票。
-
-这一规则明确放弃“旧持仓只有跌出Top100才卖”和“新股票只能从Top60买入”的绝对承诺：**Top60可挤出仍处于Top100的旧持仓，补齐步骤也可能买入Top60以外的股票。**这样才能获得确定的目标持股数。
-
-## 7. 权重、上限与现金
-
-入选股票的原始权重为：`positive_score × historical_market_cap^exponent`。
-
-- B0–B3的exponent为1；B4、B5、F-Fast、F-Slow为0.5。
-- 目标持股数为`K`，实际有效入选数为`N`时，目标权益比例为`N/K`；`N=0`则全现金。
-- 将该权益额度按原始权重分配，单一证券权重不得超过组合资产的8%。对超过上限的部分，迭代按比例分配给仍有容量的证券，不能只裁剪一次再归一化。
-- 若上限导致无法投满目标权益额度，剩余保持现金；现金收益固定为0，不虚构无风险利率。
-- 8%仅在正式调仓目标权重中约束，价格变化可导致其后超限；报告这种漂移，不默认每日再平衡。
-- 交易费用从现金和组合资产中扣除。实现必须在费用约束下求可负担的股数，不得因为目标权重合计100%而产生隐含借款。
-
-建议使用可持有碎股、不加杠杆、不做空的研究组合。整数股约束和账户规模影响属于后续执行研究。
-
-## 8. 时间、初始组合与公平基准
-
-所有组于2025-12-31收盘以相同金额**现金**起步，使用当日收盘及此前可获信息形成初始信号，在2026年第一个实际交易日开盘建仓。SPMO和SPY也在同一开盘时点建仓并计入初始交易成本。
-
-因此主表应命名为“**共同可成交起点的2026区间表现**”。它并非通常用2025年末收盘价作为购买价格的标准ETF收盘YTD；首个开盘前的隔夜涨跌不由这些现金账户承担。标准SPMO/SPY收盘至收盘总回报YTD另列参考，不与主实验收益差混算。
-
-- 月度组：每个自然月最后一个实际交易日收盘形成信号，下一个交易日开盘执行。
-- 半年度代理组：3月和9月最后一个实际交易日收盘形成信号，下一个交易日开盘执行。首次共同建仓是所有组共享的例外。
-- 这些半年度日期是受控实验的默认值，不声称与官方SPMO再平衡日完全一致。
-- 旧持仓退出股票池的事件，在其已生效且已可知之后的首个可交易开盘执行退出，所得现金保留至下次正式调仓；所有代理组采用这一共同维护规则。因此“半年/月度”指正式选股频率，不代表期间绝无交易。真实退市、并购和强制公司行动按实际有效日期记账，不能拖到方便的日期或按过期报价成交。
-- 若没有可成交开盘价、发生停牌或数据不足，记录未成交状态和原因，并继续按真实公司行动处理；不可将计划权重当作已成交权重。
-- 2026-10-02收盘按市值计价结束，不强制清仓，因此末日不额外计假想卖出费用。
-
-价格信号、开盘成交、拆分后的股数和分红必须使用一致的单位体系，不直接混用全复权收盘价和未复权开盘价。
-
-分红记账的建议默认是：除息时记应收，实际支付后成为现金，随后首个可交易日开盘，将该笔分红现金按上一收盘时仍合格的现有权益持仓比例再投资，计入相同成本并记录。仅这笔新增分红再投资，原有策略现金不动；无合格权益则留现金。若与正式调仓同日，分红现金直接进入正式调仓资金，不重复生成订单；退出证券不得被分红订单买回。所有股票策略和ETF基准使用相同约定；再投资不重新选股。若数据只能支持供应商的总回报复权近似，应作为另一个明确命名的近似模式报告，不能声称完全复制真实现金流。
-
-开盘事件顺序固定为：公司行动记账、强制成分退出、正式调仓（若当日没有正式调仓，才执行分红再投资）。同一证券净额合并订单，按实际净成交额扣费。一般调仓或分红订单若无法成交，当日取消，不自动在未来追单；强制退出标记持续待处理，在下个可交易开盘重试。卖出未成交时不预支卖出款，全部可执行买单按同一比例缩小至现金足够支付本金及费用，剩余现金保留，并输出目标与实际偏差。
-
-以上开盘价成交是假设可以按开盘价足额成交的研究模型。用开盘价换算碎股和扣费后目标仓位，不意味着现实中能在未知开盘价前提交完全相同的股数；实际开盘竞价订单、滑点和成交容量需要后续单独验证。
-
-## 9. 成本与评估输出
-
-基础成本为**每边5bp**：每笔买入成交额扣0.05%，每笔卖出成交额也扣0.05%。它是手续费、价差与滑点合并的简化假设，不是已测量的真实执行成本。所有组采用同一成本情景，包括ETF初次买入及分红再投资。
-
-预先限定的压力情景为每边0、10、25bp，同时报告基础5bp。不得在看到结果后只挑对Fast有利的成本水平。
-
-| 输出 | 定义或用途 |
+| Milestone | Fixed convention |
 |---|---|
-| 主指标 | F-Fast相对SPMO的净期末收益差，百分点 |
-| 主要归因指标 | F-Fast−F-Slow净收益差；辅助为B1−B0 |
-| 风险约束指标 | 每日收盘净资产计算的最大回撤；不声称覆盖盘中最大跌幅 |
-| 执行约束指标 | 每次买入额＋卖出额、累计双边成交额、对应交易前净资产比例及总成本 |
-| 补充表现 | 毛/净总回报、月度收益、现金比例、持股数、单股及发行人集中度 |
-| 敏感性 | 0/5/10/25bp下的完整结果，是否因合理成本变化而反转 |
+| Requested historical start | 2023-12-01, subject to actual exchange-calendar coverage |
+| Initial signal | 2024-12-31 close; at least 253 valid price points ending there |
+| Initial execution | First exchange session open after the initial signal, from equal cash balances |
+| Burn-in | All of 2025, each arm following its own schedule |
+| Reporting anchor | 2025-12-31 close; normalize each existing portfolio NAV to 100 without trading |
+| Reporting end | 2026-10-02 close; no terminal liquidation |
 
-双边成交额明确计买入加卖出，不与“除以2”的单边换手口径混称。真实ETF内部换手及费用已经影响ETF价格/净值，不能将其内部费用再次从历史收益中扣除；代理股票组合则必须显式承担自己的交易成本。
+Publish each arm's actual holdings, receivables and cash at the reporting anchor. Initial formation costs and 2025 maintenance belong to the burn-in ledger and affect the starting state; do not charge them again as 2026 costs. Benchmark portfolios receive the same initialization convention. Only the reporting-period returns and trades enter YTD statistics.
 
-不把短期YTD年化收益称为多年CAGR。若附加Sharpe等估计，须披露年化与无风险利率假设，并强调短窗口不确定性。不能从一个窗口的最好结果声称统计显著alpha。
+This burn-in reduces the artificial January reset but is not a claim that initialization has no effect. A different initialization date, if investigated, is a separately labeled sensitivity, not a replacement chosen after seeing results.
 
-## 10. 第二期周风控与前瞻验证
+The 2026 window is **retrospective exploratory research**: its market developments helped motivate the strategy. Correct historical data alignment does not turn it into an untouched holdout. Future testing begins only after a timestamped freeze of the complete implementation and protocol.
 
-B6暂不加入主实验。历史提出的均线、相对动量、回撤、波动率条件还不够确定，需要先冻结：检查日、各指标窗口、触发逻辑、减半或退出的选择、再入场规则、现金处理、交易时点和成本。没有这些定义，就不能声称周风控已实现或必然改善结果。
+## 4. Shared universe and eligibility
 
-当前探索完成后，发布固定版本，并从冻结之后的首个可执行时点开始积累前瞻模拟记录。预测、目标持仓和下单计划需在相应成交前保存时间戳；后续修订建立新版本，不覆盖旧版本。
+Use S&P 500 membership effective at each decision time and available by that time. Preserve permanent security IDs, historical ticker mappings, departed members and delisted securities. Different share classes are distinct securities; report aggregate issuer exposure as well.
 
-如获得更长且可信的历史数据，可补充不同市场阶段的稳健性研究。已被研究者用于选择规则的历史区间仍属探索数据。滚动检验、块自助法或更多历史窗口也不能自动消除事后选择和多重试验偏差。
+An eligible security must have the required common-calendar price history, finite positive market capitalization, and a finite positive combined momentum score. Missing supplier records are a data-quality failure, not an opportunity to silently exclude inconvenient stocks. Genuinely insufficient listing history is a documented eligibility exclusion.
 
-## 11. 可行性与分阶段交付
+The positive-score rule is an explicit absolute-momentum filter common to all arms. It is not represented as a verified official SPMO rule. Historical membership records alone do not prove historical publication-time availability: preserve effective-time and as-of evidence separately.
 
-计算规模约为数百只股票的一年多日频数据，普通Python研究环境足够，计算资源不是主要障碍。主要门槛是历史成分、历史市值、公司行动与数据许可。
+## 5. Signal definition
 
-1. **数据审计：**形成覆盖矩阵、缺失清单、成分生效检查与字段口径；不通过的数据不得静默替代。
-2. **最小引擎：**验证信号时点、开盘成交、持仓/现金守恒、费用、分红、上限迭代和不足持股数处理。合成测试只证明这些具体机制，不证明市场结果可靠。
-3. **固定协议回测：**先跑实际SPMO/SPY和主频率对照，再运行限定的消融组，保留全部失败与成功记录。
-4. **结果审阅：**逐笔核对抽样成交、月末资产与基准，输出净值、月收益、回撤和成本表；不能只交一张最好看的曲线。
-5. **前瞻积累：**冻结规则后继续记录，评价新的可观察数据，而不是围绕同一YTD不断调参。
+Let `t` denote the signal session on the common exchange calendar. Let `P` be the split-adjusted price series excluding reinvested cash dividends.
 
-如果只能获得当前成分或近似历史市值，可交付明确标注偏差的原型演示，但不能将其结果用作严格验证“更积极调仓有效”的证据。没有真实数据时，可以展示架构、协议和明确标注的合成示例，不填造收益数字。
+| Signal | Price return | Volatility sample |
+|---|---|---|
+| 12–1 | `P[t−21] / P[t−252] − 1` | 231 daily simple returns ending at `t−21` |
+| 6–1 | `P[t−21] / P[t−126] − 1` | 105 daily simple returns ending at `t−21` |
+| 3–1 | `P[t−21] / P[t−63] − 1` | 42 daily simple returns ending at `t−21` |
 
-## 12. GitHub展示与复现要求
+For each enabled horizon, divide its price return by the sample standard deviation of those same daily returns (`ddof=1`) times `sqrt(252)`. Zero/missing volatility makes the required signal invalid. Validate only positive-weight horizons; the unused short horizons do not exclude securities from S12/M12.
 
-- README明确研究问题、当前状态、可运行命令及结果边界；当前状态应为“实验设计阶段，未完成真实行情回测”。
-- 协议和配置保存版本标识、参数、日期范围、成本、数据模式与初始建仓约定。
-- 锁定依赖，保存运行命令、代码版本、数据清单及文件校验值，使结果与输入一一对应。
-- 结果包括完整组别对照、交易记录、净资产序列、数据审计和失败原因，不仅展示胜出的策略。
-- 原始数据只有在许可允许时才公开；否则提供字段规范和合法获取步骤。不要上传凭证、私密文件或原始聊天。
-- 将“方法说明已写”“合成机制已测试”“真实行情已核验”“市场收益已生成”分别标注，不能互相替代。
+The blend uses the raw risk-adjusted values with weights 0.50/0.30/0.20. There is no hidden z-score, winsorization or percentile transform. These coefficient weights do not imply equal horizon risk contributions. Signals affect both rankings and score-based weights by design; the interaction must be interpreted accordingly.
 
-发布一个可复核、能解释局限且诚实报告负结果的研究项目，本身就是有效交付；是否跑赢SPMO是实验待回答的问题。
+## 6. Selection and weighting
+
+Select the highest 75 eligible scores, breaking exact ties by ascending permanent security ID. There is no 60/100 buffer, moving-average filter or weekly risk overlay in the primary experiment.
+
+Raw weight is `positive_score × sqrt(historical_security_total_market_cap)`. Market cap means the security class's original price times shares outstanding known at the signal time, or a proven equivalent historical series. Do not copy company-wide capitalization onto each share class, substitute present-day shares, or silently switch to free-float cap.
+
+Normalize selected weights and impose an 8% target security cap through iterative proportional redistribution. If fewer than 75 genuinely eligible names exist, normalize over the selected names subject to that same cap; **do not add an N/75 market-timing budget**. Retain cash only when no eligible holdings exist, cap capacity is insufficient, orders cannot fill, or accounting creates temporary cash. Missing historical data must not be disguised as such a cash decision.
+
+The cap applies to scheduled target weights. Subsequent price movements and maintenance flows may produce drift; report it rather than introducing an unannounced daily rebalance. A cap-data-independent equal-weight variant would need a separate configuration and name, not a silent fallback for the primary study.
+
+## 7. Execution and accounting
+
+- Compute scheduled signals after the trading close and execute at the next trading open. The semiannual dates are March/September month-end proxies, not claimed official SPMO rebalance dates.
+- Use raw executable prices for the share/cash ledger, not adjusted close as if it were an opening fill. Fractional shares, no leverage, no shorting, USD, zero cash interest and no investor-level taxes are explicit simplifications.
+- The opening fill model assumes the full executable order fills at the raw open. Converting target weights to fractional shares using that open is an idealized simulation, not proof that identical real auction orders can be submitted before the opening price is known.
+- Account for splits and other corporate actions in shares/cash. Recognize dividend receivables on the ex-date and make cash spendable on the pay date. Never combine an already dividend-adjusted return with the same dividend cash flow again.
+- Reinvest only newly paid dividends at the next open in proportion to eligible existing holdings at the preceding close. If there are none, retain cash. Existing strategic cash is not swept into the market by this rule.
+- On overlapping dates, process corporate actions, required constituent exits, then scheduled rebalancing; dividend reinvestment is subsumed into scheduled rebalancing rather than traded twice. Net same-security orders before assessing transaction costs.
+- Once a constituent removal is both effective and known, exit at the next tradable open. Proceeds remain cash until the next scheduled selection. Never buy an exited security back through a dividend instruction.
+- Cancel unfilled ordinary rebalance/dividend orders for that day; do not pursue them automatically. Required exits remain pending and retry at the next tradable open. Do not spend proceeds of failed sells. Scale executable buys proportionally if cash is insufficient, including fees, and report target/actual deviations.
+- Missing prices, suspensions and delistings require explicit event and valuation treatment. An old carried price is not a tradable quote; unresolved material settlement data block a formal result.
+
+Benchmark portfolios use the same external trade-cost and dividend-cash conventions. A vendor's standard close-to-close ETF total-return series can appear as a separate reference with its reinvestment convention labeled. Embedded ETF expenses must not be deducted a second time.
+
+## 8. Costs, metrics and interpretation
+
+Apply **5 bps per side** to actual executed notional: each buy and each sell pays separately. Report all prespecified 0/5/10/25 bps scenarios. These are assumptions covering aggregate trading friction, not measured execution costs or guaranteed fills.
+
+| Metric | Definition / role |
+|---|---|
+| Net total return | Reporting-end NAV / reporting-anchor NAV − 1 |
+| Primary frequency spread | `100 × (net return M12 − net return S12)`, percentage points |
+| Replication and interaction | Same units and same window; definitions above |
+| Maximum drawdown | Minimum of NAV / prior running maximum − 1, using reporting-period daily closes including anchor |
+| Gross traded notional | Sum of absolute executed buy and sell values; also sum each event's traded value / pretrade NAV; no hidden division by two |
+| Cost sensitivity | The same contrasts under all four cost scenarios; separate gross and net paths |
+| Diagnostics | Monthly returns, holdings count, cash weight, weight drift, issuer concentration, failures and stale marks |
+
+Do not annualize a partial-year realized return and label it a multi-year CAGR. Sharpe is optional only with an explicit risk-free series and short-sample caveat. Net-return spreads are not factor-adjusted alpha. A single observed year, more bootstrap draws or a longer list of strategies cannot erase design-selection bias.
+
+## 9. Release and extension rules
+
+Before any market result: audit the [data contract](feasibility.md), verify the chosen [source route](data-sources.md), implement and test accounting, freeze the code/configuration/data manifest, and execute every prespecified arm/cost pair. Store the full reporting and burn-in ledgers separately.
+
+The initial release deliberately does not test buffers, a 200-day filter, weekly stops, Turbo variants, parameter sweeps or live trading. They become separate future protocols only after the four-arm result is understood. Report negative outcomes as readily as positive ones.

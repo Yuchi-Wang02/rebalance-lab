@@ -1,26 +1,36 @@
-# 证据与来源边界
+# Evidence record and claim boundaries
 
-整理日期：2026-10-08（America/New_York）。本文描述本次实际读取情况，不提供行情结论。
+Review date: October 8, 2026 (America/New_York).
 
-## 已确认的项目背景
+## What has been inspected
 
-已读取用户提供的 ChatGPT 分享页正文。关键请求是模仿 SPMO 风格并更积极换仓，随后先看当年 YTD。历史回复提出了月度选股、多周期信号、平方根市值和周度风控等建议；这些均应接受实验检验。
+The user-supplied prior discussion was read successfully. It requested an SPMO-like strategy with more active rotation, followed by a 2026 YTD investigation. The historical reply explicitly admitted that market-data retrieval failed and no actual return result was produced. Its old Notebook/ZIP and claimed synthetic-test count have not been recovered or verified in this repository.
 
-历史回复最后明确承认行情下载失败，未完成 2026 YTD 真实行情回测。旧回复提到的 Notebook、ZIP 和“10 项合成数据测试”未在本次取得或复核。因此本仓库不复制旧结果，也不声称继承了已验证的代码。研究所需背景已抽象为方法说明；包含其他个人投资讨论的原始聊天不上传。
+The prior conversation is project context, not a market-data source. Unrelated personal investment discussion and the raw conversation are not republished here.
 
-## 官方资料入口
+Official/provider-maintained package documentation and source repositories were inspected where reachable. The [connection guide](data-sources.md) and [machine-readable source registry](../configs/data-sources.json) record source-specific evidence. Documentation access must not be reported as authenticated table access, full data coverage, or point-in-time validation.
 
-| 资料 | 原始入口 | 本次验证状态 |
+## Official strategy references still to verify
+
+- [Invesco SPMO product page](https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-momentum-etf.html)
+- [S&P Momentum Indices methodology PDF](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-momentum-indices.pdf)
+
+The latest checks of these URLs were refused at the HTTPS proxy CONNECT stage with 403 before origin content could be read. The actual applicable methodology/version has therefore not been independently verified. Our research rules, month-end schedule, price-signal formula and caps are deliberately not advertised as an exact official replication. No current holdings, fee or performance numbers are copied from chat into a dataset.
+
+## Distinct states
+
+| State | What it establishes | Current position |
 |---|---|---|
-| Invesco SPMO 产品页 | https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-momentum-etf.html | 请求在代理 CONNECT 阶段返回 403，未独立读取 |
-| S&P Momentum Indices 方法文档 | https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-momentum-indices.pdf | 请求在代理 CONNECT 阶段返回 403，未独立读取 |
+| Documentation reviewed | A specific guide or SDK states a capability or requirement | Available for selected sources; see registry |
+| Endpoint reachable | A particular request reached a server | Source-specific; not a subscription or data-quality test |
+| Licensed extraction completed | Entitled data were retrieved for a named query/window | Not completed |
+| Data audit completed | IDs, time semantics, coverage and actions passed acceptance | Not completed |
+| Engine verified | Deterministic tests establish accounting and timing behavior | No engine implemented |
+| Historical experiment completed | Audited data and frozen code produced the full result set | Not run |
+| Site deployed | A public Pages deployment succeeded and its URL was checked | Determined separately from research readiness |
 
-正式实现前应取得上述方法的适用版本及修订记录，并核对参考日、调仓日、证券/公司口径、信号标准化、缓冲和权重上限。本版不根据聊天中的描述声称完整复制官方指数，也不发布未经核实的当前持仓、费率或收益。
+The local design validator checks selected invariants and links only. A rendered page or successful Git push cannot establish investment performance. The source probe never supplies credentials and must not interpret a proxy refusal as evidence that a provider lacks the dataset.
 
-## 三种状态不能混用
+## Publication boundaries
 
-1. **设计检查通过**：配置内部的有限约束成立，文档链接可解析。
-2. **引擎验证通过**：用可审计的确定性例子验证记账和交易逻辑。本仓库当前尚未实现。
-3. **真实市场回测完成**：合格历史数据驱动整个实验，产生可复现结果。本仓库当前尚未执行。
-
-网页可访问、GitHub 上传成功或 Python 可运行，都不证明第 2、3 项已经完成。
+Publish methods, code, permitted aggregate outputs and reproducibility manifests. Do not commit credentials, private account details, raw chat, or market data whose redistribution rights have not been established. A software package's open-source license is not a license to redistribute the provider's financial data.

@@ -5,5 +5,6 @@
   "engine_implemented": false,
   "data_audit_completed": false,
   "returns": null,
-  "reason": "Historical data and a validated backtest engine are not yet available in this repository."
+  "reason": "Protocol, source connection plan and static site exist; audited market data and a validated backtest engine do not.",
+  "protocol_version": "0.2.0"
 }
