@@ -221,9 +221,9 @@ summary:focus-visible {
   display: inline-block;
 }
 .home-hero h1 {
-  font-size: clamp(64px, 7.5vw, 99px);
-  line-height: 1.005;
-  letter-spacing: -0.064em;
+  font-size: clamp(52px, 5vw, 72px);
+  line-height: 1.06;
+  letter-spacing: -0.045em;
   margin: 28px 0 25px;
 }
 .home-hero h1 em {
@@ -770,7 +770,7 @@ summary:focus-visible {
     padding: 25px;
   }
   .home-hero h1 {
-    font-size: 80px;
+    font-size: 64px;
   }
   .home-study {
     padding: 25px;
@@ -820,7 +820,7 @@ summary:focus-visible {
     grid-template-columns: 1fr 1fr;
   }
   .home-hero h1 {
-    font-size: 65px;
+    font-size: 54px;
   }
   .home-hero .eyebrow {
     font-size: 8px;
@@ -950,7 +950,7 @@ summary:focus-visible {
     gap: 35px;
   }
   .home-hero h1 {
-    font-size: clamp(65px, 16vw, 85px);
+    font-size: clamp(42px, 11vw, 58px);
     margin: 24px 0 20px;
   }
   .home-hero .eyebrow {
@@ -1137,7 +1137,7 @@ summary:focus-visible {
     font-size: 32px;
   }
   .home-hero h1 {
-    font-size: 61px;
+    font-size: 40px;
   }
   .home-verdict {
     padding: 20px;

@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#20352e" />
     <meta
       name="description"
-      content="Does trading more often pay? Explore two momentum studies, their changing results, trading costs, and the limits of the evidence."
+      content="Empirical comparison of monthly and semiannual rebalancing in momentum portfolios, examining returns, drawdowns, and transaction costs in two limited pilot studies."
     />
-    <title>Rebalance Lab · Does trading more often pay?</title>
+    <title>Rebalancing Frequency in Momentum Portfolios · Rebalance Lab</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <script src="app.js" defer></script>
@@ -34,11 +34,11 @@
         ><span>Rebalance <strong>Lab</strong></span></a
       >
       <nav class="home-nav" aria-label="Primary navigation">
-        <a href="#studies">The studies</a><a href="#method">How we test</a
+        <a href="#studies">Pilot studies</a><a href="#method">Methodology</a
         ><a
           class="home-github"
           href="https://github.com/Yuchi-Wang02/rebalance-lab"
-          >Open research
+          >Research repository
           <svg
             width="12"
             height="12"
@@ -59,19 +59,19 @@
       <section class="home-hero wrap" aria-labelledby="home-title">
         <div class="home-hero-copy">
           <p class="eyebrow">
-            <span class="home-live-dot" aria-hidden="true"></span> A research
-            notebook on portfolio timing
+            <span class="home-live-dot" aria-hidden="true"></span> Empirical
+            research on portfolio rebalancing
           </p>
           <h1 id="home-title">
-            Does trading<br /><em>more often</em><br />pay?
+            Rebalancing<br /><em>Frequency in</em><br />Momentum Portfolios
           </h1>
           <p class="home-intro">
-            A faster portfolio can catch a new trend. It can also trade away its
-            advantage. We test what changes when momentum strategies rebalance
-            more often.
+            Two limited pilot studies compare monthly and semiannual rebalancing
+            in momentum portfolios, evaluating net returns, drawdowns, and
+            transaction costs under explicit data and modeling assumptions.
           </p>
           <a class="button button-dark" href="#studies"
-            >See what we found
+            >Review the findings
             <svg
               width="15"
               height="15"
@@ -88,40 +88,40 @@
         </div>
         <aside class="home-verdict" aria-labelledby="verdict-title">
           <div class="home-verdict-label">
-            <span>The short answer</span><span>Field notes / 01</span>
+            <span>Summary of findings</span><span>Pilot evidence / 01</span>
           </div>
-          <h2 id="verdict-title">Sometimes.<br /><em>Not consistently.</em></h2>
+          <h2 id="verdict-title">Observed variation<br /><em>in performance.</em></h2>
           <p>
-            Across these two studies, the answer changed with the period,
-            trading costs, and the portfolio being tested. Neither produced a
-            universal case for trading faster.
+            The relative performance of monthly and semiannual rebalancing
+            varied by period, trading cost, and portfolio specification. The
+            results do not establish a general advantage for more frequent rebalancing.
           </p>
           <div class="home-verdict-notes">
             <div>
               <span>01</span>
               <p>
-                <strong>The year mattered.</strong> Monthly stock selection led
+                <strong>Period sensitivity.</strong> Monthly stock selection led
                 in 2026 YTD after trailing in 2025.
               </p>
             </div>
             <div>
               <span>02</span>
               <p>
-                <strong>Costs mattered.</strong> The stock pilot’s small
+                <strong>Cost sensitivity.</strong> The stock pilot’s small
                 full-period advantage disappeared at higher trading costs.
               </p>
             </div>
             <div>
               <span>03</span>
               <p>
-                <strong>Risk mattered too.</strong> Monthly sector-ETF selection
+                <strong>Risk and return.</strong> Monthly sector-ETF selection
                 had a shallower drawdown and lower long-period growth.
               </p>
             </div>
           </div>
           <p class="home-verdict-foot">
-            Historical simulations, with model and data limitations. No forecast
-            or universal winner.
+            Retrospective simulations subject to model and data limitations.
+            No predictive or universal performance claim.
           </p>
         </aside>
       </section>
@@ -133,14 +133,14 @@
       >
         <div class="home-section-heading">
           <div>
-            <p class="eyebrow">The evidence so far</p>
+            <p class="eyebrow">Empirical evidence</p>
             <h2 id="studies-title">
-              Two studies.<br /><em>Different perspectives.</em>
+              Two pilot studies.<br /><em>Distinct research settings.</em>
             </h2>
           </div>
           <p>
-            Start with the findings. Follow each report for the full comparison,
-            the losing cases, and the assumptions behind the numbers.
+            Each report presents the full comparison, including negative results
+            and the assumptions underlying the reported estimates.
           </p>
         </div>
         <div class="home-study-grid">
@@ -153,14 +153,14 @@
               ><span class="home-study-tag">Pilot · provisional inputs</span>
             </div>
             <h3 id="stock-study-title">
-              A strong year.<br />A different year before it.
+              Frequency effects<br />vary across years.
             </h3>
             <p class="home-study-description">
               A fixed cohort of 100 baseline issuers, with 20 target holdings.
               Monthly and March/September selection use the same 12–1 signal.
             </p>
             <div class="home-stock-controls">
-              <span>Change the trading cost</span>
+              <span>Trading-cost scenario</span>
               <fieldset id="home-cost-controls" disabled>
                 <legend class="sr-only">Trading cost per side</legend>
                 <div class="home-cost-options">
@@ -287,7 +287,7 @@
               <span>02 / Sector ETFs</span
               ><span class="home-study-tag">2001–2025</span>
             </div>
-            <h3 id="etf-study-title">Over 25 years,<br />slower grew more.</h3>
+            <h3 id="etf-study-title">Lower monthly growth<br />over 25 years.</h3>
             <p class="home-study-description">
               Nine sector ETFs, with up to three held. The primary comparison
               uses 12–1 momentum and March/September as the semiannual schedule.
@@ -325,9 +325,9 @@
                 />
               </svg>
               <p>
-                The trade-off: monthly selection also had a
-                <strong>shallower maximum drawdown</strong> and required more
-                trading.
+                Monthly selection combined a
+                <strong>shallower maximum drawdown</strong> with higher
+                trading activity.
               </p>
             </div>
             <p id="home-etf-status" class="home-data-status" role="status">
@@ -359,7 +359,7 @@
           <strong>Compare within each study.</strong> The stock chart shows
           cumulative return differences over its labeled windows. The ETF
           headline shows a difference in annualized growth rates. They are
-          different measures, not a common leaderboard.
+          different measures and should be interpreted separately.
         </p>
       </section>
 
@@ -370,39 +370,39 @@
       >
         <div class="home-section-heading">
           <div>
-            <p class="eyebrow">How we ask the question</p>
+            <p class="eyebrow">Empirical design</p>
             <h2 id="method-title">
-              Change the timing.<br /><em>Show the trade-offs.</em>
+              Rebalancing frequency.<br /><em>Matched comparisons.</em>
             </h2>
           </div>
           <p>
-            Momentum strategies favor assets with strong past performance. Our
-            central question is how often to update that selection.
+            Momentum strategies select assets based on past performance. The
+            primary comparison changes the frequency of portfolio selection.
           </p>
         </div>
         <div class="home-principles">
           <article>
             <span>01</span>
-            <h3>Keep the comparison controlled.</h3>
+            <h3>Controlled strategy comparisons.</h3>
             <p>
-              Within each primary pair, keep the universe, signal and portfolio
-              rules fixed. Change monthly versus semiannual selection.
+              Within each primary pair, the universe, signal and portfolio
+              rules remain fixed. Selection occurs monthly or semiannually.
             </p>
           </article>
           <article>
             <span>02</span>
-            <h3>Charge for the extra activity.</h3>
+            <h3>Transaction-cost sensitivity.</h3>
             <p>
-              Model costs on every buy and sell. Show 0, 5, 10 and 25 bps per
-              side, alongside the return and drawdown.
+              Costs apply to each purchase and sale. Scenarios of 0, 5, 10 and
+              25 bps per side are reported alongside return and drawdown.
             </p>
           </article>
           <article>
             <span>03</span>
-            <h3>Keep the inconvenient results.</h3>
+            <h3>Complete comparative reporting.</h3>
             <p>
-              Publish different periods, calendar schedules and signal variants.
-              A favorable year never replaces the full record.
+              Reported comparisons cover prespecified periods, calendar schedules
+              and signal variants. A favorable year does not replace the complete results.
             </p>
           </article>
         </div>
@@ -411,7 +411,7 @@
       <section class="home-research wrap" aria-labelledby="research-title">
         <div>
           <p class="eyebrow">Open methods, inspectable evidence</p>
-          <h2 id="research-title">Read beyond<br /><em>the headline.</em></h2>
+          <h2 id="research-title">Methods and<br /><em>research evidence.</em></h2>
           <p>
             Protocols, data provenance, code and limitations live with the
             research. The two pilot studies do not complete the separate,

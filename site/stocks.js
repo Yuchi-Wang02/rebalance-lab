@@ -246,7 +246,7 @@
     const reversal = spread2025 * spread2026 < 0;
     $('stock-spread-2025').textContent = pp(spread2025);
     $('stock-spread-2026').textContent = pp(spread2026);
-    $('stock-perspective-title').textContent = reversal ? 'The sign changes across years.' : 'The same test, two windows.';
+    $('stock-perspective-title').textContent = reversal ? 'Annual Frequency Effects Differ in Sign' : 'Annual Frequency Effects';
     $('stock-perspective-note').textContent = `M12 minus S12 at ${cost} bps per side. ${reversal ? 'A stronger result in one window does not settle the frequency question.' : 'Neither window is an independent, untouched holdout.'}`;
     $('stock-result-story').textContent = `In the ${window.label.toLowerCase()} view, monthly 12–1 selection returned ${pct(monthly.total_return)}, ${direction} the semiannual portfolio at ${pct(slow.total_return)}. Both figures include ${cost} bps per side in modeled trading costs. The comparison belongs to this 100-issuer, 20-position pilot.`;
     $('stock-interpretation').textContent = `The primary frequency difference is ${pp(primary)}; with the blended signal it is ${pp(replication)}. The difference between those effects is ${pp(interaction)}. These are observed differences for the selected window and cost assumption, not statistical significance or evidence that the full 75-stock strategy would behave the same way.`;

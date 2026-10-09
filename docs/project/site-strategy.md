@@ -2,13 +2,13 @@
 
 ## Identity and promise
 
-**Rebalance Lab** asks **“Does trading more often pay?”** The name gives future studies room to examine frequency, costs and portfolio decisions without implying that the project reproduces one ETF. SPMO remains a relevant benchmark in the stock study and part of the research history, rather than the main public hook.
+**Rebalance Lab** presents **Rebalancing Frequency in Momentum Portfolios**. The title names the research subject directly. The site compares monthly and semiannual portfolio formation, reporting returns, drawdowns, trading activity and transaction costs within each study's stated data and accounting limits. SPMO remains a relevant benchmark in the stock study and part of the research history, rather than the umbrella identity.
 
-The primary reader is a curious investor who understands returns, fees and drawdowns but should not need to read Python before finding the result. The secondary reader is a researcher or developer who wants exact rules, source limitations, independent checks and reproduction instructions. The site serves these readers through two routes: **explore an experiment** and **inspect or reproduce it**.
+The primary readers are researchers, students and investment practitioners who need to understand the study design, measured results and limitations before inspecting the code. A technical reader can follow exact rules, source provenance, independent checks and reproduction instructions. The site serves these readers through two routes: **review the empirical findings** and **inspect or reproduce the analysis**.
 
 ## Lead with the observed answers
 
-The homepage opens with the question and a direct answer: the measured benefit changes with the period, portfolio and modeled trading cost. It presents two equally visible study cards:
+The homepage opens with the research subject and a concise empirical summary: observed frequency differences vary by period, portfolio and modeled trading cost. Its language should be precise and academic without implying peer review, publication acceptance or causal identification. It presents two equally visible study cards:
 
 | Study | First result to show | Context that stays beside it |
 |---|---|---|

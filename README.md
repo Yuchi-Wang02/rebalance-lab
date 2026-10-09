@@ -1,15 +1,15 @@
 # Rebalance Lab
 
-## Does trading more often pay?
+## Rebalancing Frequency in Momentum Portfolios
 
-**The answer changes with the period, the portfolio and the cost of trading.** Two published pilot experiments compare monthly momentum selection with a fixed March/September schedule. One found a small cumulative advantage for monthly selection; the longer study found lower annualized returns. Both publish the unfavorable comparisons alongside the favorable ones.
+**An empirical comparison of monthly and semiannual rebalancing in momentum portfolios.** Two limited pilot studies evaluate net returns, drawdowns and transaction costs, using March/September as the primary semiannual schedule. The fixed-cohort stock pilot reports a small full-period cumulative advantage for monthly selection; the longer sector ETF study reports lower annualized growth. Both retain negative results and explicit data and modeling limitations.
 
 [![Research checks](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/checks.yml/badge.svg)](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/checks.yml)
 [![Website deployment](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/pages.yml/badge.svg)](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/pages.yml)
 
 [Explore the research](https://yuchi-wang02.github.io/rebalance-lab/) · [Stock experiment](https://yuchi-wang02.github.io/rebalance-lab/stocks.html) · [ETF experiment](https://yuchi-wang02.github.io/rebalance-lab/pilot.html) · [Methods and reproduction](docs/README.md)
 
-### Two experiments, two different answers
+### Pilot studies and empirical findings
 
 | Study | What was compared | Finding at 5 bps per side |
 |---|---|---|
@@ -22,7 +22,7 @@ These studies use different universes, weights, price conventions and measuremen
 
 Five basis points means a modeled cost of **0.05% on each purchase or sale**. Every study also reports 0, 10 and 25 bps scenarios. In the stock study, the full-period monthly advantage became **−0.74 points at 25 bps**. In the ETF study, changing the semiannual months could change the comparison's sign. A favorable year or calendar does not establish a durable advantage.
 
-### Inspect an answer, then inspect its limits
+### Results, methods and limitations
 
 - **Stocks:** [interactive report](https://yuchi-wang02.github.io/rebalance-lab/stocks.html), [written findings](docs/studies/stock-pilot.md), [aggregate results](site/data/stock-pilot-summary.json), [independent replay](site/data/stock-pilot-validation.json).
 - **ETFs:** [interactive report](https://yuchi-wang02.github.io/rebalance-lab/pilot.html), [written findings](docs/studies/sector-etf-pilot.md), [all calendar/cost comparisons](site/data/etf-pilot-full_period.csv), [independent replay](docs/validation/pilot-validation.md).
@@ -31,7 +31,7 @@ Both use vendor-adjusted price proxies. Independent implementations reproduce th
 
 The [original 75-stock protocol](docs/methods/original-stock-protocol.md) remains a separate, uncompleted study. It requires accepted historical membership, class-level capitalization, dividend-excluding signals and a raw-share corporate-action ledger. Neither completed experiment meets that full contract. The [data audit](docs/data/original-data-audit.md) records the missing inputs.
 
-### Find your way around
+### Repository structure
 
 ```text
 site/                 Interactive research and published aggregates

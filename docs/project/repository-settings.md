@@ -1,6 +1,6 @@
 # Repository identity and owner settings
 
-The public project name is **Rebalance Lab**. Its research question is **Does trading more often pay?** SPMO is a benchmark and part of the project's history; it is not the umbrella brand.
+The public project name is **Rebalance Lab**. Its research focus is **Rebalancing Frequency in Momentum Portfolios**. SPMO is a benchmark and part of the project's history; it is not the umbrella brand.
 
 The repository was renamed on October 9, 2026 to [`Yuchi-Wang02/rebalance-lab`](https://github.com/Yuchi-Wang02/rebalance-lab). Maintained site and documentation links now use this identity. The Pages address is <https://yuchi-wang02.github.io/rebalance-lab/>.
 
@@ -9,7 +9,7 @@ The repository was renamed on October 9, 2026 to [`Yuchi-Wang02/rebalance-lab`](
 | Field | Value |
 | --- | --- |
 | Repository name | `rebalance-lab` |
-| Description | Does trading more often pay? Reproducible momentum experiments with trading costs, calendar sensitivity, and transparent data limits. |
+| Description | Empirical research on rebalancing frequency in momentum portfolios, with transparent analysis of returns, drawdowns, transaction costs, and data limitations. |
 | Website | `https://yuchi-wang02.github.io/rebalance-lab/` |
 | Topics | `portfolio-rebalancing`, `momentum-investing`, `quantitative-finance`, `backtesting`, `transaction-costs`, `empirical-finance`, `reproducible-research`, `financial-data`, `python`, `data-visualization`, `etf`, `github-pages` |
 
