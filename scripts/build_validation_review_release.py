@@ -145,7 +145,8 @@ def build(node):
     for key in ("actual_answers_recorded","checkpoint_1","checkpoint_2","checkpoint_3"):
         require(status["owner_review"][key]==progress[key],"owner progress projection is stale")
     require(status["owner_presentation_ready"]==progress["owner_presentation_ready"],"owner readiness projection")
-    status["stage"]="research_and_presentation_complete_local_review"
+    if not status["publication"].get("production_publication_authorized",False):
+        status["stage"]="research_and_presentation_complete_local_review"
     status["research_and_presentation_complete"]=True
     status["publication"]["local_review_package_complete"]=True
     save(ROOT/"results/status.json",status)

@@ -9,7 +9,7 @@
     "notebooks/validation-study.ipynb": "675272523564fefdb34108c48e561ba26fef70020a45f543ef7e79eb56c115a8",
     "results/owner-review-progress.json": "a646dc03e09746568204b32fd50b1825e3bb521edf6a1eb041ae1bab4ea52da1",
     "results/presentation-review.json": "0a524e6d2e5360fab08b5df0386aa294264b9a64a5c53fc44fe5446714cb68ba",
-    "results/status.json": "9060e74107ee10e5be4fcc2bc883cd53b2b3a8a81b15aacab679230861eb6582",
+    "results/status.json": "f61a3b1575ec5c77fd32de6c5526088acf61ba22f9dcf37f48a0bfc5f0be3e2d",
     "site/app.js": "cfc1feffe06c416c749a6094044e7c7a26dafab73989cf9ae872c121b136fbd4",
     "site/assets/favicon.svg": "63b3bbe87f3866f2b922d0e68ed6e91baa580bce3c38d7b3d8374e0a99071a2b",
     "site/assets/pilot-annual-spread.svg": "40281a32c4b6c1c3311025b7e4ee9537faa7b358b167a7f165ca84396690a74e",
@@ -58,6 +58,8 @@
     "site/validation.css": "5d1ec427975d091fb87133d94ed8050406c6e8eab6a9b1c7648244c0620fff24",
     "site/validation.js": "f3caaae5e02c765ab9350cb3c3055da84dca56a6b7e9c51bcb644ff814bdb90b"
   },
+  "authorization_record": "results/status.json",
+  "authorization_supplement_at_utc": "2026-10-09T06:55:20.941801+00:00",
   "baseline_commit": "56479fc9bfef756f81eba269e6114ac35b36d375",
   "checks": {
     "browser": {
