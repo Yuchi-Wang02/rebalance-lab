@@ -4,7 +4,7 @@
 
 A reproducible research project about faster portfolio rotation within the S&P 500. The aim is to test a plausible idea—not to advertise an ETF, recommend trades, or assume that more trading produces better returns.
 
-**Current release: protocol v0.2, reproducible price diagnostics and website preview. No market backtest has been run.** A direct Yahoo request returned 711 daily observations each for SPMO and SPY, from December 1, 2023 through October 2, 2026. Structural/value checks passed and offline replay reproduced the derived files. Exchange-calendar completeness and price-adjustment semantics remain unverified. The repository contains the research design, ingestion tools and a static GitHub Pages site; it does not yet contain a backtest engine or audited historical-universe dataset.
+**Current release: protocol v0.2, a synthetic engine prototype, reproducible price diagnostics and website preview. No market backtest has been run.** The engine runs the four strategies and four cost assumptions on fictional inputs to inspect signals, execution and accounting. Formal engine acceptance and the historical-data audit remain pending. Separately, direct Yahoo requests returned 711 daily observations each for SPMO and SPY, from December 1, 2023 through October 2, 2026; structural checks and offline replay passed, while exchange-calendar completeness and price-adjustment semantics remain unverified.
 
 ## The research question
 
@@ -53,7 +53,7 @@ The [static site source](site/index.html) is designed for curious ETF investors 
 
 ## Run the available checks
 
-Python 3.12+; no third-party dependencies are needed for the design checks or static site.
+Python 3.12+; no third-party dependencies are needed for the engine, checks or static site.
 
 ```bash
 python3 scripts/validate_design.py
@@ -61,7 +61,15 @@ python3 -m unittest discover -s tests -p 'test_*.py' -v
 node --check site/app.js
 ```
 
-These offline commands check protocol/status invariants and links, exercise ingestion/replay failures, and check site JavaScript syntax. Node is needed only for the JavaScript check. No provider account or network request is required.
+These offline commands check protocol/status invariants and links, exercise synthetic engine and ingestion/replay cases, and check site JavaScript syntax. Node is needed only for the JavaScript check. No provider account or network request is required.
+
+Run the complete fictional experiment:
+
+```bash
+python3 scripts/run_synthetic.py --output-dir results/generated/synthetic --public-summary site/data/engine-status.json
+```
+
+Each invocation creates a new run directory with all 16 strategy/cost combinations and a reproducibility manifest. The public receipt contains engineering checks, counts and hashes, with no performance figures. The [engine guide](docs/engine.md) explains the implementation boundary and outputs. Synthetic results test software behavior; they do not estimate investment performance.
 
 Run `python3 scripts/ingest_diagnostic.py` to acquire a new private diagnostic snapshot. See the [pipeline guide](docs/data-pipeline.md) for replay and public-summary export commands. The separate `python3 scripts/check_source_access.py` probes documentation reachability only; it does not prove subscription access.
 
@@ -78,6 +86,7 @@ To inspect the site locally, run `python3 -m http.server 8000 --directory site` 
 | [Experiment configuration](configs/experiment.v1.json) | Machine-readable protocol v0.2; filename retained for existing links |
 | [Source registry](configs/data-sources.json) | Provider documentation, connection routes and gaps |
 | [Diagnostic pipeline](docs/data-pipeline.md) | Fixed-window acquisition, quality checks, hash verification and offline replay |
+| [Synthetic engine guide](docs/engine.md) | Offline fictional experiment, accounting rules, reproducibility and remaining acceptance work |
 | [Public diagnostic summary](site/data/ingestion-summary.json) | Observed dates, aggregate quality counts and provenance; no market bars |
 | [Research status](results/status.json) | Explicit machine-readable absence of market results |
 | [Website](site/index.html) | Static, dependency-free public presentation |
@@ -86,7 +95,7 @@ To inspect the site locally, run `python3 -m http.server 8000 --directory site` 
 
 1. **Protocol and source plan:** documented in this release; parameters remain proposed until frozen before a market run.
 2. **Data acceptance:** benchmark price diagnostics are implemented; permanent-ID mapping, historical membership, original prices, corporate actions, capitalization vintages and benchmark reconstruction remain pending.
-3. **Engine acceptance:** look-ahead prevention, share/cash conservation, split and dividend accounting, fees, caps and unfilled orders.
+3. **Engine acceptance:** the synthetic prototype exercises signals, accounting and execution. Formal acceptance still requires broader event coverage, independent reconciliation and audited market inputs.
 4. **Historical experiment:** all four arms and all prespecified cost scenarios, with ledgers and reproducible manifests.
 5. **Forward observation:** signals saved before execution after the final protocol/implementation freeze. Never relabel retrospective results as live observations.
 

@@ -1,6 +1,6 @@
 # Feasibility, data contract, and release gates
 
-Protocol v0.2 is a research specification. **No backtest engine is implemented and no full research dataset has passed an audit. A small unauthenticated Yahoo price request succeeded; that diagnostic does not satisfy the experiment’s data contract.** There are no performance results. Reading provider documentation or passing configuration checks does not change that status.
+Protocol v0.2 is a research specification. **A synthetic engine prototype is implemented; formal engine acceptance and the full research-data audit remain pending.** The prototype runs fictional inputs through the four-arm experiment and its cost scenarios; see the [engine guide](engine.md). Separate unauthenticated Yahoo price diagnostics do not satisfy the experiment’s historical-data contract. There are no market performance results. Reading provider documentation or passing synthetic checks does not change that status.
 
 Daily research on several hundred securities is technically manageable. The limiting work is obtaining historical constituents, usable opening prices, corporate actions, and historical shares with defensible availability dates. See the [source and connection plan](data-sources.md) for candidate providers, access requirements, and unresolved coverage. A licensed export imported into this cloud workspace may be more practical than a native connection; provider access and redistribution rights must be verified separately.
 
@@ -66,7 +66,7 @@ No tier may disguise missing data as zero returns. Preserve unavailable states a
 | 1. Freeze specification | Versioned four-arm configuration and common event rules | Pairwise frequency controls differ only in their schedule; time, signal, selection, weighting, and cash rules are deterministic. |
 | 2. Establish access | Source registry, authorized extraction/import steps, small sample | Confirm account entitlement, historical coverage, field semantics, platform compatibility, and publication rights. Documentation access is not dataset access. |
 | 3. Audit inputs | Normalized tables, source hashes, coverage and exception reports | Required burn-in and signal history are present; membership, identifiers, opening prices, actions, and historical cap reconcile. No unexplained critical gaps or silent omissions. |
-| 4. Validate engine | Deterministic accounting and timing checks | Splits conserve value; dividends and fees are counted once; future information is inaccessible; cash and quantities reconcile; halted orders cannot fill. None of these engine checks is implemented yet. |
+| 4. Validate engine | Deterministic accounting and timing checks | The synthetic prototype exercises signals, splits, dividends, fees, point-in-time selection, cash conservation and unfilled orders. Formal acceptance still requires broader event coverage and independent reconciliation; the implemented checks are described in the [engine guide](engine.md). |
 | 5. Reconcile market run | Inspectable fills, positions, NAV, and reference comparisons | Trace representative trades and events to sources. Explain material differences between reconstructed ETF returns and published reference conventions. |
 | 6. Publish results | All four arms and cost scenarios, diagnostics, limitations | Reproduce from the same code/config/data versions. Present primary, replication, and interaction contrasts without selecting only favorable outcomes. |
 
@@ -74,7 +74,7 @@ A future paper track begins after a frozen version is published, with signals re
 
 ## Output contract
 
-These are planned outputs, not existing results. A `run_id` identifies **one arm × one cost scenario × one data snapshot × one code/config version**. Every combination receives a distinct ID; the manifest maps it to `strategy_id`. Keep burn-in and measurement periods separately identified.
+The table defines the full market-research output contract. The synthetic prototype provides a subset of these artifacts on fictional data; see the [engine guide](engine.md) for its current outputs. A `run_id` identifies **one arm × one cost scenario × one data snapshot × one code/config version**. Every combination receives a distinct ID; the manifest maps it to `strategy_id`. Keep burn-in and measurement periods separately identified.
 
 | Artifact | Key fields / purpose |
 |---|---|
@@ -88,10 +88,10 @@ These are planned outputs, not existing results. A `run_id` identifies **one arm
 | `nav_daily.csv` | Run/strategy IDs, session, period label, cash, receivables, securities value, NAV, return, cumulative costs, valuation status. |
 | `metrics.csv` / `monthly_returns.csv` | Run ID, metric/period, definition, value, observation count; net return, drawdown, traded notional, costs, cash and concentration diagnostics. |
 
-Define precision and rounding before implementation. Keep trading turnover explicit: purchases plus sales divided by pretrade NAV; label any half-turnover convention separately. Report missing metrics as unavailable, not as zero performance.
+Document precision and rounding as part of engine acceptance. Keep trading turnover explicit: purchases plus sales divided by pretrade NAV; label any half-turnover convention separately. Report missing metrics as unavailable, not as zero performance.
 
 ## GitHub publication
 
-Publish English methodology, configuration, source instructions, code when implemented, synthetic fixtures, and permitted aggregate results. Access to data is not permission to redistribute it. Retain hashes and acquisition instructions when raw files must remain private. Exclude credentials, signed download URLs, personal information, and conversation exports.
+Publish English methodology, configuration, source instructions, implemented code, synthetic fixtures, and permitted aggregate results. Access to data is not permission to redistribute it. Retain hashes and acquisition instructions when raw files must remain private. Exclude credentials, signed download URLs, personal information, and conversation exports.
 
 Maintain separate status flags for source documentation reviewed, connection established, data acquired, audit passed, engine validated, and market run completed. Configuration checks establish only their stated finite constraints; they cannot certify this experiment's performance.

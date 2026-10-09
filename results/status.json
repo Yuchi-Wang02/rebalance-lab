@@ -1,11 +1,14 @@
 {
   "schema_version": 1,
-  "stage": "data_diagnostics",
+  "stage": "synthetic_engine_validation",
   "market_backtest_executed": false,
-  "engine_implemented": false,
+  "engine_implemented": true,
+  "engine_status": "synthetic_prototype",
+  "formal_engine_accepted": false,
+  "synthetic_validation_summary": "site/data/engine-status.json",
   "data_audit_completed": false,
   "returns": null,
-  "reason": "Fixed-window benchmark price capture and offline replay are implemented; historical-universe data, calendar/adjustment audits and the backtest engine remain pending.",
+  "reason": "Price diagnostics and a synthetic-only engine are implemented; audited historical-universe data, full corporate-action support and market reconciliation remain pending.",
   "protocol_version": "0.2.0",
   "price_ingestion_diagnostic": {
     "provider": "Yahoo chart API",

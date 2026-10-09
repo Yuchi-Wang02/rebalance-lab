@@ -68,7 +68,16 @@ def validate(root: Path) -> list[str]:
     for pair in comparisons["product_context"]:
         require(len(pair) == 2 and all(x in known for x in pair), f"Unknown product comparison: {pair}.")
     require(not config["results"]["executed"] and config["results"]["market_returns"] is None, "No market result has been generated in this release.")
-    require(status["stage"] == "data_diagnostics" and not status["engine_implemented"] and not status["data_audit_completed"] and not status["market_backtest_executed"] and status["returns"] is None, "Research status must remain honest about unrun work.")
+    require(status["stage"] == "synthetic_engine_validation" and status["engine_implemented"] is True and status["engine_status"] == "synthetic_prototype" and status["formal_engine_accepted"] is False and not status["data_audit_completed"] and not status["market_backtest_executed"] and status["returns"] is None, "Research status must distinguish synthetic implementation from market acceptance.")
+    engine = json.loads((root / "site/data/engine-status.json").read_text())
+    require(engine["engine_status"] == "synthetic_prototype" and engine["data_track"] == "synthetic" and engine["formal_engine_accepted"] is False and engine["market_backtest_executed"] is False and engine["research_ready"] is False, "Synthetic receipt cannot claim market readiness.")
+    require(engine["run_count"] == 16 and engine["strategy_ids"] == list(arms) and engine["cost_bps"] == common["cost_bps_per_side_scenarios"], "Synthetic receipt must include every arm and cost scenario.")
+    require(engine["checks"] and all(v is True for v in engine["checks"].values()), "Synthetic engineering checks must pass.")
+    require(engine["config_sha256"] == hashlib.sha256((root / "configs/experiment.v1.json").read_bytes()).hexdigest(), "Synthetic receipt uses a different configuration.")
+    expected_code = {"scripts/run_synthetic.py", *[str(p.relative_to(root)) for p in (root / "spmo_lab").glob("*.py")]}
+    require(set(engine["code_sha256"]) == expected_code, "Synthetic receipt must identify every engine module.")
+    for name, digest in engine["code_sha256"].items():
+        require(name in expected_code and hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, "Synthetic receipt code hash mismatch; rerun the fixture.")
     summary = json.loads((root / "site/data/ingestion-summary.json").read_text())
     diagnostic = status["price_ingestion_diagnostic"]
     require(summary["research_ready"] is False and diagnostic["research_ready"] is False and diagnostic["full_dataset_audited"] is False, "Price diagnostics cannot certify the research dataset.")
@@ -130,7 +139,7 @@ def main():
     if errors:
         return 1
     print("PASS: limited protocol, factorial controls, source registry, status and local link checks.")
-    print("NOT RUN: market-data audit, backtest-engine tests, or market backtest.")
+    print("NOT RUN by this command: engine tests, market-data audit or market backtest. Synthetic execution has a separate receipt.")
     return 0
 
 

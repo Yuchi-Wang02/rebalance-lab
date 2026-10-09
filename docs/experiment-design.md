@@ -1,6 +1,6 @@
 # Experiment protocol v0.2
 
-**Status: proposed protocol, not an implemented or completed market backtest.** The purpose is to test faster momentum rotation, not to establish in advance that a faster strategy wins. This release supersedes the v0.1 cumulative ablation chain; the previous commit remains in Git history.
+**Status: proposed protocol with a synthetic engine prototype; no completed market backtest.** The purpose is to test faster momentum rotation, not to establish in advance that a faster strategy wins. The [engine guide](engine.md) describes the fictional-data implementation and its remaining acceptance work. This release supersedes the v0.1 cumulative ablation chain; the previous commit remains in Git history.
 
 ## 1. What changed and why
 

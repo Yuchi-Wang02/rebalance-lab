@@ -1,7 +1,7 @@
 'use strict';
 
-// The site explains the protocol, reads a saved ingestion diagnostic, and offers
-// a fee-arithmetic illustration. It does not request prices or simulate returns.
+// The site explains the protocol, reads saved diagnostic/engineering receipts,
+// and illustrates fee arithmetic. It does not request prices or simulate returns.
 const arms = {
   S12: {
     tag: 'Primary control',
@@ -167,9 +167,6 @@ function renderDiagnosticSummary(summary) {
   document.getElementById('diagnostic-state').textContent = passed
     ? 'Price ingestion checks passed. The research data audit remains pending.'
     : 'The diagnostic has unresolved issues. Inspect the saved summary and pipeline notes before using these inputs.';
-  document.getElementById('research-status').textContent = passed
-    ? 'Price pipeline tested; research data audit pending.'
-    : 'Price diagnostic issues; research audit pending.';
   const generated = new Date(summary.generated_at_utc).toISOString().replace('T', ' ').replace('.000Z', ' UTC');
   document.getElementById('diagnostic-meta').textContent = `Requested: ${summary.requested_start} to ${summary.requested_end}. Summary generated: ${generated}. Cache replay: ${summary.cache_replay_verified ? 'verified' : 'not verified'}.`;
   document.getElementById('diagnostic-results').hidden = false;
@@ -191,3 +188,82 @@ async function loadDiagnosticSummary() {
 }
 
 loadDiagnosticSummary();
+
+function validateEngineSummary(summary) {
+  const expectedStrategies = ['S12', 'M12', 'SMIX', 'MMIX'];
+  const expectedCosts = [0, 5, 10, 25];
+  const matchesSet = (values, expected) => Array.isArray(values)
+    && values.length === expected.length && new Set(values).size === expected.length
+    && values.every((value) => expected.includes(value));
+  const isRecord = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+  if (!summary || summary.schema_version !== 1 || summary.engine_status !== 'synthetic_prototype'
+      || summary.data_track !== 'synthetic' || summary.formal_engine_accepted !== false
+      || summary.market_backtest_executed !== false || summary.research_ready !== false
+      || !matchesSet(summary.strategy_ids, expectedStrategies) || !matchesSet(summary.cost_bps, expectedCosts)
+      || !Number.isSafeInteger(summary.run_count)
+      || summary.run_count !== expectedStrategies.length * expectedCosts.length
+      || !isRecord(summary.checks) || Object.keys(summary.checks).length === 0
+      || Object.keys(summary.checks).length > 40
+      || !Object.entries(summary.checks).every(([name, value]) => name.length > 0 && name.length <= 120 && typeof value === 'boolean')
+      || typeof summary.generated_at_utc !== 'string' || !Number.isFinite(Date.parse(summary.generated_at_utc))
+      || !Array.isArray(summary.limitations) || summary.limitations.length > 20
+      || !summary.limitations.every((value) => typeof value === 'string' && value.trim().length > 0 && value.length <= 2000)) {
+    throw new Error('Unsupported synthetic engine receipt');
+  }
+  return summary;
+}
+
+function renderEngineSummary(summary) {
+  const checks = Object.entries(summary.checks);
+  const passedCount = checks.filter(([, passed]) => passed).length;
+  document.getElementById('engine-run-count').textContent = String(summary.run_count);
+  document.getElementById('engine-check-count').textContent = `${passedCount} / ${checks.length}`;
+  document.getElementById('engine-combinations').textContent = `${summary.strategy_ids.join(' · ')}. Each tested at ${summary.cost_bps.join(' / ')} bps per side, on synthetic data.`;
+  const checkList = document.createDocumentFragment();
+  for (const [name, passed] of checks) {
+    const item = document.createElement('li');
+    const label = document.createElement('span');
+    const humanName = name.replace(/[_-]+/g, ' ');
+    label.textContent = humanName.charAt(0).toUpperCase() + humanName.slice(1);
+    const result = document.createElement('strong');
+    result.textContent = passed ? 'Passed' : 'Needs review';
+    result.className = passed ? 'check-passed' : 'check-unresolved';
+    item.append(label, result);
+    checkList.append(item);
+  }
+  document.getElementById('engine-checks').replaceChildren(checkList);
+  const limitations = document.createDocumentFragment();
+  for (const limitation of summary.limitations) {
+    const item = document.createElement('li');
+    item.textContent = limitation;
+    limitations.append(item);
+  }
+  if (summary.limitations.length === 0) {
+    const item = document.createElement('li');
+    item.textContent = 'No additional limitations listed in this receipt. Market validation and formal acceptance remain pending.';
+    limitations.append(item);
+  }
+  document.getElementById('engine-limitations').replaceChildren(limitations);
+  document.getElementById('engine-state').textContent = passedCount === checks.length
+    ? 'The recorded synthetic checks passed. They establish only the specific software behavior tested.'
+    : 'Some recorded synthetic checks need review. This receipt does not establish engine acceptance.';
+  const generated = new Date(summary.generated_at_utc).toISOString().replace('T', ' ').replace(/Z$/, ' UTC');
+  document.getElementById('engine-meta').textContent = `Receipt generated: ${generated}. See the saved JSON for the code, fixture, and configuration hashes.`;
+  document.getElementById('engine-results').hidden = false;
+}
+
+async function loadEngineSummary() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    const response = await fetch('data/engine-status.json', { signal: controller.signal });
+    if (!response.ok) throw new Error('Engine receipt unavailable');
+    renderEngineSummary(validateEngineSummary(await response.json()));
+  } catch {
+    document.getElementById('engine-state').textContent = 'The saved engine receipt could not be loaded or validated. No check results are inferred; read the engine guide for implementation details.';
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+loadEngineSummary();
