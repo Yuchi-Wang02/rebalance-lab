@@ -154,7 +154,7 @@ def build(node):
     tracked=[p for p in files if p.relative_to(ROOT).parts[0] in {"site","notebooks"} or p.relative_to(ROOT).as_posix() in {"README.md","docs/studies/validation-study.md","docs/methods/validation-study.md","docs/validation/validation-memo.md","docs/methods/design-decisions.md","docs/reproduction.md","results/status.json"}]
     dirty=bool(subprocess.run(["git","status","--porcelain"],cwd=ROOT,text=True,capture_output=True,check=True).stdout.strip())
     tracked.extend([ROOT/"results/owner-review-progress.json",ROOT/"results/presentation-review.json"])
-    record={"schema_version":2,"recorded_at_utc":datetime.now(timezone.utc).isoformat(),"baseline_commit":baseline,"implementation_is_uncommitted":dirty,"research_and_presentation_complete":True,"owner_presentation_ready":status["owner_presentation_ready"],"new_version_deployed":status["publication"]["new_version_deployed"],"checks":checks,"release_scope":{"raw_vendor_data":False,"credentials":False,"private_ledgers":False,"private_owner_material":False},"artifact_sha256":{p.relative_to(ROOT).as_posix():sha(p) for p in tracked}}
+    record={"schema_version":2,"recorded_at_utc":datetime.now(timezone.utc).isoformat(),"baseline_commit":baseline,"implementation_is_uncommitted_at_packaging":dirty,"research_and_presentation_complete":True,"owner_presentation_ready":status["owner_presentation_ready"],"new_version_deployed":status["publication"]["new_version_deployed"],"checks":checks,"release_scope":{"raw_vendor_data":False,"credentials":False,"private_ledgers":False,"private_owner_material":False},"artifact_sha256":{p.relative_to(ROOT).as_posix():sha(p) for p in tracked}}
     save(ROOT/"results/validation-release.json",record)
     review='''# Rebalance Lab：本地发布审阅包
 

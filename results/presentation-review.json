@@ -6,7 +6,7 @@
   "artifact_sha256": {
     "site/index.html": "e79b28cb569fd05f17588784c5821c5e75bf76faae225be4cbfc79030ec286b8",
     "site/pilot.html": "406ad60c85027ce36553c9b02a122ea348ae86fc32170ffe4c3c98d7c4024ac7",
-    "site/methods.html": "98fdff42a7f7ed5cba77c450041f59dd44c7a368d7a04853dd7a8260d88483c1",
+    "site/methods.html": "ad7a81d6f1c3876489c2797252b1627c718046180c37355484b0efb460cd4c35",
     "site/notebook.html": "ec5b01ead3908294a0ae6dfad7d563c02f21bf7a0d5b1ecd192a89c3262f025a",
     "site/stocks.html": "0b4dba455ce253f421ce8dc54f7e0a79f07b173cf9c78848ad0a5f77cb5f4711",
     "site/validation.css": "5d1ec427975d091fb87133d94ed8050406c6e8eab6a9b1c7648244c0620fff24",
@@ -58,5 +58,6 @@
     "home-desktop.jpg": "7f3f2c3777fd32115bae7b21d4b753d8c97d448df2ffa35fca96d6d2bb564b78",
     "notebook-desktop.jpg": "3466c71bbffe970b1d0195a0ab6cdd27c1e2cb12bacff64c26a6aac44a8df2e0"
   },
-  "scope": "Presentation and technical usability only; not independent scientific validation or owner mastery."
+  "scope": "Presentation and technical usability only; not independent scientific validation or owner mastery.",
+  "publication_documentation_reviewed_at_utc": "2026-10-09T07:04:05.362322+00:00"
 }

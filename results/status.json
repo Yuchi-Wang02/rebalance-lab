@@ -13,17 +13,22 @@
     "authorization_for_new_version": true,
     "existing_public_version_commit": "56479fc9bfef756f81eba269e6114ac35b36d375",
     "local_review_package_complete": true,
-    "new_version_deployed": false,
+    "new_version_deployed": true,
     "production_publication_authorized": true,
     "review_branch": "codex/research-continuation",
     "review_branch_authorized": true,
     "authorization_recorded_at_utc": "2026-10-09T06:55:20.941801+00:00",
     "approved_review_url": "https://github.com/Yuchi-Wang02/rebalance-lab/pull/1",
-    "approved_review_head": "b11cecf15732dcedd7c72669d63a581582a8002e"
+    "approved_review_head": "b11cecf15732dcedd7c72669d63a581582a8002e",
+    "merged_pull_request": "https://github.com/Yuchi-Wang02/rebalance-lab/pull/1",
+    "last_verified_deployment_commit": "c00c52a4d8466de7e52fc758b4cc541de98daab2",
+    "live_verification_path": "results/publication-verification.json",
+    "deployment_verified_at_utc": "2026-10-09T07:00:53.703915+00:00",
+    "research_version": "sector-etf-validation-v1"
   },
   "research_and_presentation_complete": true,
   "schema_version": 2,
-  "stage": "production_release_authorized_pending_ci",
+  "stage": "research_and_presentation_complete_published",
   "studies": {
     "original_stock": {
       "archive_protocol": "docs/archive/methods/original-stock-protocol.md",

@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-10-09T07:00:53.703915+00:00",
+  "verified_commit": "c00c52a4d8466de7e52fc758b4cc541de98daab2",
+  "base_url": "https://yuchi-wang02.github.io/rebalance-lab/",
+  "site_files_checked": 47,
+  "all_file_bytes_match": true,
+  "files": {
+    "app.js": {
+      "status": 200,
+      "sha256": "cfc1feffe06c416c749a6094044e7c7a26dafab73989cf9ae872c121b136fbd4",
+      "bytes": 7437
+    },
+    "assets/favicon.svg": {
+      "status": 200,
+      "sha256": "63b3bbe87f3866f2b922d0e68ed6e91baa580bce3c38d7b3d8374e0a99071a2b",
+      "bytes": 204
+    },
+    "assets/pilot-annual-spread.svg": {
+      "status": 200,
+      "sha256": "40281a32c4b6c1c3311025b7e4ee9537faa7b358b167a7f165ca84396690a74e",
+      "bytes": 41721
+    },
+    "assets/pilot-calendar-costs.svg": {
+      "status": 200,
+      "sha256": "ab7643b354c91ddca18e0d506675a7999a039c467ca5bbf7d6fb9bbf86ee4847",
+      "bytes": 75404
+    },
+    "assets/pilot-wealth-drawdown.svg": {
+      "status": 200,
+      "sha256": "2e833cc7a3ce4eb7fc158e168105e1c2b06bef74a2be1d788becba807642fcd7",
+      "bytes": 626554
+    },
+    "assets/rebalance-lab-validation-brief.pdf": {
+      "status": 200,
+      "sha256": "ba9c02a0933cb7fb45c452cfe60d113983df72cc11cf7de0e106dbcdb6dfd6d7",
+      "bytes": 309596
+    },
+    "assets/rebalance-lab-validation-memo.pdf": {
+      "status": 200,
+      "sha256": "f571e5d98e173a201786e02aeb67e8ec055b2bbdc8cea138716761dfe824cb28",
+      "bytes": 90236
+    },
+    "assets/research-overview.png": {
+      "status": 200,
+      "sha256": "9767dc9e84c054458723272f04dfc72c469d2531352df658ca57928cc48a592e",
+      "bytes": 383356
+    },
+    "assets/validation-calendar-costs.png": {
+      "status": 200,
+      "sha256": "2bcd6c3d89a3e31c5450d4e9cd2947c90821a0e32b39913f9473dfda1d5e859d",
+      "bytes": 130100
+    },
+    "assets/validation-calendar-costs.svg": {
+      "status": 200,
+      "sha256": "d9370ac4778150902ddb93a625d2e1d2125e16bec5dce238a87e06eb72397dc3",
+      "bytes": 31643
+    },
+    "assets/validation-costs.png": {
+      "status": 200,
+      "sha256": "25406283d5c9a9cc21a51945252bcf6309789bd02727ff037acc5e6815db11c3",
+      "bytes": 81302
+    },
+    "assets/validation-costs.svg": {
+      "status": 200,
+      "sha256": "1a68fac38fb71ea9b904ec182d176675d7486eb0f080e9020c12e9ebe23bac1e",
+      "bytes": 20674
+    },
+    "assets/validation-intervals.png": {
+      "status": 200,
+      "sha256": "a267fc3a757bacb88364c955033f086e980d912f7f6f6aca1cbc1b00e0694406",
+      "bytes": 47165
+    },
+    "assets/validation-intervals.svg": {
+      "status": 200,
+      "sha256": "01e6f24d4be7048c21d8f18b7ea008e50d5e43fd1ea24c3690bf300e36fa9ecc",
+      "bytes": 10416
+    },
+    "assets/validation-preview.png": {
+      "status": 200,
+      "sha256": "704524f686f5fe6452a83d70cc9a94f435924b0774da52df200c8b671b59fa3a",
+      "bytes": 41940
+    },
+    "assets/validation-wealth-drawdown.png": {
+      "status": 200,
+      "sha256": "78fdf032ceeb926c91ab84acdaf9dd663663bb105be5e11dc384684ccd5ee0a6",
+      "bytes": 291861
+    },
+    "assets/validation-wealth-drawdown.svg": {
+      "status": 200,
+      "sha256": "59546770dab1069caaa708ed900ae23724f7383dcf16c7c64a84a97cc20dc8a6",
+      "bytes": 900237
+    },
+    "data/calendar-sensitivity-status.json": {
+      "status": 200,
+      "sha256": "eb820980f98fe46f80e512e0b3249dc70a985666acd3546e4af8915e80c46643",
+      "bytes": 2749
+    },
+    "data/engine-status.json": {
+      "status": 200,
+      "sha256": "0b2c214d9758202183121c835e6797c913c7c3b6cc5a11b57806ade8c498543a",
+      "bytes": 1895
+    },
+    "data/etf-pilot-annual.csv": {
+      "status": 200,
+      "sha256": "290e61211e362544092b7830980944193d1837a6a63e0a6031d140dc11d30d32",
+      "bytes": 376980
+    },
+    "data/etf-pilot-full_period.csv": {
+      "status": 200,
+      "sha256": "8a399e0cab5ebb56fadcb8b1bfad7eee58caa581b5975e1983f236e05f0fdcc1",
+      "bytes": 15492
+    },
+    "data/etf-pilot-summary.json": {
+      "status": 200,
+      "sha256": "c0c28ab2573e076f2a53a28d292908b6e8c8ba917a536cc02e015760104e44da",
+      "bytes": 430234
+    },
+    "data/etf-pilot-validation.json": {
+      "status": 200,
+      "sha256": "1b3137dd71ed0ec536e99760ca5e5b56d7f667263af8da9c08207206fd01000f",
+      "bytes": 2356
+    },
+    "data/etf-pilot-ytd2026.csv": {
+      "status": 200,
+      "sha256": "35305220711ccda2efa0f8baec540fd07691ff71d28e2830aa36e673695f693c",
+      "bytes": 12269
+    },
+    "data/ingestion-summary.json": {
+      "status": 200,
+      "sha256": "2f108356e697a56ed6d7a6494f8325e871ab9874d3a3b477e027a0246f2f3b1f",
+      "bytes": 1892
+    },
+    "data/stock-pilot-nav.json": {
+      "status": 200,
+      "sha256": "8ec78a8f34597db3f3b2ed4694046ed24c0a5c1f30b5b254e6bdb82bf8d9cb44",
+      "bytes": 960711
+    },
+    "data/stock-pilot-sensitivity.json": {
+      "status": 200,
+      "sha256": "a477672f8b398e0f19d03487528648b5dae9674bffc5f06e23f651eca314694e",
+      "bytes": 1835
+    },
+    "data/stock-pilot-summary.json": {
+      "status": 200,
+      "sha256": "585091281cd3b33f0b96bfc4e498d8fbb4a69dee098bad7e7715cef638ed9f9f",
+      "bytes": 64772
+    },
+    "data/stock-pilot-validation.json": {
+      "status": 200,
+      "sha256": "ba8c166c6ad762484d9358ea3dd149bcb734d24dafb37794466b8cdc45d8d636",
+      "bytes": 14449
+    },
+    "data/validation-daily-nav.csv": {
+      "status": 200,
+      "sha256": "0ac53b58c77eea93f94f50f87638cf057d70eab6631af0e4822439d7c101160c",
+      "bytes": 659035
+    },
+    "data/validation-monthly-returns.csv": {
+      "status": 200,
+      "sha256": "c8e354ed9a04773d917e2686ec0f81de04dc41e1d18beadd8ba31590dacf5787",
+      "bytes": 3286371
+    },
+    "data/validation-risk-metrics.csv": {
+      "status": 200,
+      "sha256": "d38905c39f60a2a56ef35ed34b25f7cc59f00ce28da27d3b70fb42c8e838d81f",
+      "bytes": 16600
+    },
+    "data/validation-study-replay.json": {
+      "status": 200,
+      "sha256": "2b117afafa821a86fbca4cd6ddb9928396bcd7d8bb3cae703d4ce7f9241db46f",
+      "bytes": 1466
+    },
+    "data/validation-study-summary.json": {
+      "status": 200,
+      "sha256": "9b727f816af638772cd19b98ee7911cc97bf3290ee9b72dcd79bce4ba5bc6619",
+      "bytes": 4138615
+    },
+    "downloads/validation-study.ipynb": {
+      "status": 200,
+      "sha256": "675272523564fefdb34108c48e561ba26fef70020a45f543ef7e79eb56c115a8",
+      "bytes": 462595
+    },
+    "index.html": {
+      "status": 200,
+      "sha256": "e79b28cb569fd05f17588784c5821c5e75bf76faae225be4cbfc79030ec286b8",
+      "bytes": 7095
+    },
+    "methods.html": {
+      "status": 200,
+      "sha256": "98fdff42a7f7ed5cba77c450041f59dd44c7a368d7a04853dd7a8260d88483c1",
+      "bytes": 22741
+    },
+    "notebook.html": {
+      "status": 200,
+      "sha256": "ec5b01ead3908294a0ae6dfad7d563c02f21bf7a0d5b1ecd192a89c3262f025a",
+      "bytes": 759733
+    },
+    "pilot.css": {
+      "status": 200,
+      "sha256": "f37a7fa3b2973c806a360d0a54714da47adffe0c0658cea6da123a46767ad564",
+      "bytes": 3173
+    },
+    "pilot.html": {
+      "status": 200,
+      "sha256": "406ad60c85027ce36553c9b02a122ea348ae86fc32170ffe4c3c98d7c4024ac7",
+      "bytes": 11050
+    },
+    "pilot.js": {
+      "status": 200,
+      "sha256": "e9a1de2e2b76c7fa2dc20652079fbeba05bae698b1abf1d21dc02f342dc5f70f",
+      "bytes": 6296
+    },
+    "stocks.css": {
+      "status": 200,
+      "sha256": "14337f694e2173b660eab0f07277c35da728a5d33aff35182edbb640e47eb76c",
+      "bytes": 12286
+    },
+    "stocks.html": {
+      "status": 200,
+      "sha256": "0b4dba455ce253f421ce8dc54f7e0a79f07b173cf9c78848ad0a5f77cb5f4711",
+      "bytes": 14342
+    },
+    "stocks.js": {
+      "status": 200,
+      "sha256": "3bdfb8ff1cb2c889536fac4cbf511992a5ba63f86f57fbd8a3a30c17749d1a0d",
+      "bytes": 20886
+    },
+    "styles.css": {
+      "status": 200,
+      "sha256": "1e03910c048b21a153bf3dbdc600fc7387a87a6143227c2b96ae090035852014",
+      "bytes": 20751
+    },
+    "validation.css": {
+      "status": 200,
+      "sha256": "5d1ec427975d091fb87133d94ed8050406c6e8eab6a9b1c7648244c0620fff24",
+      "bytes": 5031
+    },
+    "validation.js": {
+      "status": 200,
+      "sha256": "f3caaae5e02c765ab9350cb3c3055da84dca56a6b7e9c51bcb644ff814bdb90b",
+      "bytes": 6135
+    }
+  },
+  "scope": "Dated observation of this verified commit. Later changes require fresh checks; this receipt is not owner mastery or independent scientific validation.",
+  "merge_pull_request": "https://github.com/Yuchi-Wang02/rebalance-lab/pull/1",
+  "checks_run_url": "https://github.com/Yuchi-Wang02/rebalance-lab/actions/runs/37896492625",
+  "pages_run_url": "https://github.com/Yuchi-Wang02/rebalance-lab/actions/runs/37896492620",
+  "pages_build_passed": true,
+  "pages_deploy_passed": true,
+  "browser": {
+    "principal_finding_and_background_visible": true,
+    "eight_saved_scenarios_loaded": true,
+    "mobile_page_overflow": false,
+    "notebook_native_plots": 4,
+    "notebook_broken_images": 0
+  },
+  "repository_metadata": {
+    "description_updated": true,
+    "model_validation_robustness_and_bootstrap_topics_saved": true,
+    "social_preview_uploaded_and_visually_confirmed": true
+  }
+}

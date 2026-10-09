@@ -280,7 +280,7 @@ The independent extension verifier imports no project calculation code. It recom
 
 ## Local review and publication
 
-Open the generated site, four-page brief, one-page memo and executed notebook. Check desktop/mobile layouts and data-unavailable behavior. Record the three owner checkpoints separately. This release is prepared locally; a public URL already exists for the older version. Do not call the new version deployed until a separately authorized push/deploy completes and its live contents are verified.
+Open the generated site, four-page brief, one-page memo and executed notebook. Check desktop/mobile layouts and data-unavailable behavior. Record the three owner checkpoints separately. The dated [project status](../results/status.json) separates owner readiness, release authorization and observed deployment. The [publication receipt](../results/publication-verification.json) records a specific verified commit and file identities; later commits require their own checks. A successful local build alone does not establish a live deployment.
 ''')
     return risk_table,interval_table
 
