@@ -50,7 +50,7 @@ Nine credential-free documentation probes succeeded. The first Yahoo chart probe
 
 The [aggregate summary](../site/data/ingestion-summary.json) records run identities, dates, counts, parser/response hashes and unresolved warnings. The [pipeline guide](data-pipeline.md) explains reproduction. Raw observations remain in ignored private directories. This is not a licensed full-universe extract, an exchange-calendar/point-in-time audit, a validated benchmark-return series or input to a reported backtest. It does not extend the October 2 cutoff.
 
-The source registry distinguishes this sample from authenticated downloads and records more specific product/schema limitations. GitHub API connectivity also recovered; Pages activation nevertheless returned an origin authorization error for the connected integration. Network reachability and application permission are separate gates.
+The source registry distinguishes this sample from authenticated downloads and records more specific product/schema limitations. GitHub API connectivity also recovered. An earlier Pages activation request returned an origin authorization error for the connected integration; that setup blocker is now resolved. On October 9, 2026, [deployment attempt 2](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/runs/37874047025/attempts/2) succeeded, and the public homepage, report, scripts and experiment artifacts returned HTTP 200 with hashes matching the validated local files. See the [deployment evidence and browser-check limits](publishing.md#verified-deployment-and-activation-history). Network reachability, application permission and research readiness remain separate gates.
 
 ## Distinct states
 
@@ -63,7 +63,7 @@ The source registry distinguishes this sample from authenticated downloads and r
 | Data audit completed | IDs, time semantics, coverage and actions passed acceptance | Not completed |
 | Engine prototype tested | Deterministic tests establish specified accounting and timing behavior | 16 primary and 56 supplementary synthetic paths exercised; formal market-engine acceptance remains pending |
 | Historical experiment completed | Declared market inputs and code produced a scoped result set | Separate ETF pilot completed with caveats; original stock experiment not run |
-| Site deployed | A public Pages deployment succeeded and its URL was checked | Determined separately from research readiness |
+| Site deployed | A public Pages deployment succeeded and its URL was checked | [Live site](https://yuchi-wang02.github.io/SPMO-ETF-test/) and [report](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html) verified; 12 public files matched local hashes on October 9, 2026 |
 
 The local design validator checks selected invariants and links only. A rendered page or successful Git push cannot establish investment performance. The source probe never supplies credentials and must not interpret a proxy refusal as evidence that a provider lacks the dataset.
 

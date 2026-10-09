@@ -25,7 +25,7 @@ A successful artifact build with **deploy skipped** means the site is ready for 
 
 The repository's **Settings → Pages → Build and deployment → Source** must be **GitHub Actions**. Enabling that setting requires sufficient repository permissions and a GitHub plan that supports Pages for the repository's visibility. Do not change repository visibility simply to make hosting work.
 
-Expected project-site location after a successful deployment: `https://yuchi-wang02.github.io/SPMO-ETF-test/`. This is a target address, not proof that the site is live. Confirm the workflow's deploy result and make an HTTP request to the published page before advertising it as available.
+The project site is live at [https://yuchi-wang02.github.io/SPMO-ETF-test/](https://yuchi-wang02.github.io/SPMO-ETF-test/), with the [interactive experiment report](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html) alongside it. The deployment and public files were verified on October 9, 2026; see the evidence below. For later changes, confirm the new workflow's deploy result and check the published files again.
 
 The workflow publishes presentation files, not raw research data. Repository secrets, provider exports, source receipts and the prior chat must not be copied into `site/`.
 
@@ -33,10 +33,14 @@ The workflow publishes presentation files, not raw research data. Repository sec
 
 Future tasks should use the existing `/workspace/SPMO-ETF-test` checkout rather than creating another worktree. The files and Python runtime can persist in an environment snapshot; a local HTTP server does not. Start a new server only when a task needs a preview. No server is required to read or validate the design.
 
-## Current activation blocker
+## Verified deployment and activation history
 
-Earlier workflow runs passed configuration validation but failed initial Pages configuration because the repository did not have a Pages site. A direct attempt to create it returned GitHub HTTP 403, **Resource not accessible by integration**, even though repository metadata reports that the user has admin permission. User permission and the connected integration's granted permission are different. The current workflow handles the unconfigured state explicitly without attempting to create a site.
+On **October 9, 2026 at 02:25 UTC**, the Pages API reported `build_type=workflow`. [Workflow run 37874047025, attempt 2](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/runs/37874047025/attempts/2) then completed both build and deployment successfully for commit `66fdfa288f6f61757860458e200716027bee34da`.
 
-A repository administrator can finish activation in **Settings → Pages → Source → GitHub Actions**, then rerun **Validate and publish research site** from the Actions tab. No repository visibility change or provider data key is required. GitHub's [official configure-pages input contract](https://github.com/actions/configure-pages/blob/v5/action.yml) states that automatic initial enablement needs a token other than the workflow's default `GITHUB_TOKEN`, with the corresponding Pages/administration permissions. No extra token is requested or embedded here.
+At **02:25:51 UTC**, verified HTTPS requests returned **HTTP 200** for the homepage, report page, both JavaScript files, the summary and validation JSON files, all three result CSVs and all three report figures. Each of these 12 public files had the same SHA-256 hash as its local source. This confirms that the deployed site contains the validated experiment artifacts.
 
-At the latest check the target Pages URL returned origin HTTP 404, so the public site is **not yet verified live**. The README image is a screenshot of the tested local site.
+Desktop/mobile rendering and all eight signal/cost combinations were checked against the local site before deployment. Direct Chromium navigation to the public site was blocked by the cloud browser's proxy-certificate trust configuration; TLS verification was not disabled. Public availability and content equality were verified separately through HTTPS. The README image remains a screenshot of the tested local site.
+
+Earlier activation attempts returned GitHub HTTP 403, **Resource not accessible by integration**. That initial setup blocker is resolved: the repository now uses **Settings → Pages → Source → GitHub Actions**. The workflow still handles an unconfigured repository explicitly without attempting to change its settings. No extra token, repository visibility change or provider data key was needed for this deployment.
+
+Publishing this site does not complete the original stock experiment. The completed ETF pilot and the remaining historical-stock data requirements retain their separate status.

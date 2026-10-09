@@ -6,7 +6,7 @@ A controlled study of monthly versus twice-yearly momentum selection. Both portf
 
 **A separate real-market sector ETF pilot is complete.** At 5 bps per side over 2001–2025, monthly selection returned **8.02% CAGR**, versus **8.51%** for March/September selection: **−0.49 percentage points per year**. Monthly had a shallower maximum drawdown (−30.32% versus −32.81%) and much higher trading activity. Calendar choice changes the sign of the comparison.
 
-Read the [complete experimental retrospective](docs/pilot-retrospective.md), inspect the [derived results](site/data/etf-pilot-summary.json), or open the [report page](site/pilot.html). All six calendars and four costs are published. The 2026 primary pair favored monthly selection, which does not overturn the longer-period result.
+Read the [complete experimental retrospective](docs/pilot-retrospective.md), inspect the [derived results](site/data/etf-pilot-summary.json), or explore the [live interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html). All six calendars and four costs are published. The 2026 primary pair favored monthly selection, which does not overturn the longer-period result.
 
 **Scope matters:** this pilot selects three slots from nine sector ETFs using adjusted total-return prices. It does **not** complete the original 75-stock, historical-capitalization-weighted experiment described below. The [data-access audit](docs/original-data-audit.md) documents concrete missing inputs, including historical membership gaps, class-level share-count ambiguity and unavailable former-constituent prices.
 
@@ -47,7 +47,7 @@ The original **2026 period through October 2** remains a retrospective case stud
 | Engine reconciliation | Accounting and execution can be exercised on fictional data | Broader event support and independent reconciliation against accepted market/event records |
 | Market comparisons | Not run; the primary and supplementary protocols are documented | Accept the inputs and engine, then complete all prespecified comparisons |
 
-The [English website](site/index.html) explains the question first, then offers progressively deeper methods and reproduction details. Public GitHub Pages hosting still requires activation; the image below is a tested local preview.
+The [live English website](https://yuchi-wang02.github.io/SPMO-ETF-test/) explains the question first, then offers progressively deeper methods and reproduction details. GitHub Pages deployment and public file integrity were verified on October 9, 2026. The image below is a tested local preview of the same site.
 
 ![SPMO Fast Lab preview: the primary comparison and evidence-led research story](docs/assets/site-preview.png)
 
@@ -97,7 +97,7 @@ Both create new immutable run directories. Primary and supplementary outputs hav
 
 The [price pipeline guide](docs/data-pipeline.md) documents `python3 scripts/ingest_diagnostic.py`, raw-response hashing and offline replay. Its Yahoo observations remain separate from the synthetic engine and do not satisfy the historical-universe contract.
 
-To inspect the static site, run `python3 -m http.server 8000 --directory site` from the repository root. [Publishing instructions](docs/publishing.md) explain Pages activation and how to verify an actual public deployment.
+To inspect the static site, run `python3 -m http.server 8000 --directory site` from the repository root. [Publishing instructions](docs/publishing.md) explain deployment and how to verify the published files.
 
 </details>
 
