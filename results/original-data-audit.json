@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "audit_id": "original-stock-data-access-20261009",
+  "generated_at_utc": "2026-10-09T02:16:31Z",
+  "status": "acquisition_not_complete",
+  "original_stock_experiment_completed": false,
+  "original_stock_strategy_performance_generated": false,
+  "acquisition_complete": false,
+  "critical_unresolved_findings": 6,
+  "scope": {
+    "protocol": "configs/experiment.v1.json",
+    "arms": [
+      "M12",
+      "S12",
+      "MMIX",
+      "SMIX"
+    ],
+    "requested_price_warmup_start": "2023-12-01",
+    "initial_signal_close": "2024-12-31",
+    "report_anchor_close": "2025-12-31",
+    "report_end_close": "2026-10-02",
+    "data_track": "public_source_diligence"
+  },
+  "method": {
+    "requests": "Normal unauthenticated HTTPS GET requests; no access-control or network restriction bypass.",
+    "provider_credential_bindings_present": false,
+    "environment_secret_values_read": false,
+    "raw_market_series_committed": false,
+    "observation_limits": "HTTP success verifies only the sampled response, not complete coverage, source accuracy, redistribution rights or point-in-time validity."
+  },
+  "findings": [
+    {
+      "id": "membership_coverage",
+      "severity": "critical",
+      "blocking": true,
+      "component": "membership",
+      "evidence_ids": [
+        "historical_membership",
+        "current_membership"
+      ],
+      "observation": "Historical snapshots end on 2026-08-18, before the 2026-10-02 study end. The newer 503-name snapshot adds BE, ILMN and P and removes BLDR, TAP and TTD relative to that last historical snapshot.",
+      "impact": "Carrying the old list forward misses a known change set; applying the new list backward introduces look-ahead. A commit date cannot supply an effective or announcement date.",
+      "required_resolution": "A verified initial security-level snapshot and complete changes through the study end, with effective and historical announcement/known-at timestamps."
+    },
+    {
+      "id": "membership_identity_and_timing",
+      "severity": "critical",
+      "blocking": true,
+      "component": "membership_security_master",
+      "evidence_ids": [
+        "historical_membership",
+        "current_membership"
+      ],
+      "observation": "The historical CSV exposes only date and ticker-list columns. No permanent security IDs, announcement timestamps or per-event primary evidence are present. The current snapshot is not an event ledger; a CIK identifies an issuer, not a share class.",
+      "impact": "Ticker changes, reused symbols and multiple share classes cannot be joined safely; announcement-time membership is unverified.",
+      "required_resolution": "Dated security-class identifiers/ticker mappings and source-backed effective and known-at membership intervals."
+    },
+    {
+      "id": "historical_class_capitalization",
+      "severity": "critical",
+      "blocking": true,
+      "component": "market_caps",
+      "evidence_ids": [
+        "yahoo_shares_aapl",
+        "yahoo_shares_goog",
+        "yahoo_shares_googl",
+        "sec_aapl_facts",
+        "sec_google_class_filing",
+        "sec_google_submissions",
+        "sharadar_daily",
+        "fmp_marketcap"
+      ],
+      "observation": "Yahoo share histories have timestamps but no historical availability or revision fields. The two Alphabet tickers return the same latest share count; separate classes in the original SEC filing have different counts. SEC facts and original class-dimensional filings are recoverable, but a complete vintage-aware class panel has not been constructed. Commercial sample requests require credentials.",
+      "impact": "Issuer-wide shares copied to individual classes would distort the square-root-cap weighting. Backfilling later reported shares introduces look-ahead.",
+      "required_resolution": "Historical class-level capitalization, or validated class shares plus prices, with observation times, known-at times, units, source/vintage and declared staleness treatment for every eligible security and signal."
+    },
+    {
+      "id": "delisted_price_coverage",
+      "severity": "critical",
+      "blocking": true,
+      "component": "prices",
+      "evidence_ids": [
+        "yahoo_anss",
+        "sec_anss_filing"
+      ],
+      "observation": "The requested 2023-12-01 through 2026-10-02 Yahoo ANSS chart returns HTTP 404, while the SEC filing confirms its 2025 acquisition.",
+      "impact": "The public price route does not cover even this identified former constituent. Dropping unavailable names would introduce survivorship bias; a last quote is not merger proceeds.",
+      "required_resolution": "Complete raw executable opens/closes and split-adjusted signal prices for current and former constituents, with stable IDs, status flags and the required warmup."
+    },
+    {
+      "id": "cash_events_and_settlement",
+      "severity": "critical",
+      "blocking": true,
+      "component": "corporate_actions",
+      "evidence_ids": [
+        "sec_anss_filing",
+        "sec_jnpr_filing",
+        "nasdaq_dividend"
+      ],
+      "observation": "SEC completion filings establish selected cash/stock consideration terms, but the complete ex-date/pay-date action ledger and actual settlement timing have not been acquired. The Nasdaq dividend endpoint is blocked at proxy CONNECT.",
+      "impact": "Ex-dates cannot be substituted for cash payment dates. Assumed merger proceeds or successor shares can change cash, reinvestment, holdings and subsequent trades.",
+      "required_resolution": "A complete security-level splits/dividends/mergers/delistings ledger with ex/effective, known-at and cash/stock settlement dates, actual final terms and supporting sources."
+    },
+    {
+      "id": "event_engine_acceptance",
+      "severity": "critical",
+      "blocking": true,
+      "component": "engine_acceptance",
+      "evidence_ids": [
+        "sec_anss_filing",
+        "sec_jnpr_filing"
+      ],
+      "observation": "The current synthetic engine has not been accepted against all merger, spinoff and delisting settlement cases required by the original protocol.",
+      "impact": "Acquiring event records alone would not make the original experiment complete. Unsupported events must not be deleted or silently treated as market sales.",
+      "required_resolution": "Implement and independently reconcile the encountered real event types, then complete the full data and accounting acceptance gates."
+    }
+  ],
+  "minimum_missing_dataset": {
+    "delivery": "An authorized export or entitled feed is sufficient; no particular vendor or new purchase is required.",
+    "membership": "Complete security-class membership intervals and changes through 2026-10-02, verified initial snapshot, stable IDs/ticker history, effective and historically known-at timestamps.",
+    "prices": "Current and former constituents, raw executable opens/closes, separate signal-price adjustment provenance, trading/status flags, and all required sessions from 2023-12-01 through 2026-10-02.",
+    "capitalization": "Class-level historical shares/caps with units, observation and historical availability dates, revision/source provenance and validated staleness treatment at every signal.",
+    "actions": "Splits, dividends including ex/pay dates, mergers/delistings including successor securities, final consideration and settlement timing; records sufficient to resolve events relevant to the reporting end.",
+    "validation": "Matched benchmark conventions, verified exchange calendar, immutable file hashes, permitted use and independent event-ledger reconciliation. Data delivery alone does not satisfy engine acceptance."
+  },
+  "separate_experiment_boundary": "A real ETF pilot can answer a narrower question with different inputs. Its execution/results do not complete or substitute for the frozen original four-arm stock experiment.",
+  "probes": [
+    {
+      "id": "yahoo_shares_aapl",
+      "url": "https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/AAPL?symbol=AAPL&type=shares_out&period1=1701388800&period2=1790985600",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "a77d4121a23e6c86e3f0d6c36249f1472ef1c39a4d68052693f49311d2b09663",
+      "response_bytes": 4145,
+      "fields": [
+        "meta",
+        "timestamp",
+        "shares_out"
+      ],
+      "observation_count": 175,
+      "first_observation_date": "2023-12-19",
+      "last_observation_date": "2026-08-05",
+      "has_known_at_field": false,
+      "has_revision_vintage_field": false,
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "yahoo_shares_goog",
+      "url": "https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/GOOG?symbol=GOOG&type=shares_out&period1=1701388800&period2=1790985600",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "cbcf0413a4c6666c4099acb8d4092a13b7e96d8fbbf9930cac03147b494b5560",
+      "response_bytes": 14518,
+      "fields": [
+        "meta",
+        "timestamp",
+        "shares_out"
+      ],
+      "observation_count": 626,
+      "first_observation_date": "2023-12-01",
+      "last_observation_date": "2026-07-24",
+      "has_known_at_field": false,
+      "has_revision_vintage_field": false,
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "yahoo_shares_googl",
+      "url": "https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/GOOGL?symbol=GOOGL&type=shares_out&period1=1701388800&period2=1790985600",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "ad5e244dd26f0c759eae579e4e323d92f47957e3630d85c57e2ca1192da859f1",
+      "response_bytes": 14496,
+      "fields": [
+        "meta",
+        "timestamp",
+        "shares_out"
+      ],
+      "observation_count": 625,
+      "first_observation_date": "2023-12-01",
+      "last_observation_date": "2026-07-24",
+      "has_known_at_field": false,
+      "has_revision_vintage_field": false,
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "yahoo_anss",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/ANSS?period1=1701388800&period2=1790985600&interval=1d&events=div%2Csplits",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 404,
+      "response_sha256": "f0b5f9feeac9f1fc93c31b1edc03fbc1fda4acb3ec5e233ebb39d6f8b66e1769",
+      "response_bytes": 108,
+      "error": {
+        "code": "Not Found",
+        "description": "No data found, symbol may be delisted"
+      },
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "sec_aapl_facts",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "73a86c6aedc31f77cac2ea4df5f80f0b3bd7e6eb58bb4e01444fbedf3afb9c43",
+      "response_bytes": 3789099,
+      "entity": "Apple Inc.",
+      "sample_fact_fields": [
+        "end",
+        "val",
+        "accn",
+        "fy",
+        "fp",
+        "form",
+        "filed",
+        "frame"
+      ],
+      "has_separate_observation_and_filing_dates": true,
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "sec_google_class_filing",
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "21684cc5714fb6dbc2110f509eb83a4f3e9661f4f3ab34fcf027a43f22ebe6ae",
+      "response_bytes": 2464248,
+      "public_filing_class_evidence": "As of July 15, 2026, there were 5,868 million shares of Alphabet\u2019s Class A stock outstanding, 835 million shares of Alphabet's Class B stock outstanding, and 5,527 million shares of Alphabet's Class C stock outstanding. 1 Table of Contents Alphabet Inc. Alphabet Inc. Form 10-Q For the Quarterly Per",
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "sec_google_submissions",
+      "url": "https://data.sec.gov/submissions/CIK0001652044.json",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "9434407b197d6322de4bece8ad3b69459c8d6ddf3a68526b4b22b02e8175d33c",
+      "response_bytes": 152415,
+      "filing_acceptance_utc": "2026-07-23T01:15:54.000Z",
+      "accession": "0001652044-26-000071",
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "sec_anss_filing",
+      "url": "https://www.sec.gov/Archives/edgar/data/1013462/000114036125026141/ef20052066_8k.htm",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "4cf22c8c9a5d323b943acd213cccb8a1de6e90bf5371b56a2c23b7195c037f5d",
+      "response_bytes": 57201,
+      "verified_terms": {
+        "cash_per_share_usd": 199.91,
+        "successor_share_ratio": 0.3399,
+        "successor": "SNPS",
+        "completion_date": "2025-07-17"
+      },
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "sec_jnpr_filing",
+      "url": "https://www.sec.gov/Archives/edgar/data/1043604/000119312525154400/d912160d8k.htm",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "2a834057cbf9674b9067053a66da8e11bd0c130e6e6ee30957ff22e353b695b6",
+      "response_bytes": 50416,
+      "verified_terms": {
+        "cash_per_share_usd": 40,
+        "completion_date": "2025-07-02"
+      },
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "sharadar_daily",
+      "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/DAILY.json?ticker=AAPL&date=2025-03-31&qopts.per_page=5",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 403,
+      "response_sha256": "26af25ed0734916aa549e1293cb610c3e12a1c564e94164496f53983dd44ea8d",
+      "response_bytes": 188,
+      "error": {
+        "code": "QEPx04",
+        "message": "A valid API key is required to retrieve data. Please check your API key and try again. You can find your API key under your account settings."
+      },
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "fmp_marketcap",
+      "url": "https://financialmodelingprep.com/stable/historical-market-capitalization?symbol=AAPL",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 401,
+      "response_sha256": "06715a4a9ad6e58abdf7284732fae1e3869278264d8972e7edd5b65c680b3e77",
+      "response_bytes": 184,
+      "error": "Invalid API KEY. Feel free to create a Free API Key or visit https://site.financialmodelingprep.com/faqs?search=why-is-my-api-key-invalid for more information.",
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "nasdaq_dividend",
+      "url": "https://api.nasdaq.com/api/quote/SPMO/dividends?assetclass=etf",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": null,
+      "transport_error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "network_layer": "proxy_connect",
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "wikipedia_membership",
+      "url": "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": null,
+      "transport_error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "network_layer": "proxy_connect",
+      "scope": "source_diligence_only",
+      "full_component_accepted": false
+    },
+    {
+      "id": "historical_membership",
+      "url": "https://raw.githubusercontent.com/fja05680/sp500/a2430f2af0c79ddf0748e91de11bdeb1616ab5a7/S%26P%20500%20Historical%20Components%20%26%20Changes%20%28Updated%29.csv",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "36326709d46d6cd25834de5df457b16f5f96fad3a06b9beac28f7b88aa0b0d54",
+      "response_bytes": 5530907,
+      "row_count": 2720,
+      "columns": [
+        "date",
+        "tickers"
+      ],
+      "first_date": "1996-01-02",
+      "last_date": "2026-08-18",
+      "scope": "source_diligence_only",
+      "full_component_accepted": false,
+      "repository_commit": "a2430f2af0c79ddf0748e91de11bdeb1616ab5a7",
+      "repository_license": "MIT",
+      "license_url": "https://github.com/fja05680/sp500/blob/a2430f2af0c79ddf0748e91de11bdeb1616ab5a7/LICENSE",
+      "announcement_timestamps_present": false,
+      "permanent_security_ids_present": false
+    },
+    {
+      "id": "current_membership",
+      "url": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/05a928d03abe805698f08446c355c3718c2d55dd/data/constituents.csv",
+      "retrieved_at_utc": "2026-10-09T02:16:30Z",
+      "http_status": 200,
+      "response_sha256": "8e8c5a9aa27079a1feb6f92f9d56c5ad7a2084263a66d4191c54705a5b77c2ed",
+      "response_bytes": 53677,
+      "row_count": 503,
+      "columns": [
+        "Symbol",
+        "Security",
+        "GICS Sector",
+        "GICS Sub-Industry",
+        "Headquarters Location",
+        "Date added",
+        "CIK",
+        "Founded"
+      ],
+      "scope": "source_diligence_only",
+      "full_component_accepted": false,
+      "repository_commit": "05a928d03abe805698f08446c355c3718c2d55dd",
+      "data_license": "PDDL-1.0",
+      "license_declaration_url": "https://github.com/datasets/s-and-p-500-companies/blob/05a928d03abe805698f08446c355c3718c2d55dd/datapackage.json",
+      "snapshot_update_date": "2026-09-21",
+      "snapshot_update_date_is_event_effective_date": false
+    }
+  ]
+}

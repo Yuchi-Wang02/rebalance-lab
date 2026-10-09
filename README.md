@@ -4,9 +4,17 @@
 
 A controlled study of monthly versus twice-yearly momentum selection. Both portfolios use the same signal, investment universe, weighting rules and trading-cost assumptions. The question is whether updating the portfolio more often leaves investors better off after costs.
 
-**Market findings pending: historical data audit.** The research protocol and synthetic engine are available. A real-market strategy backtest has not been run.
+**A separate real-market sector ETF pilot is complete.** At 5 bps per side over 2001–2025, monthly selection returned **8.02% CAGR**, versus **8.51%** for March/September selection: **−0.49 percentage points per year**. Monthly had a shallower maximum drawdown (−30.32% versus −32.81%) and much higher trading activity. Calendar choice changes the sign of the comparison.
 
-## Start with one comparison
+Read the [complete experimental retrospective](docs/pilot-retrospective.md), inspect the [derived results](site/data/etf-pilot-summary.json), or open the [report page](site/pilot.html). All six calendars and four costs are published. The 2026 primary pair favored monthly selection, which does not overturn the longer-period result.
+
+**Scope matters:** this pilot selects three slots from nine sector ETFs using adjusted total-return prices. It does **not** complete the original 75-stock, historical-capitalization-weighted experiment described below. The [data-access audit](docs/original-data-audit.md) documents concrete missing inputs, including historical membership gaps, class-level share-count ambiguity and unavailable former-constituent prices.
+
+## Original stock protocol — still awaiting accepted data
+
+The comparison below remains the original research question; the completed sector ETF pilot is a separate experiment.
+
+### Start with one comparison
 
 | Portfolio | Selection schedule | Signal |
 |---|---|---|
@@ -94,3 +102,16 @@ To inspect the static site, run `python3 -m http.server 8000 --directory site` f
 </details>
 
 Publish methods, permitted results and reproducibility records together, including negative findings. Credentials, raw conversation and market data without redistribution rights stay out of Git.
+
+## Reproduce the real-market pilot
+
+The original engine and its offline tests need no third-party packages. The separate pilot adds a pinned exchange calendar and plotting tools:
+
+```bash
+python3 -m venv --system-site-packages .venv
+.venv/bin/pip install -r requirements-pilot.txt
+.venv/bin/python scripts/etf_pilot_data.py --acquire --audit-output results/generated/pilot-data-audit
+.venv/bin/python scripts/run_etf_pilot.py --raw-dir data/raw/sector-etf-pilot/<snapshot> --public-dir site/data
+```
+
+Use the actual snapshot directory returned by acquisition. [The pilot protocol](docs/sector-etf-pilot.md) documents offline replay, independent reconciliation and publication. Raw vendor bars and detailed account ledgers stay in ignored directories. Re-downloading can change revised source values; hashes identify the original run.

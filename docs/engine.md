@@ -2,7 +2,7 @@
 
 The standard-library Python engine implements an **engineering prototype on fictional data**. It runs S12, M12, SMIX and MMIX at each prespecified cost rate: 0, 5, 10 and 25 basis points per side. This makes the 16 experiment paths inspectable before a market-data adapter exists. Synthetic outcomes are software diagnostics, not evidence that any strategy outperforms.
 
-The implementation status is `synthetic_prototype`: an engine is implemented, but formal engine acceptance is false. No historical-data audit or market backtest has been completed. The [experiment protocol](experiment-design.md) remains the scientific specification, and the [data contract](feasibility.md) remains the market-release gate.
+The implementation status is `synthetic_prototype`: an engine is implemented, but formal engine acceptance is false. No historical-data audit or market backtest for this original stock engine has been completed. A separate [sector ETF pilot](pilot-retrospective.md), implemented in `pilot/engine.py`, uses a different universe and adjusted-unit convention. The [experiment protocol](experiment-design.md) remains the scientific specification, and the [data contract](feasibility.md) remains the market-release gate.
 
 The separately labeled [calendar-phase sensitivity](calendar-sensitivity.md) varies the semiannual months across six fixed schedules while reusing monthly controls. It preserves the primary experiment and publishes every phase. Its results are within-study robustness checks, not independent replication or a rule for choosing the best schedule.
 

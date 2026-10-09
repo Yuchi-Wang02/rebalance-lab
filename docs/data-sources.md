@@ -1,6 +1,6 @@
 # Data sources and connection plan
 
-**The SPMO/SPY price diagnostic is executable; the full experiment has no validated market dataset.** This document separates documentation that was actually read, public endpoint diagnostics, and untested authenticated access. The machine-readable catalog is [data-sources.json](../configs/data-sources.json); commands and replay instructions are in the [pipeline guide](data-pipeline.md).
+**The SPMO/SPY price diagnostic is executable; the original stock experiment has no validated market dataset.** A separate [sector ETF pilot](pilot-retrospective.md) has acquired and audited a public adjusted-price snapshot; its narrower data convention does not satisfy the original stock contract. This document separates documentation that was actually read, public endpoint diagnostics, and untested authenticated access. The machine-readable catalog is [data-sources.json](../configs/data-sources.json); commands and replay instructions are in the [pipeline guide](data-pipeline.md).
 
 The recommended order is: use an existing institutional entitlement if one is available; otherwise verify the required commercial data components before choosing a subscription. Use Yahoo/yfinance only for a no-cost diagnostic. Norgate is a conditional Windows export route, not a native connection for this Linux workspace. No purchase, signup, credential request, or authenticated data download has been performed.
 

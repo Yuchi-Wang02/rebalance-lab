@@ -2,6 +2,12 @@
 
 Source review: October 8, 2026 (America/New_York). Reproducible diagnostic run: October 9, 2026 UTC.
 
+## Completed separate real-market pilot
+
+The [sector ETF retrospective](pilot-retrospective.md) now reports an actual historical-price experiment, separately from the original stock protocol. It audited 6,987 common sessions, ran 56 strategy paths and four SPY reference paths, and published all calendar and cost comparisons. At 5 bps per side over 2001–2025, the primary monthly portfolio earned 8.02% CAGR versus 8.51% for March/September selection, with a shallower maximum drawdown and more trading. A separate implementation reconciled all 60 paths and 403,740 daily account observations; see [its receipt](../site/data/etf-pilot-validation.json).
+
+The pilot uses nine sector ETFs, three fixed equal slots and adjusted total-return proxy units. Its results do not complete the original top-75 stock experiment or validate raw-price/payment-date accounting. The [new input audit](original-data-audit.md) documents why the original historical-stock dataset remains unavailable.
+
 ## Synthetic engine validation
 
 The October 9 implementation exercises the four-arm synthetic engine and the separate calendar-sensitivity track. A deterministic fictional fixture exercised all 16 primary strategy/cost combinations and 56 supplementary paths: 8 shared monthly controls and 48 semiannual paths. All 9 primary and 14 supplementary run-level checks passed; 88 offline tests covered ingestion, signals, portfolio accounting, point-in-time selection, reporting boundaries and calendar controls. Independent accounting checks also reconciled mixed action scenarios against the asset-value identity. These are engineering results, not market performance.
@@ -56,7 +62,7 @@ The source registry distinguishes this sample from authenticated downloads and r
 | Licensed extraction completed | Entitled data were retrieved for a named query/window | Not completed |
 | Data audit completed | IDs, time semantics, coverage and actions passed acceptance | Not completed |
 | Engine prototype tested | Deterministic tests establish specified accounting and timing behavior | 16 primary and 56 supplementary synthetic paths exercised; formal market-engine acceptance remains pending |
-| Historical experiment completed | Audited data and frozen code produced the full result set | Not run |
+| Historical experiment completed | Declared market inputs and code produced a scoped result set | Separate ETF pilot completed with caveats; original stock experiment not run |
 | Site deployed | A public Pages deployment succeeded and its URL was checked | Determined separately from research readiness |
 
 The local design validator checks selected invariants and links only. A rendered page or successful Git push cannot establish investment performance. The source probe never supplies credentials and must not interpret a proxy refusal as evidence that a provider lacks the dataset.

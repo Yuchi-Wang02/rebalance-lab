@@ -15,7 +15,7 @@
   },
   "data_audit_completed": false,
   "returns": null,
-  "reason": "Price diagnostics and a synthetic-only engine are implemented; audited historical-universe data, full corporate-action support and market reconciliation remain pending.",
+  "reason": "The original stock protocol remains blocked by historical-universe inputs and real-event accounting. A separate sector ETF adjusted-price pilot has completed; its results cannot substitute for the original experiment.",
   "protocol_version": "0.2.0",
   "price_ingestion_diagnostic": {
     "provider": "Yahoo chart API",
@@ -26,5 +26,15 @@
     "cache_replay_verified": true,
     "full_dataset_audited": false,
     "research_ready": false
+  },
+  "original_stock_experiment_completed": false,
+  "sector_etf_pilot": {
+    "experiment_id": "sector-etf-frequency-v1",
+    "status": "completed_with_caveats",
+    "market_pilot_executed": true,
+    "original_stock_experiment_completed": false,
+    "summary_path": "site/data/etf-pilot-summary.json",
+    "validation_path": "site/data/etf-pilot-validation.json",
+    "report_path": "docs/pilot-retrospective.md"
   }
 }

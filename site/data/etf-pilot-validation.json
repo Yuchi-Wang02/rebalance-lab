@@ -1,0 +1,43 @@
+{
+  "checks": {
+    "all_expected_paths_present": true,
+    "every_daily_nav_cash_and_holding_matches": true,
+    "every_signal_and_next_open_trade_matches": true,
+    "full_year_ytd_and_annual_metrics_match": true,
+    "independent_analytic_fee_solution_matches": true,
+    "independent_momentum_selection_matches": true,
+    "partial_year_not_annualized": true,
+    "preserved_raw_input_result_and_code_hashes_match": true,
+    "published_metrics_comparisons_and_plot_points_match": true,
+    "spy_hold_identity_all_costs": true
+  },
+  "compared_day_count": 403740,
+  "config_sha256": "b1236c23038e567b2a7bcfd7a3d9f8cfae195775ba593d054d0e2bb075c88af2",
+  "engine_code_sha256": {
+    "pilot/__init__.py": "ce00656bed9785b35c701024ffc08b8f385e6e64a2edd4bfd987cb364e09f4c8",
+    "pilot/engine.py": "836242d8ec3e16b4b8d939fafd7cb3eb42d5dab5b48c8937f2812475b2d30105",
+    "scripts/etf_pilot_data.py": "f5c24c686b607296bb74a885567c0096a56756390bcecfb49d2aae8fa3b7c546",
+    "scripts/run_etf_pilot.py": "775f157dcbffd53f97d5e0253d8e3114091ee01d36d9d2d6dd1e248ade9ba023",
+    "spmo_lab/signals.py": "9a6fcef67acce9671a9fe96eb3259ad3268a014712a54c6163fb55f28a4a0aa0"
+  },
+  "generated_at_utc": "2026-10-09T02:18:29.526083+00:00",
+  "imports_project_code": false,
+  "independent_replay": true,
+  "independent_run_count": 60,
+  "input_data_gzip_sha256": "204711ba32495c7cca328d5d6c89773b4e3ea877446b4072cac42cd9807eabf5",
+  "limitations": [
+    "This is an independent implementation check using the same vendor input snapshot, not an independent price source.",
+    "It does not validate executable fills, payment-date dividend accounting or the original stock protocol."
+  ],
+  "max_absolute_cash_error": 3.3527612686157227e-08,
+  "max_relative_nav_error": 1.1334737837411629e-14,
+  "original_stock_experiment_completed": false,
+  "passed": true,
+  "raw_manifest_sha256": "bca533432074e8d0cb0edf84c97a07b2a6341fa029bb9937dcadf4a32107ad9e",
+  "run_id": "20261009T021722928426Z-9e9cb830b3cb",
+  "run_manifest_sha256": "a98b1fbf07ee58ef3b69f7ce596a2ee98163b7cc9447c9f48e00986210f1b518",
+  "schema_version": 1,
+  "scope": "independent_accounting_replay_of_preserved_vendor_snapshot",
+  "summary_sha256": "c0c28ab2573e076f2a53a28d292908b6e8c8ba917a536cc02e015760104e44da",
+  "verifier_code_sha256": "9d9e2cc9a673a96fcdc586978de90e7efe6f50d435741c5f1472bf003787670f"
+}

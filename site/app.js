@@ -1,6 +1,6 @@
 'use strict';
 
-// The site explains the protocol, reads saved diagnostic/engineering receipts,
+// The site reads saved pilot results and original-model diagnostic receipts,
 // and illustrates fee arithmetic. It does not request prices or simulate returns.
 const arms = {
   S12: {
@@ -258,7 +258,7 @@ function renderEngineSummary(summary) {
   }
   if (summary.limitations.length === 0) {
     const item = document.createElement('li');
-    item.textContent = 'No additional limitations listed in this receipt. Market validation and formal acceptance remain pending.';
+    item.textContent = 'No additional limitations listed in this receipt. The original stock model still needs market validation and formal acceptance.';
     limitations.append(item);
   }
   document.getElementById('engine-limitations').replaceChildren(limitations);
@@ -285,3 +285,59 @@ async function loadEngineSummary() {
 }
 
 loadEngineSummary();
+
+function validatePilotSummary(summary) {
+  const primary = summary?.primary?.full_period;
+  if (!summary || summary.schema_version !== 1
+      || summary.experiment_id !== 'sector-etf-frequency-v1'
+      || summary.data_track !== 'real_market_adjusted_price_pilot'
+      || summary.market_pilot_executed !== true
+      || summary.original_stock_experiment_completed !== false
+      || summary.scope !== 'separate_public_market_pilot_not_original_stock_experiment'
+      || summary.audit?.passed !== true || !primary
+      || summary.boundaries?.report_anchor_on_or_before !== '2000-12-29'
+      || summary.boundaries?.full_year_end_on_or_before !== '2025-12-31'
+      || primary.monthly_run_id !== 'M12-5bps'
+      || primary.semiannual_run_id !== 'S12-03-09-5bps'
+      || primary.signal !== '12-1' || primary.cost_bps_per_side !== 5
+      || !Array.isArray(primary.phase) || primary.phase.length !== 2
+      || primary.phase[0] !== 3 || primary.phase[1] !== 9
+      || !['monthly_cagr', 'semiannual_cagr', 'cagr_difference_pp'].every((key) =>
+        typeof primary[key] === 'number' && Number.isFinite(primary[key]))
+      || primary.monthly_cagr <= -1 || primary.semiannual_cagr <= -1
+      || Math.abs(primary.cagr_difference_pp
+        - 100 * (primary.monthly_cagr - primary.semiannual_cagr)) > 0.000001) {
+    throw new Error('Unsupported sector ETF pilot summary');
+  }
+  return primary;
+}
+
+async function loadPilotSummary() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    const response = await fetch('data/etf-pilot-summary.json', { signal: controller.signal });
+    if (!response.ok) throw new Error('Pilot summary unavailable');
+    const primary = validatePilotSummary(await response.json());
+    const difference = primary.cagr_difference_pp;
+    const percent = new Intl.NumberFormat('en-US', {
+      style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2,
+    });
+    document.getElementById('pilot-headline').textContent = difference < 0
+      ? 'Monthly finished with lower annualized growth.'
+      : difference > 0 ? 'Monthly finished with higher annualized growth.'
+        : 'The primary annualized growth rates were equal.';
+    document.getElementById('pilot-primary-gap').textContent = new Intl.NumberFormat('en-US', {
+      signDisplay: 'exceptZero', minimumFractionDigits: 2, maximumFractionDigits: 2,
+    }).format(difference);
+    document.getElementById('pilot-comparison').textContent = `Monthly: ${percent.format(primary.monthly_cagr)}. March/September: ${percent.format(primary.semiannual_cagr)}. Both after modeled trading costs.`;
+    document.getElementById('pilot-comparison-state').textContent = 'Observed in the primary sector ETF comparison; the original stock study remains pending.';
+    document.getElementById('pilot-results').hidden = false;
+  } catch {
+    document.getElementById('pilot-comparison-state').textContent = 'The saved primary comparison could not be loaded or validated. Read the pilot report for the results and their limitations.';
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+loadPilotSummary();

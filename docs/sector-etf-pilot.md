@@ -30,3 +30,19 @@ The primary numeric comparisons are the monthly-minus-March/September difference
 Annual outcomes and the six overlapping schedules are dependent. No p-values, independent-replication claim, causal market explanation or promise of future profitability follows from these comparisons. A result about sector allocation cannot establish the result of selecting 75 individual stocks.
 
 Keep raw vendor responses and detailed ledgers private. Publish permitted derived statistics, source URLs, request and response hashes, code/configuration hashes, audit findings and replay instructions. Acquisition and a deterministic rerun are separate checks; neither proves the vendor's values are independently authoritative.
+
+## Execution and replay
+
+Specification freeze: commit `8bb2e11`, before this pilot's performance calculation. The original protocol file was not changed. Install `requirements-pilot.txt` in an isolated environment, then run:
+
+```bash
+python scripts/etf_pilot_data.py --acquire --audit-output results/generated/pilot-data-audit
+python scripts/run_etf_pilot.py --raw-dir data/raw/sector-etf-pilot/<snapshot> --public-dir site/data
+python scripts/validate_etf_pilot_independent.py --help
+```
+
+The data command returns the real snapshot directory; replace the placeholder with it. For an offline input replay, use `etf_pilot_data.py --raw-dir <same snapshot> --audit-output <new private directory>`. Each raw response and execution has a hash manifest. The independent verifier documents its arguments in `--help` and imports no engine code. A fresh acquisition can contain vendor revisions, so equality is claimed only for the preserved input snapshot.
+
+The [completed retrospective](pilot-retrospective.md) and [independent validation](pilot-validation.md) distinguish the original stock-data blockers from this pilot's own limitations. Yahoo chart requests are documented by the acquisition script; [yfinance's maintainer documentation](https://github.com/ranaroussi/yfinance) describes the unofficial source and usage limits. Session comparison uses [exchange-calendars 4.11.2](https://pypi.org/project/exchange-calendars/4.11.2/). Raw observations are retained privately, not redistributed.
+
+Fund mandates are not fixed economic-sector histories: XLF's 2016 real-estate separation and the 2018 communication-services reclassification changed exposures. The snapshot represents XLF's 2016 distribution as a split-like adjustment; this pilot uses the adjusted fund path and does not interpret that vendor record as a literal raw-share split. These are additional reasons not to transfer its results to the original stock-selection protocol.
