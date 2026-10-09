@@ -2,6 +2,8 @@
 
 **The SPMO/SPY price diagnostic is executable; the original stock experiment has no validated market dataset.** A separate [sector ETF pilot](pilot-retrospective.md) has acquired and audited a public adjusted-price snapshot; its narrower data convention does not satisfy the original stock contract. This document separates documentation that was actually read, public endpoint diagnostics, and untested authenticated access. The machine-readable catalog is [data-sources.json](../configs/data-sources.json); commands and replay instructions are in the [pipeline guide](data-pipeline.md).
 
+**Updated buying decision:** see the [purchase guide](data-purchase-guide.md) and [official-source evidence](../results/data-purchase-audit.json). The October 8 follow-up verified `SHARADAR/SP500`, `ACTIONS` and `SFP`; the earlier assumption that Sharadar necessarily needs a separate membership supplier is corrected below. Norgate Platinum is USD 346.50 for six months or USD 630 for twelve months, but is not a complete solution by itself.
+
 The recommended order is: use an existing institutional entitlement if one is available; otherwise verify the required commercial data components before choosing a subscription. Use Yahoo/yfinance only for a no-cost diagnostic. Norgate is a conditional Windows export route, not a native connection for this Linux workspace. No purchase, signup, credential request, or authenticated data download has been performed.
 
 ## 1. What was verified
@@ -11,8 +13,8 @@ Source documentation was inspected on 2026-10-08, America/New_York. The fixed-wi
 | Route | Documentation actually read | Market API/sample | Authenticated full coverage | Point-in-time integrity |
 |---|---|---|---|---|
 | Yahoo/yfinance | Maintainer README and download source | Direct chart capture: 711 daily rows each for SPMO/SPY, zero missing/invalid OHLC; hash-verified offline replay | Not established; yfinance SDK not used | Not established |
-| WRDS/CRSP | Official WRDS SDK README and connection source; manual entrypoint redirects to login | No database query | No entitlement or coverage verified | Membership, revisions and delisting contract not established |
-| Nasdaq Data Link / Sharadar | Official SDK plus public metadata for SEP, DAILY, SF1 and TICKERS | Metadata HTTP 200; indicator dictionary request requires an API key | No entitlement or price/fundamental rows verified | Field definitions, coverage and revision/availability semantics not established |
+| WRDS/CRSP | Official WRDS SDK and public demo; full manual entrypoint redirects to login | Fixed public monthly demo: 24 records for IBM/MSFT in 2006; no entitled query | No entitlement or coverage verified | Membership, revisions and delisting contract not established |
+| Nasdaq Data Link / Sharadar | Official SDK plus public metadata for SEP, DAILY, SF1, TICKERS, SP500, ACTIONS and SFP | Seven metadata endpoints HTTP 200; actual sample and dictionary requests require an API key | No entitlement or price/fundamental rows verified | Field definitions, coverage and revision/availability semantics not established |
 | Norgate | Provider-published package description and public data-content page | No NDU connection or export | No subscription verified | Historical membership coverage is documented; announcement-time correctness is not established; documented fundamentals are current-only |
 
 Initial requests to several provider sites failed with proxy CONNECT 403. After the supported network change, Yahoo, Nasdaq, WRDS and Norgate were reachable. Results must be classified by layer: the old Nasdaq collection and WRDS membership-guide URLs returned origin 404; WRDS manuals redirected to login; Nasdaq's product page returned an HTML application shell; its indicator dictionary returned origin 403 with API error `QEPx04` requiring a valid API key. An initial concurrent TICKERS metadata request returned origin 429 (`QELx04`); a later sequential request succeeded. FMP documentation still failed at proxy CONNECT 403, before any origin response. No proxy, TLS, authentication or network restriction was bypassed.
@@ -118,7 +120,7 @@ Verified sources:
 - [Official configuration source](https://github.com/Nasdaq/data-link-python/blob/main/nasdaqdatalink/api_config.py) specifies the API base `https://data.nasdaq.com/api/v3` and TLS verification enabled.
 - [Official table pagination source](https://github.com/Nasdaq/data-link-python/blob/main/nasdaqdatalink/get_table.py) handles cursor pagination through `paginate=True`; an initial page alone is not complete data.
 
-The following public metadata endpoints returned HTTP 200. They establish the names, premium flags, filters and keys shown here. All four responses had an empty `columns` array and null description, so they do not establish the underlying field contracts.
+The following public metadata endpoints returned HTTP 200. The follow-up adds SP500, ACTIONS and SFP to the original four. They establish names, premium flags, filters and keys. All seven responses had an empty `columns` array and null description, so they do not establish the underlying field contracts.
 
 | Verified metadata endpoint | Name / premium flag | Filters | Primary key |
 |---|---|---|---|
@@ -126,6 +128,9 @@ The following public metadata endpoints returned HTTP 200. They establish the na
 | [DAILY](https://data.nasdaq.com/api/v3/datatables/SHARADAR/DAILY/metadata.json) | Daily Metrics / true | date, lastupdated, ticker | ticker, date |
 | [SF1](https://data.nasdaq.com/api/v3/datatables/SHARADAR/SF1/metadata.json) | Core US Fundamentals / true | calendardate, datekey, dimension, lastupdated, reportperiod, ticker | ticker, dimension, datekey, reportperiod |
 | [TICKERS](https://data.nasdaq.com/api/v3/datatables/SHARADAR/TICKERS/metadata.json) | Tickers and Metadata / false | lastupdated, permaticker, table, ticker | table, permaticker, ticker |
+| [SP500](https://data.nasdaq.com/api/v3/datatables/SHARADAR/SP500/metadata.json) | S&P500 Current and Historical Constituents / true | action, contraticker, date, ticker | date, ticker, action |
+| [ACTIONS](https://data.nasdaq.com/api/v3/datatables/SHARADAR/ACTIONS/metadata.json) | Corporate Actions / true | action, contraticker, date, ticker | date, ticker, name, action, contraname, contraticker |
+| [SFP](https://data.nasdaq.com/api/v3/datatables/SHARADAR/SFP/metadata.json) | Sharadar Fund Prices / true | date, lastupdated, ticker | ticker, date |
 
 The following remain **intended component mappings to validate**, not inspected field contracts:
 
@@ -135,6 +140,9 @@ The following remain **intended component mappings to validate**, not inspected 
 | `SHARADAR/DAILY` | Historical daily market-cap observations | Field units, class versus issuer cap, shares timing, revisions and availability timestamp |
 | `SHARADAR/SF1` | Supporting fundamentals/share observations where needed | Dimension semantics, as-reported versus restated values, filing/publication timestamps and availability lag |
 | `SHARADAR/TICKERS` | Identifier metadata and coverage inventory | Permanent-ID and historical-ticker coverage; this is not by itself proof of index membership history |
+| `SHARADAR/SP500` | Historical index membership | Complete initial state and changes; effective dates versus original announcement timing |
+| `SHARADAR/ACTIONS` | Corporate actions | Dividend payment dates, final merger/delisting consideration and settlement; an event date alone is insufficient |
+| `SHARADAR/SFP` | ETF benchmark prices | Actual SPMO/SPY coverage and adjustment conventions |
 
 SPMO/SPY coverage must be checked separately; do not assume SEP includes both ETFs. SF1 is not required merely because it is available: use it only when it supplies a necessary, validated field.
 
@@ -154,7 +162,7 @@ sample = nasdaqdatalink.get_table(
 
 The origin is reachable and SEP's ticker/date filters are listed in public metadata. The [SEP indicator dictionary request](https://data.nasdaq.com/api/v3/datatables/SHARADAR/INDICATORS.json?table=SEP&qopts.per_page=100) returned origin 403 with `QEPx04`: a valid API key is required. Its field definitions were therefore not read. Obtain the entitled dictionary and a small authorized data sample before using the example. Store access keys only in supported secure settings; never paste a real key into the example, output, request log or repository. A valid key does not establish entitlement to premium tables; conversely, metadata saying `premium=false` does not guarantee keyless data access.
 
-**Unresolved membership dependency:** obtain a licensed S&P historical constituent/event source, or evaluate an alternate membership-events provider. An [FMP historical S&P 500 constituents documentation candidate](https://financialmodelingprep.com/developer/docs/stable/historical-sp-500-constituents) was also proxy-blocked; its schema, API path, history completeness, announcement dates and subscription tier are unverified. It is not a connected fallback. An event feed must reconstruct a validated starting snapshot and all subsequent changes; today's constituents plus an incomplete events list is insufficient.
+**Membership candidate now identified:** `SHARADAR/SP500` is a premium table named “S&P500 Current and Historical Constituents.” First request its dictionary and an authorized sample. A separate supplier is needed only if its coverage or timing is insufficient. Its date filter does not prove announcement-time availability. Reconstruct a validated starting snapshot and all subsequent changes; today’s constituents plus an incomplete events list is insufficient.
 
 The old Sharadar collection-documentation URL returned origin 404. The [SEP product page](https://data.nasdaq.com/databases/SEP/documentation) returned HTTP 200, but its HTML was an application shell without the required table definitions. Neither response establishes full historical coverage, raw prices, field units or PIT correctness. No price or fundamental records were downloaded from Nasdaq.
 
@@ -181,7 +189,7 @@ Import the permitted export into this Linux workspace. Do not install NDU here o
 The full experiment is not data-ready. The next useful milestone is a documented schema/coverage sample, not a backtest result:
 
 1. Preserve the completed public probes and their limits. Further attempts at an authenticated dictionary or dataset require supported credentials/entitlements; FMP's unresolved failure remains a network prerequisite, not evidence of subscription status.
-2. If existing institutional exports are available, audit WRDS/CRSP components first. Otherwise verify Sharadar product contracts plus a historical membership source before selecting a commercial route.
+2. If existing institutional exports are available, audit WRDS/CRSP components first. Otherwise request a sample and quote for Sharadar SEP, DAILY, SP500, ACTIONS and TICKERS, adding SF1/SFP when needed; verify the exact entitlement and field coverage before buying.
 3. Use the implemented Yahoo diagnostic for price-ingestion development. Next audit exchange sessions and adjustment/action semantics against authoritative evidence; do not silently turn it into a current-constituent backtest.
 4. Use Norgate only as an authorized Windows export option with its historical-cap gap explicitly resolved.
 5. Populate and validate the shared contract before the strategy engine consumes any market data. Keep documented, sampled, entitled, coverage-audited and PIT-audited statuses separate.

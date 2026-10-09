@@ -133,7 +133,7 @@
         "https_proxy_secret_is_postgres_credential": false
       },
       "access_requirement": "Institutional WRDS account and entitlement to the specific CRSP datasets/release; not verified.",
-      "market_sample_result": "not_attempted",
+      "market_sample_result": "public_fixed_monthly_demo_24_rows_two_securities_2006_not_original_daily_coverage",
       "authenticated_full_coverage_verified": false,
       "point_in_time_verified": false,
       "open_checks": [
@@ -144,11 +144,12 @@
         "SPMO_SPY_coverage",
         "whether_returns_already_include_delisting",
         "revision_vintages"
-      ]
+      ],
+      "public_demo_evidence": "results/data-purchase-audit.json"
     },
     {
       "id": "nasdaq_sharadar_components",
-      "role": "commercial_https_candidate_requires_membership_and_coverage_validation",
+      "role": "commercial_https_candidate_with_own_historical_membership_table_requires_coverage_validation",
       "documentation_verified": true,
       "product_contract_verified": false,
       "documentation_sources": [
@@ -175,17 +176,22 @@
         "SHARADAR/SEP": "daily_stock_prices_adjustments_and_raw_open_must_be_verified",
         "SHARADAR/DAILY": "historical_daily_market_caps_units_scope_vintages_must_be_verified",
         "SHARADAR/SF1": "optional_fundamentals_only_if_needed_and_as_reported_timing_verified",
-        "SHARADAR/TICKERS": "security_metadata_not_proof_of_historical_index_membership"
+        "SHARADAR/TICKERS": "security_metadata_not_proof_of_historical_index_membership",
+        "SHARADAR/SP500": "historical_index_membership_effective_and_announcement_timing_must_be_verified",
+        "SHARADAR/ACTIONS": "corporate_actions_payment_dates_and_final_settlement_terms_must_be_verified",
+        "SHARADAR/SFP": "ETF_reference_prices_actual_SPMO_SPY_coverage_must_be_verified"
       },
       "membership_dependency": {
         "resolved": false,
-        "primary_candidate": "licensed_SP_historical_constituents_and_announcement_events",
-        "alternate_candidate": "FMP_historical_constituent_events_requires_contract_validation",
+        "primary_candidate": "SHARADAR/SP500",
+        "alternate_candidate": "licensed_SP_historical_constituents_or_other_verified_source_if_Sharadar_coverage_insufficient",
         "alternate_documentation_reference": "https://financialmodelingprep.com/developer/docs/stable/historical-sp-500-constituents",
         "alternate_documentation_result": "proxy_connect_403_origin_content_not_read",
-        "alternate_api_endpoint_verified": false
+        "alternate_api_endpoint_verified": false,
+        "provider_table_metadata_verified": true,
+        "separate_supplier_automatically_required": false
       },
-      "market_sample_result": "not_attempted",
+      "market_sample_result": "unauthenticated_SP500_ACTIONS_SFP_and_INDICATORS_attempts_origin403_QEPx04_no_market_rows",
       "authenticated_full_coverage_verified": false,
       "point_in_time_verified": false,
       "open_checks": [
@@ -278,6 +284,67 @@
           "data_version": "3",
           "columns_returned": [],
           "description_returned": null
+        },
+        "ACTIONS": {
+          "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/ACTIONS/metadata.json",
+          "http_status": 200,
+          "name": "Corporate Actions",
+          "premium": true,
+          "filters": [
+            "action",
+            "contraticker",
+            "date",
+            "ticker"
+          ],
+          "primary_key": [
+            "date",
+            "ticker",
+            "name",
+            "action",
+            "contraname",
+            "contraticker"
+          ],
+          "data_version": "2",
+          "columns_returned": [],
+          "description_returned": null
+        },
+        "SP500": {
+          "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SP500/metadata.json",
+          "http_status": 200,
+          "name": "S&P500 Current and Historical Constituents",
+          "premium": true,
+          "filters": [
+            "action",
+            "contraticker",
+            "date",
+            "ticker"
+          ],
+          "primary_key": [
+            "date",
+            "ticker",
+            "action"
+          ],
+          "data_version": "2",
+          "columns_returned": [],
+          "description_returned": null
+        },
+        "SFP": {
+          "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SFP/metadata.json",
+          "http_status": 200,
+          "name": "Sharadar Fund Prices",
+          "premium": true,
+          "filters": [
+            "date",
+            "lastupdated",
+            "ticker"
+          ],
+          "primary_key": [
+            "ticker",
+            "date"
+          ],
+          "data_version": "2",
+          "columns_returned": [],
+          "description_returned": null
         }
       },
       "indicator_dictionary_probe": {
@@ -288,7 +355,13 @@
         "message": "A valid API key is required to retrieve data.",
         "field_contract_read": false
       },
-      "rate_limit_observation": "Initial concurrent TICKERS metadata probe returned origin429 QELx04; later sequential retry returned200."
+      "rate_limit_observation": "Initial concurrent TICKERS metadata probe returned origin429 QELx04; later sequential retry returned200.",
+      "procurement_review": {
+        "current_price_verified": false,
+        "bundle_contents_verified": false,
+        "publisher_url": "https://data.nasdaq.com/publishers/SHARADAR",
+        "evidence": "results/data-purchase-audit.json"
+      }
     },
     {
       "id": "norgate_windows_export",
@@ -329,7 +402,21 @@
         "licensed_export_and_redistribution_permissions"
       ],
       "provider_documented_SP500_membership_start": "1957-03",
-      "documented_open_price_semantics": "first_price_from_any_venue_or_ECN_not_necessarily_primary_exchange_opening_auction"
+      "documented_open_price_semantics": "first_price_from_any_venue_or_ECN_not_necessarily_primary_exchange_opening_auction",
+      "procurement_review": {
+        "price_source": "https://norgatedata.com/stockmarketpackages.php",
+        "currency": "USD",
+        "platinum_6_months": 346.5,
+        "platinum_12_months": 630.0,
+        "diamond_6_months": 433.13,
+        "diamond_12_months": 787.5,
+        "trial_weeks": 3,
+        "trial_history_years": 2,
+        "historical_fundamentals_available": false,
+        "complete_merger_or_economic_delisting_settlement_available": false,
+        "revision_versioning_available": false,
+        "evidence": "results/data-purchase-audit.json"
+      }
     }
   ],
   "network_observation_policy": "Distinguish proxyCONNECT403, origin404, login redirect, originAPI403 QEPx04 and origin429 QELx04; retry only after a supported change or diagnosed rate/concurrency correction.",
@@ -341,5 +428,12 @@
     "known_at_and_revision_audit",
     "corporate_actions_and_benchmark_reconciliation"
   ],
-  "unauthenticated_market_sample_received": true
+  "unauthenticated_market_sample_received": true,
+  "latest_procurement_review": {
+    "date": "2026-10-08",
+    "timezone": "America/New_York",
+    "guide": "docs/data-purchase-guide.md",
+    "evidence": "results/data-purchase-audit.json",
+    "purchase_performed": false
+  }
 }

@@ -1,0 +1,593 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-08",
+  "review_timezone": "America/New_York",
+  "original_stock_experiment_completed": false,
+  "purchase_or_signup_performed": false,
+  "vendor_message_sent": false,
+  "recommendation": "Request Sharadar exact-table sample and quote first; use existing institutional WRDS access if available; Norgate Platinum is a partial component, not a complete standalone solution.",
+  "sharadar": {
+    "schema_version": 1,
+    "created_at_utc": "2026-10-09T03:22:15Z",
+    "user_date": "2026-10-08",
+    "user_timezone": "America/New_York",
+    "purpose": "Verify current Sharadar routes for a conditional purchase recommendation; no signup, paid acquisition or authentication performed.",
+    "numeric_price_verified": false,
+    "price_quote": null,
+    "tables": [
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SEP/metadata.json",
+        "observed_at_utc": "2026-10-09T03:22:11Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SEP/metadata.json",
+        "response_sha256": "2d141001e2f3d28bb8846f1354106d0535a605c31f0e0edd29df58f9364310de",
+        "response_bytes": 400,
+        "table": "SHARADAR/SEP",
+        "metadata": {
+          "vendor_code": "SHARADAR",
+          "datatable_code": "SEP",
+          "name": "Sharadar Equity Prices",
+          "description": null,
+          "columns": [],
+          "filters": [
+            "date",
+            "lastupdated",
+            "ticker"
+          ],
+          "primary_key": [
+            "ticker",
+            "date"
+          ],
+          "premium": true,
+          "status": {
+            "refreshed_at": "2026-10-09T02:52:04.000Z",
+            "status": "ON TIME",
+            "expected_at": "*",
+            "update_frequency": "CONTINUOUS"
+          },
+          "data_version": {
+            "code": "2",
+            "default": true,
+            "description": null
+          }
+        },
+        "inference_limit": "Public metadata establishes table existence/name/premium/filters/key only; columns empty; no data, entitlement, history coverage or field semantics verified."
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SF1/metadata.json",
+        "observed_at_utc": "2026-10-09T03:22:11Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SF1/metadata.json",
+        "response_sha256": "3a628f5fc0cefe93d67d930b28e2d58864fec7075a74ee6588d34edf27ad8d44",
+        "response_bytes": 473,
+        "table": "SHARADAR/SF1",
+        "metadata": {
+          "vendor_code": "SHARADAR",
+          "datatable_code": "SF1",
+          "name": "Core US Fundamentals",
+          "description": null,
+          "columns": [],
+          "filters": [
+            "calendardate",
+            "datekey",
+            "dimension",
+            "lastupdated",
+            "reportperiod",
+            "ticker"
+          ],
+          "primary_key": [
+            "ticker",
+            "dimension",
+            "datekey",
+            "reportperiod"
+          ],
+          "premium": true,
+          "status": {
+            "refreshed_at": "2026-10-09T02:42:43.000Z",
+            "status": "ON TIME",
+            "expected_at": "*",
+            "update_frequency": "CONTINUOUS"
+          },
+          "data_version": {
+            "code": "3",
+            "default": true,
+            "description": null
+          }
+        },
+        "inference_limit": "Public metadata establishes table existence/name/premium/filters/key only; columns empty; no data, entitlement, history coverage or field semantics verified."
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/DAILY/metadata.json",
+        "observed_at_utc": "2026-10-09T03:22:11Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/DAILY/metadata.json",
+        "response_sha256": "227e52d8c1a26511b6141cee53d9db9eeb621933f8791010802e729c8c5d3931",
+        "response_bytes": 393,
+        "table": "SHARADAR/DAILY",
+        "metadata": {
+          "vendor_code": "SHARADAR",
+          "datatable_code": "DAILY",
+          "name": "Daily Metrics",
+          "description": null,
+          "columns": [],
+          "filters": [
+            "date",
+            "lastupdated",
+            "ticker"
+          ],
+          "primary_key": [
+            "ticker",
+            "date"
+          ],
+          "premium": true,
+          "status": {
+            "refreshed_at": "2026-10-08T23:23:54.000Z",
+            "status": "ON TIME",
+            "expected_at": "*",
+            "update_frequency": "CONTINUOUS"
+          },
+          "data_version": {
+            "code": "3",
+            "default": true,
+            "description": null
+          }
+        },
+        "inference_limit": "Public metadata establishes table existence/name/premium/filters/key only; columns empty; no data, entitlement, history coverage or field semantics verified."
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/ACTIONS/metadata.json",
+        "observed_at_utc": "2026-10-09T03:22:12Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/ACTIONS/metadata.json",
+        "response_sha256": "6eb362e2b03190a511df38d37f916b2e16d9be3767433f4a6ff4bbc966bd6439",
+        "response_bytes": 453,
+        "table": "SHARADAR/ACTIONS",
+        "metadata": {
+          "vendor_code": "SHARADAR",
+          "datatable_code": "ACTIONS",
+          "name": "Corporate Actions",
+          "description": null,
+          "columns": [],
+          "filters": [
+            "action",
+            "contraticker",
+            "date",
+            "ticker"
+          ],
+          "primary_key": [
+            "date",
+            "ticker",
+            "name",
+            "action",
+            "contraname",
+            "contraticker"
+          ],
+          "premium": true,
+          "status": {
+            "refreshed_at": "2026-10-08T23:22:26.000Z",
+            "status": "ON TIME",
+            "expected_at": "*",
+            "update_frequency": "CONTINUOUS"
+          },
+          "data_version": {
+            "code": "2",
+            "default": true,
+            "description": null
+          }
+        },
+        "inference_limit": "Public metadata establishes table existence/name/premium/filters/key only; columns empty; no data, entitlement, history coverage or field semantics verified."
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SP500/metadata.json",
+        "observed_at_utc": "2026-10-09T03:22:12Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SP500/metadata.json",
+        "response_sha256": "9d461d38fc02dca5f2851402238f3596cae952ba5ed22f94a6d6a2dfcf009166",
+        "response_bytes": 441,
+        "table": "SHARADAR/SP500",
+        "metadata": {
+          "vendor_code": "SHARADAR",
+          "datatable_code": "SP500",
+          "name": "S&P500 Current and Historical Constituents",
+          "description": null,
+          "columns": [],
+          "filters": [
+            "action",
+            "contraticker",
+            "date",
+            "ticker"
+          ],
+          "primary_key": [
+            "date",
+            "ticker",
+            "action"
+          ],
+          "premium": true,
+          "status": {
+            "refreshed_at": "2026-10-08T23:20:56.000Z",
+            "status": "ON TIME",
+            "expected_at": "*",
+            "update_frequency": "CONTINUOUS"
+          },
+          "data_version": {
+            "code": "2",
+            "default": true,
+            "description": null
+          }
+        },
+        "inference_limit": "Public metadata establishes table existence/name/premium/filters/key only; columns empty; no data, entitlement, history coverage or field semantics verified."
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SFP/metadata.json",
+        "observed_at_utc": "2026-10-09T03:22:12Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SFP/metadata.json",
+        "response_sha256": "53c95c31a97574244116927fb7ec0b2fcbc1c21bb7c226be9104b312d2549a6e",
+        "response_bytes": 398,
+        "table": "SHARADAR/SFP",
+        "metadata": {
+          "vendor_code": "SHARADAR",
+          "datatable_code": "SFP",
+          "name": "Sharadar Fund Prices",
+          "description": null,
+          "columns": [],
+          "filters": [
+            "date",
+            "lastupdated",
+            "ticker"
+          ],
+          "primary_key": [
+            "ticker",
+            "date"
+          ],
+          "premium": true,
+          "status": {
+            "refreshed_at": "2026-10-09T02:53:36.000Z",
+            "status": "ON TIME",
+            "expected_at": "*",
+            "update_frequency": "CONTINUOUS"
+          },
+          "data_version": {
+            "code": "2",
+            "default": true,
+            "description": null
+          }
+        },
+        "inference_limit": "Public metadata establishes table existence/name/premium/filters/key only; columns empty; no data, entitlement, history coverage or field semantics verified."
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/TICKERS/metadata.json",
+        "observed_at_utc": "2026-10-09T03:22:12Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/TICKERS/metadata.json",
+        "response_sha256": "94babee18d22c63527ac68a8253b6eeb558f304262a3673e3131529c825a5bab",
+        "response_bytes": 421,
+        "table": "SHARADAR/TICKERS",
+        "metadata": {
+          "vendor_code": "SHARADAR",
+          "datatable_code": "TICKERS",
+          "name": "Tickers and Metadata",
+          "description": null,
+          "columns": [],
+          "filters": [
+            "lastupdated",
+            "permaticker",
+            "table",
+            "ticker"
+          ],
+          "primary_key": [
+            "table",
+            "permaticker",
+            "ticker"
+          ],
+          "premium": false,
+          "status": {
+            "refreshed_at": "2026-10-09T02:58:00.000Z",
+            "status": null,
+            "expected_at": null,
+            "update_frequency": null
+          },
+          "data_version": {
+            "code": "3",
+            "default": true,
+            "description": null
+          }
+        },
+        "inference_limit": "Public metadata establishes table existence/name/premium/filters/key only; columns empty; no data, entitlement, history coverage or field semantics verified."
+      }
+    ],
+    "unauthenticated_sample_requests": [
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SP500.json?qopts.per_page=5",
+        "observed_at_utc": "2026-10-09T03:22:12Z",
+        "http_status": 403,
+        "response_sha256": "26af25ed0734916aa549e1293cb610c3e12a1c564e94164496f53983dd44ea8d",
+        "response_bytes": 188,
+        "table": "SHARADAR/SP500",
+        "error": {
+          "code": "QEPx04",
+          "message": "A valid API key is required to retrieve data. Please check your API key and try again. You can find your API key under your account settings."
+        },
+        "data_rows_retained": false
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/ACTIONS.json?ticker=AAPL&qopts.per_page=5",
+        "observed_at_utc": "2026-10-09T03:22:13Z",
+        "http_status": 403,
+        "response_sha256": "26af25ed0734916aa549e1293cb610c3e12a1c564e94164496f53983dd44ea8d",
+        "response_bytes": 188,
+        "table": "SHARADAR/ACTIONS",
+        "error": {
+          "code": "QEPx04",
+          "message": "A valid API key is required to retrieve data. Please check your API key and try again. You can find your API key under your account settings."
+        },
+        "data_rows_retained": false
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/SFP.json?ticker=SPY&qopts.per_page=5",
+        "observed_at_utc": "2026-10-09T03:22:13Z",
+        "http_status": 403,
+        "response_sha256": "26af25ed0734916aa549e1293cb610c3e12a1c564e94164496f53983dd44ea8d",
+        "response_bytes": 188,
+        "table": "SHARADAR/SFP",
+        "error": {
+          "code": "QEPx04",
+          "message": "A valid API key is required to retrieve data. Please check your API key and try again. You can find your API key under your account settings."
+        },
+        "data_rows_retained": false
+      },
+      {
+        "url": "https://data.nasdaq.com/api/v3/datatables/SHARADAR/INDICATORS.json?table=SP500&qopts.per_page=5",
+        "observed_at_utc": "2026-10-09T03:22:13Z",
+        "http_status": 403,
+        "response_sha256": "26af25ed0734916aa549e1293cb610c3e12a1c564e94164496f53983dd44ea8d",
+        "response_bytes": 188,
+        "table": "SHARADAR/INDICATORS",
+        "error": {
+          "code": "QEPx04",
+          "message": "A valid API key is required to retrieve data. Please check your API key and try again. You can find your API key under your account settings."
+        },
+        "data_rows_retained": false
+      }
+    ],
+    "official_pages": [
+      {
+        "url": "https://data.nasdaq.com/publishers/SHARADAR",
+        "observed_at_utc": "2026-10-09T03:22:14Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/publishers/SHARADAR",
+        "response_sha256": "8d31b0603f6a9b79867e00d577c10e00f635b87440c7db27874449121b957f84",
+        "response_bytes": 7090,
+        "name": "Sharadar publisher",
+        "contains_verified_numeric_price": false,
+        "rendered_product_content_verified": false
+      },
+      {
+        "url": "https://data.nasdaq.com/databases/SFA",
+        "observed_at_utc": "2026-10-09T03:22:14Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/databases/SFA",
+        "response_sha256": "c5fe7e6cfec626fa86215aa7426e18be5d2ee7facd7febe21369c7842a01b697",
+        "response_bytes": 7089,
+        "name": "SFA product candidate",
+        "contains_verified_numeric_price": false,
+        "rendered_product_content_verified": false
+      },
+      {
+        "url": "https://data.nasdaq.com/databases/SEP",
+        "observed_at_utc": "2026-10-09T03:22:14Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/databases/SEP",
+        "response_sha256": "85caa711d08bd599d1439321c2f6db185f5b92b05d7d3174c67705e2a9f3e3b3",
+        "response_bytes": 7090,
+        "name": "SEP product",
+        "contains_verified_numeric_price": false,
+        "rendered_product_content_verified": false
+      },
+      {
+        "url": "https://data.nasdaq.com/databases/SF1",
+        "observed_at_utc": "2026-10-09T03:22:14Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/databases/SF1",
+        "response_sha256": "dfd1060ca04001bb2767e2a7af9172ca7ae0dce197ec84929dc983815bc72865",
+        "response_bytes": 7090,
+        "name": "SF1 product",
+        "contains_verified_numeric_price": false,
+        "rendered_product_content_verified": false
+      },
+      {
+        "url": "https://data.nasdaq.com/databases/SFP",
+        "observed_at_utc": "2026-10-09T03:22:15Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/databases/SFP",
+        "response_sha256": "6ec66b74efe834c1a35d129b340ededf369d90d7ecf8d2dd4d09d654827c4e12",
+        "response_bytes": 7089,
+        "name": "SFP product",
+        "contains_verified_numeric_price": false,
+        "rendered_product_content_verified": false
+      },
+      {
+        "url": "https://data.nasdaq.com/users/sign_up",
+        "observed_at_utc": "2026-10-09T03:22:15Z",
+        "http_status": 200,
+        "final_url": "https://data.nasdaq.com/users/sign_up",
+        "response_sha256": "fbc5a02b076c7f484d909874013b326345fcea401d51cbf932beff860ea9210a",
+        "response_bytes": 255,
+        "name": "Account registration route",
+        "contains_verified_numeric_price": false,
+        "rendered_product_content_verified": false
+      },
+      {
+        "url": "https://next-pro.cdn.data.nasdaq.com/assets/index-DfmHlqua.js",
+        "observed_at_utc": "2026-10-09T03:22:15Z",
+        "http_status": null,
+        "network_error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+        "network_layer": "proxy_CONNECT",
+        "name": "Public application asset",
+        "contains_verified_numeric_price": false,
+        "rendered_product_content_verified": false
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Nasdaq/data-link-python/main/README.md",
+        "observed_at_utc": "2026-10-09T03:22:15Z",
+        "http_status": 200,
+        "final_url": "https://raw.githubusercontent.com/Nasdaq/data-link-python/main/README.md",
+        "response_sha256": "f92eefecfbda311909517e783b1b441153c2c20b15a3baed65624497fb718e0f",
+        "response_bytes": 6999,
+        "name": "Official Python SDK README",
+        "contains_verified_numeric_price": false,
+        "rendered_product_content_verified": false,
+        "verified_quote": "Note that in both examples if an `api_key` has not been set you may receive limited or sample data.",
+        "credential_binding_documented": true
+      }
+    ],
+    "correction_to_previous_docs": "SHARADAR/SP500 exists as a premium table named S&P500 Current and Historical Constituents; a separate membership supplier is conditional, not automatically required. ACTIONS and SFP are also confirmed premium tables.",
+    "recommended_request_to_vendor": "Quote a personal-research entitlement to SEP + DAILY + SP500 + ACTIONS + TICKERS, with SF1 if required for as-reported shares/availability, and SFP if needed for SPMO/SPY. SFA is a reachable product-page candidate only; exact bundle inclusion and current price have not been verified.",
+    "before_purchase_sample": [
+      "AAPL continuing member",
+      "GOOG and GOOGL separate classes",
+      "ANSS 2025 merger/delisted history",
+      "JNPR 2025 cash merger",
+      "a dated 2026 S&P500 addition/removal",
+      "SPMO and SPY distributions"
+    ],
+    "required_confirmations": [
+      "SP500 historical start/end, full changes and initial snapshots, effective-date versus announcement-date semantics; metadata has only a date filter, no proven known_at field.",
+      "DAILY class-level versus issuer-level capitalization; units, availability lag, historical revisions and whether GOOG/GOOGL each carry class-specific shares.",
+      "SEP raw opening-price and split/dividend adjustment conventions, current/former member coverage and ANSS delisted history.",
+      "ACTIONS event taxonomy, ex/effective/pay/settlement dates, mergers/delistings and successor-security terms; metadata date is not evidence of pay_date.",
+      "TICKERS permanent security versus issuer identifiers and historical mapping coverage; do not assume permaticker alone solves security-class identity.",
+      "SFP actual SPMO/SPY coverage and benchmark action/price conventions.",
+      "Current checkout price, exact bundle contents, entitlement and permitted export/derived-result publication."
+    ],
+    "api_key_note": "SDK documents an API key and possible limited/sample data without it. The actual premium SP500/ACTIONS/SFP sample calls here require a valid key. A free account/API key is not demonstrated premium entitlement; sample availability and paid access must be confirmed with the vendor.",
+    "limitations": "HTTP200 app shells did not expose verified current pricing or rendered documentation; the linked public CDN asset was blocked by proxy CONNECT403. Old /docs/sharadar-fundamentals and /pricing/plans routes returned origin404. No access restriction was bypassed."
+  },
+  "norgate": {
+    "observed_at_utc": "2026-10-09T03:21:52.711877+00:00",
+    "sources": [
+      {
+        "url": "https://norgatedata.com/",
+        "sha256": "5eda917123870ced436d285a24ce303aee6a4aa0712db23a2ee490fabcd3c320",
+        "bytes": 14648,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/stockmarketpackages.php",
+        "sha256": "6700b3209051c7ab50e290cb04539e8112e0cb538c1a3aa8a6df6d90f768078b",
+        "bytes": 24630,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/prices.php",
+        "sha256": "7dc9b43b42bac75cff6fec4fc89a8510c27243e8f0e42c3e1bebae595d56480b",
+        "bytes": 106090,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/freetrial.php",
+        "sha256": "c620a88640a4598760e99baa11c68daf5112e0fc0c5e89c3580a9809bffdb980",
+        "bytes": 15317,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/orderform.php",
+        "sha256": "de54bb8df8f1169928777e903926a2dc8fb23f444220615aa8d8ae900efbc199",
+        "bytes": 14414,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/data-content-tables.php",
+        "sha256": "361f1b019c168ab81945b4eae5cce35028bbf5c9207916f1bd0165aff1e0b755",
+        "bytes": 183178,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/data-package-faq.php",
+        "sha256": "f1c88df87f7e471f1e1d06d2517a7091aafc725642ff1401db6818e2bdec1c9a",
+        "bytes": 60508,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/faq.php",
+        "sha256": "dfbddeb917095a1eee4d390fb21995b8c167a7774256eedc67670aa99d834c13",
+        "bytes": 31075,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/subscribe/eula.php",
+        "sha256": "95b16336702dce351ca27926b6e99168fc28e84290bd3f736ec238a059d2f82c",
+        "bytes": 21239,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/ndu-faq.php",
+        "sha256": "48db6303c26be1269dc4b7d50ca975a494830cc946b4c8973b6c56dd2c4f13fa",
+        "bytes": 26898,
+        "http_status": 200
+      },
+      {
+        "url": "https://norgatedata.com/system-requirements.php",
+        "sha256": "9bfdf9d8f5b7c4895d09ed378c9747e45e08a31a0ed5805e09e4f3f16734c2d2",
+        "bytes": 11184,
+        "http_status": 200
+      },
+      {
+        "url": "https://pypi.org/pypi/norgatedata/json",
+        "sha256": "4748a39cc97039a42469ecc76647c483a21b6b9854b979f47621b3cf4c0a3f14",
+        "bytes": 115010,
+        "http_status": 200
+      }
+    ],
+    "prices": {
+      "currency": "USD",
+      "platinum_6_months": 346.5,
+      "platinum_12_months": 630.0,
+      "diamond_6_months": 433.13,
+      "diamond_12_months": 787.5,
+      "source_url": "https://norgatedata.com/stockmarketpackages.php"
+    },
+    "trial": {
+      "duration_weeks": 3,
+      "history_years": 2,
+      "covers_original_warmup": false
+    },
+    "gaps": [
+      "historical_security_class_capitalization",
+      "dividend_payment_dates",
+      "merger_consideration_and_settlement",
+      "economic_delisting_proceeds",
+      "historical_revision_vintages"
+    ],
+    "runtime": "Windows NDU for acquisition; permitted private cloud analysis subject to current EULA.",
+    "license_note": "Raw exports not for public redistribution; subscription expiry requires deletion of licensed exports, normalized data, metadata and backups; qualifying derived research outputs may be retained."
+  },
+  "wrds": {
+    "public_demo": {
+      "source_url": "https://wrds-www.wharton.upenn.edu/demo/crsp/data/",
+      "http_status": 200,
+      "byte_count": 45132,
+      "sha256": "efe9884eb04775d41884edfa2eb9ff711566ffce7b22c83f9cf9268c473bd7ba",
+      "scope": "Fixed public demonstration; result page states selections do not affect output. Monthly2006, four tickersJJSF IBM MSFT DELL,48 observations12variables; not daily or original experiment coverage.",
+      "actual_record_count": 24,
+      "actual_symbols": [
+        "MSFT",
+        "IBM"
+      ],
+      "actual_start": "2006-01-31",
+      "actual_end": "2006-12-29",
+      "advertised_result_page_record_count": 48,
+      "advertised_result_page_symbols": [
+        "JJSF",
+        "IBM",
+        "MSFT",
+        "DELL"
+      ],
+      "note": "Result page advertises48observations/fourtickers; retrieved visiblepre data actuallycontains24monthlyrows fortwotickers. Not a complete query output."
+    },
+    "pricing_verified": false,
+    "contact_url": "https://wrds-www.wharton.upenn.edu/pages/about/contact-wrds/",
+    "entitlement_verified": false
+  },
+  "market_rows_in_this_artifact": 0
+}

@@ -53,6 +53,8 @@ The [live English website](https://yuchi-wang02.github.io/SPMO-ETF-test/) explai
 
 ## The next data decision
 
+The [buying guide](docs/data-purchase-guide.md) now gives verified purchase links, Norgate prices and a ready-to-send sample request. First investigate Sharadar’s own `SP500` historical-membership table alongside its prices, daily metrics and corporate actions; a separate membership supplier is only needed if that coverage fails acceptance. Norgate Platinum is a priced partial alternative, with explicit capitalization and settlement gaps.
+
 First obtain a small, authorized [acceptance sample](docs/data-acceptance-sample.md) covering ordinary securities and difficult events: membership entry/exit, ticker changes, splits, dividends, multiple share classes and merger/delisting settlement. Historical class-level capitalization and information-availability dates must be demonstrated before a provider is treated as sufficient.
 
 If institutional access already exists, inspect an entitled WRDS/CRSP export. Otherwise verify the required licensed components before choosing a commercial route. The [source guide](docs/data-sources.md) records what was actually inspected and each remaining gap. No subscription, credential or complete historical dataset is assumed.
