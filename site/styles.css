@@ -1835,3 +1835,168 @@ input[type=range]::-moz-range-thumb {
   width:26px;
   height:26px;
 }
+
+/* Saved ingestion diagnostics: metadata only, never prices or performance. */
+.readiness-panel {
+  margin-top:30px;
+  padding:29px;
+  border:1px solid #c7d0c1;
+  background:var(--white);
+}
+.readiness-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:24px;
+}
+.readiness-heading .eyebrow {
+  color:var(--green);
+  font-size:.61rem;
+  margin-bottom:12px;
+}
+.readiness-heading h3 {
+  font-family:var(--serif);
+  font-size:1.8rem;
+  line-height:1.2;
+  letter-spacing:-.03em;
+}
+.readiness-heading .small-tag {
+  flex-shrink:0;
+  margin-top:4px;
+}
+.readiness-intro {
+  color:var(--muted);
+  font-size:.76rem;
+  max-width:760px;
+  line-height:1.8;
+  margin-top:16px;
+}
+.diagnostic-state {
+  margin-top:21px;
+  font-size:.74rem;
+  line-height:1.8;
+}
+.needs-review {
+  color:#945031;
+  border-color:#b99378;
+}
+.readiness-table-scroll {
+  overflow-x:auto;
+  margin-top:20px;
+}
+.readiness-table-scroll:focus-visible {
+  outline:2px solid var(--orange);
+  outline-offset:4px;
+}
+.readiness-table {
+  width:100%;
+  border-collapse:collapse;
+  text-align:left;
+  font-size:.74rem;
+  font-variant-numeric:tabular-nums;
+}
+.readiness-table caption {
+  text-align:left;
+  color:var(--muted);
+  font-size:.66rem;
+  padding-bottom:12px;
+}
+.readiness-table th,.readiness-table td {
+  padding:13px 18px 13px 0;
+  border-bottom:1px solid var(--line);
+}
+.readiness-table th {
+  font-weight:600;
+}
+.readiness-table thead th {
+  font-size:.66rem;
+  color:var(--muted);
+  background:var(--white);
+}
+.readiness-table th:last-child,.readiness-table td:last-child {
+  padding-right:0;
+}
+.diagnostic-meta,.diagnostic-noscript {
+  margin-top:15px;
+  color:var(--muted);
+  font-size:.65rem;
+  line-height:1.8;
+}
+.diagnostic-noscript a {
+  text-decoration:underline;
+}
+.readiness-limits {
+  margin-top:24px;
+  border-left:2px solid var(--orange);
+  padding-left:16px;
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:18px;
+  font-size:.69rem;
+  line-height:1.8;
+}
+.readiness-limits strong {
+  font-weight:600;
+  color:#945031;
+}
+.readiness-limits p {
+  color:var(--muted);
+}
+.readiness-footer {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  margin-top:24px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+}
+.readiness-footer p {
+  font-size:.65rem;
+  color:var(--muted);
+  line-height:1.8;
+}
+.readiness-footer .text-link {
+  font-size:.68rem;
+  flex-shrink:0;
+}
+@media(max-width:900px) {
+  .readiness-heading {
+    flex-direction:column;
+    gap:14px;
+  }
+  .readiness-limits {
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+  .readiness-footer {
+    align-items:flex-start;
+    flex-direction:column;
+    gap:15px;
+  }
+}
+@media(max-width:650px) {
+  .readiness-panel {
+    padding:23px 20px;
+    margin-top:23px;
+  }
+  .readiness-heading h3 {
+    font-size:1.65rem;
+  }
+  .readiness-intro,.diagnostic-state {
+    font-size:.72rem;
+  }
+  .readiness-table {
+    min-width:550px;
+    font-size:.72rem;
+  }
+  .readiness-table th,.readiness-table td {
+    padding-right:17px;
+  }
+  .readiness-table caption {
+    font-size:.63rem;
+  }
+  .readiness-footer .text-link {
+    font-size:.67rem;
+  }
+}

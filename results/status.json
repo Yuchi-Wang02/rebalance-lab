@@ -1,18 +1,20 @@
 {
   "schema_version": 1,
-  "stage": "design_only",
+  "stage": "data_diagnostics",
   "market_backtest_executed": false,
   "engine_implemented": false,
   "data_audit_completed": false,
   "returns": null,
-  "reason": "Protocol, source connection plan and static site exist; audited market data and a validated backtest engine do not.",
+  "reason": "Fixed-window benchmark price capture and offline replay are implemented; historical-universe data, calendar/adjustment audits and the backtest engine remain pending.",
   "protocol_version": "0.2.0",
   "price_ingestion_diagnostic": {
     "provider": "Yahoo chart API",
     "authenticated": false,
-    "timestamps_returned": 5,
-    "complete_ohlc_bars": 4,
-    "scope": "connectivity_sample_not_experiment_input",
-    "full_dataset_audited": false
+    "scope": "fixed_window_benchmark_diagnostic_not_experiment_input",
+    "summary_path": "site/data/ingestion-summary.json",
+    "diagnostic_passed": true,
+    "cache_replay_verified": true,
+    "full_dataset_audited": false,
+    "research_ready": false
   }
 }

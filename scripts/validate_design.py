@@ -2,6 +2,7 @@
 """Check limited design invariants and local links; never run a market backtest."""
 
 import json
+import hashlib
 import math
 import re
 import sys
@@ -67,7 +68,23 @@ def validate(root: Path) -> list[str]:
     for pair in comparisons["product_context"]:
         require(len(pair) == 2 and all(x in known for x in pair), f"Unknown product comparison: {pair}.")
     require(not config["results"]["executed"] and config["results"]["market_returns"] is None, "No market result has been generated in this release.")
-    require(status["stage"] == "design_only" and not status["engine_implemented"] and not status["data_audit_completed"] and not status["market_backtest_executed"] and status["returns"] is None, "Research status must remain honest about unrun work.")
+    require(status["stage"] == "data_diagnostics" and not status["engine_implemented"] and not status["data_audit_completed"] and not status["market_backtest_executed"] and status["returns"] is None, "Research status must remain honest about unrun work.")
+    summary = json.loads((root / "site/data/ingestion-summary.json").read_text())
+    diagnostic = status["price_ingestion_diagnostic"]
+    require(summary["research_ready"] is False and diagnostic["research_ready"] is False and diagnostic["full_dataset_audited"] is False, "Price diagnostics cannot certify the research dataset.")
+    require(summary["calendar_coverage"] == "not_verified" and summary["price_adjustment_semantics"] == "not_verified", "Outstanding data audits must remain visible.")
+    require(summary["requested_start"] == period["warmup_request_start"] and summary["requested_end"] == period["report_end_close"], "Public diagnostic must use the declared experiment window.")
+    require(summary["source_script_sha256"] == hashlib.sha256((root / "scripts/ingest_diagnostic.py").read_bytes()).hexdigest(), "Saved diagnostic was not produced by the current ingestion script; rerun and replay after parser changes.")
+    require(diagnostic["diagnostic_passed"] == summary["diagnostic_passed"] and diagnostic["cache_replay_verified"] == summary["cache_replay_verified"], "Research status and public diagnostic disagree.")
+    require([entry["symbol"] for entry in summary["symbols"]] == config["benchmarks"]["tradeable"], "Public diagnostic must include the declared benchmarks.")
+    for entry in summary["symbols"]:
+        counts = [entry[key] for key in ("rows", "complete_ohlc_rows", "missing_ohlc_rows", "invalid_ohlc_rows", "error_count", "warning_count")]
+        require(all(type(count) is int and count >= 0 for count in counts), f"{entry['symbol']}: invalid diagnostic counts.")
+        require(sum(counts[1:4]) == counts[0], f"{entry['symbol']}: OHLC counts do not partition the observed rows.")
+        require(bool(re.fullmatch(r"[0-9a-f]{64}", entry["raw_sha256"])), "Invalid raw capture hash.")
+        require(period["warmup_request_start"] <= entry["observed_start"] <= entry["observed_end"] <= period["report_end_close"], "Observed diagnostic dates escape the requested interval.")
+        if summary["diagnostic_passed"]:
+            require(entry["rows"] > 0 and counts[2:5] == [0, 0, 0], "Passing diagnostic has missing/invalid observations or errors.")
     ids = [route["id"] for route in catalog["routes"]]
     require(len(ids) == len(set(ids)) and len(ids) > 0, "Source route IDs must be unique and nonempty.")
     require(not catalog["market_dataset_validated"] and not catalog["authenticated_market_download_completed"], "Provider documentation is not a validated market download.")

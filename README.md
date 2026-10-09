@@ -4,7 +4,7 @@
 
 A reproducible research project about faster portfolio rotation within the S&P 500. The aim is to test a plausible idea—not to advertise an ETF, recommend trades, or assume that more trading produces better returns.
 
-**Current release: protocol v0.2 and website preview. No market backtest has been run.** Source documentation has been reviewed and a small unauthenticated Yahoo sample returned five timestamps with four complete OHLC bars. The full historical research dataset has not been acquired or audited. The repository contains a research design, source registry, validation tools, and a static GitHub Pages site; it does not yet contain a backtest engine.
+**Current release: protocol v0.2, reproducible price diagnostics and website preview. No market backtest has been run.** A direct Yahoo request returned 711 daily observations each for SPMO and SPY, from December 1, 2023 through October 2, 2026. Structural/value checks passed and offline replay reproduced the derived files. Exchange-calendar completeness and price-adjustment semantics remain unverified. The repository contains the research design, ingestion tools and a static GitHub Pages site; it does not yet contain a backtest engine or audited historical-universe dataset.
 
 ## The research question
 
@@ -34,14 +34,14 @@ This avoids granting the semiannual strategy an extra January 2026 formation. Re
 
 | Route | Practical connection | What it can support | Remaining gate |
 |---|---|---|---|
-| Free diagnostic | [yfinance](https://pypi.org/project/yfinance/) | Small price/action samples and benchmark pipeline development | Not a historical constituent, delisting, or point-in-time capitalization solution; usage rights require review |
+| Free diagnostic | [Direct Yahoo chart ingestion](docs/data-pipeline.md); [yfinance](https://pypi.org/project/yfinance/) is an optional client | Fixed-window SPMO/SPY price/action capture, quality checks and offline replay | Not a historical constituent, delisting, or point-in-time capitalization solution; adjustment semantics and usage rights require review |
 | Institutional research | [WRDS](https://wrds-www.wharton.upenn.edu/) / licensed CRSP export | Candidate integrated identifiers, membership, returns, actions and share histories | Entitlement, exact tables, opening prices, vintage semantics and coverage must be verified; the SDK uses PostgreSQL, not HTTPS |
 | Licensed API components | [Nasdaq Data Link](https://data.nasdaq.com/) / SHARADAR candidates | HTTPS table extraction for candidate prices, fundamentals and identifiers | Table contracts and subscription unverified; a separate audited historical-membership source is still required |
 | Windows-assisted export | [Norgate Data](https://pypi.org/project/norgatedata/) | Documented historical-constituent and price APIs with appropriate subscription | Requires Windows updater; documented market-cap fundamentals are current values, not a historical PIT cap series |
 
-**Recommended next step:** audit a small institutional export if access already exists. Otherwise start with a clearly labeled free diagnostic and obtain a licensed-data coverage sample before committing to a provider. No subscription purchase or institutional access is assumed.
+**Recommended next step:** audit a small institutional export if access already exists. Otherwise obtain a licensed-data coverage sample before committing to a provider. The free diagnostic now works, but it cannot supply all inputs to the experiment. No subscription purchase or institutional access is assumed.
 
-The [data connection guide](docs/data-sources.md) gives links, SDK entry points, authentication requirements, expected outputs, and unresolved gaps. The [data contract](docs/feasibility.md) defines what must pass before a result can be published. A successful API request is not a data-quality certificate. The small price sample is an ingestion diagnostic, not a strategy result.
+The [data connection guide](docs/data-sources.md) gives links, SDK entry points, authentication requirements, expected outputs, and unresolved gaps. The [data contract](docs/feasibility.md) defines what must pass before a result can be published. The [pipeline guide](docs/data-pipeline.md) documents the executable diagnostic and its limits. Successful price ingestion is not a strategy result.
 
 ## The public site
 
@@ -57,10 +57,13 @@ Python 3.12+; no third-party dependencies are needed for the design checks or st
 
 ```bash
 python3 scripts/validate_design.py
-python3 scripts/check_source_access.py
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+node --check site/app.js
 ```
 
-The first command checks a limited set of protocol invariants, factorial contrasts, source-registry structure, and local links. The second makes credential-free documentation requests and reports reachability; it does not acquire market data or prove subscription access. Network errors are reported as failed probes, not as evidence that a dataset does not exist.
+These offline commands check protocol/status invariants and links, exercise ingestion/replay failures, and check site JavaScript syntax. Node is needed only for the JavaScript check. No provider account or network request is required.
+
+Run `python3 scripts/ingest_diagnostic.py` to acquire a new private diagnostic snapshot. See the [pipeline guide](docs/data-pipeline.md) for replay and public-summary export commands. The separate `python3 scripts/check_source_access.py` probes documentation reachability only; it does not prove subscription access.
 
 To inspect the site locally, run `python3 -m http.server 8000 --directory site` from the repository root and use a local browser. Cloud tasks use the existing checkout; an extra Git worktree is unnecessary.
 
@@ -74,13 +77,15 @@ To inspect the site locally, run `python3 -m http.server 8000 --directory site` 
 | [Evidence record](docs/evidence.md) | What was actually inspected and what remains unverified |
 | [Experiment configuration](configs/experiment.v1.json) | Machine-readable protocol v0.2; filename retained for existing links |
 | [Source registry](configs/data-sources.json) | Provider documentation, connection routes and gaps |
+| [Diagnostic pipeline](docs/data-pipeline.md) | Fixed-window acquisition, quality checks, hash verification and offline replay |
+| [Public diagnostic summary](site/data/ingestion-summary.json) | Observed dates, aggregate quality counts and provenance; no market bars |
 | [Research status](results/status.json) | Explicit machine-readable absence of market results |
 | [Website](site/index.html) | Static, dependency-free public presentation |
 
 ## Release gates
 
 1. **Protocol and source plan:** documented in this release; parameters remain proposed until frozen before a market run.
-2. **Data acceptance:** permanent-ID mapping, historical membership, original prices, corporate actions, capitalization vintages and benchmark reconstruction.
+2. **Data acceptance:** benchmark price diagnostics are implemented; permanent-ID mapping, historical membership, original prices, corporate actions, capitalization vintages and benchmark reconstruction remain pending.
 3. **Engine acceptance:** look-ahead prevention, share/cash conservation, split and dividend accounting, fees, caps and unfilled orders.
 4. **Historical experiment:** all four arms and all prespecified cost scenarios, with ledgers and reproducible manifests.
 5. **Forward observation:** signals saved before execution after the final protocol/implementation freeze. Never relabel retrospective results as live observations.

@@ -1,29 +1,29 @@
 # Data sources and connection plan
 
-**A small public Yahoo price sample is accessible; the full experiment has no validated market dataset.** This document separates documentation that was actually read, public endpoint probes, and untested authenticated access. The machine-readable catalog is [data-sources.json](../configs/data-sources.json).
+**The SPMO/SPY price diagnostic is executable; the full experiment has no validated market dataset.** This document separates documentation that was actually read, public endpoint diagnostics, and untested authenticated access. The machine-readable catalog is [data-sources.json](../configs/data-sources.json); commands and replay instructions are in the [pipeline guide](data-pipeline.md).
 
 The recommended order is: use an existing institutional entitlement if one is available; otherwise verify the required commercial data components before choosing a subscription. Use Yahoo/yfinance only for a no-cost diagnostic. Norgate is a conditional Windows export route, not a native connection for this Linux workspace. No purchase, signup, credential request, or authenticated data download has been performed.
 
 ## 1. What was verified
 
-Source inspection and network recheck date: 2026-10-08, America/New_York. Rechecks followed an applied network configuration change. These observations describe this environment at inspection time, not permanent availability.
+Source documentation was inspected on 2026-10-08, America/New_York. The fixed-window diagnostic was acquired on 2026-10-09 UTC. Rechecks followed an applied network configuration change. These observations describe this environment at inspection time, not permanent availability.
 
 | Route | Documentation actually read | Market API/sample | Authenticated full coverage | Point-in-time integrity |
 |---|---|---|---|---|
-| Yahoo/yfinance | Maintainer README and download source | Public chart HTTP 200: five timestamps, four complete OHLC bars for SPMO | Not established; full yfinance call not run | Not established |
+| Yahoo/yfinance | Maintainer README and download source | Direct chart capture: 711 daily rows each for SPMO/SPY, zero missing/invalid OHLC; hash-verified offline replay | Not established; yfinance SDK not used | Not established |
 | WRDS/CRSP | Official WRDS SDK README and connection source; manual entrypoint redirects to login | No database query | No entitlement or coverage verified | Membership, revisions and delisting contract not established |
 | Nasdaq Data Link / Sharadar | Official SDK plus public metadata for SEP, DAILY, SF1 and TICKERS | Metadata HTTP 200; indicator dictionary request requires an API key | No entitlement or price/fundamental rows verified | Field definitions, coverage and revision/availability semantics not established |
 | Norgate | Provider-published package description and public data-content page | No NDU connection or export | No subscription verified | Historical membership coverage is documented; announcement-time correctness is not established; documented fundamentals are current-only |
 
 Initial requests to several provider sites failed with proxy CONNECT 403. After the supported network change, Yahoo, Nasdaq, WRDS and Norgate were reachable. Results must be classified by layer: the old Nasdaq collection and WRDS membership-guide URLs returned origin 404; WRDS manuals redirected to login; Nasdaq's product page returned an HTML application shell; its indicator dictionary returned origin 403 with API error `QEPx04` requiring a valid API key. An initial concurrent TICKERS metadata request returned origin 429 (`QELx04`); a later sequential request succeeded. FMP documentation still failed at proxy CONNECT 403, before any origin response. No proxy, TLS, authentication or network restriction was bypassed.
 
-The Yahoo response and metadata evidence were held outside the checkout in temporary files. No market bars were added to this repository. A public sample response establishes only that particular request, not a reliable ingestion pipeline or permission to redistribute its data.
+The initial Yahoo probe and provider metadata evidence were held in temporary files. The repeatable diagnostic now stores private raw and derived snapshots in ignored data directories. Only an [aggregate summary](../site/data/ingestion-summary.json) is committed; no market bars are published. Successful acquisition and replay do not establish permission to redistribute vendor data or complete historical research coverage.
 
 “Historical data,” “survivorship-bias-free” and “point-in-time” are different claims. A table indexed by a past date does not establish when a record first became available or whether later revisions replaced the original value.
 
 ## 2. Shared acquisition contract
 
-Provider exports belong in ignored `data/raw/<provider>/<snapshot-id>/`; normalized tables belong in ignored `data/processed/<snapshot-id>/`. These are planned locations, not evidence that data exists. Keep original files immutable. Publish only the manifest and outputs permitted by the data license.
+Provider exports belong in ignored `data/raw/<provider>/<snapshot-id>/`; normalized tables belong in ignored `data/processed/<provider>/<snapshot-id>/`. Yahoo diagnostic snapshots now use this layout; the broader research tables below are still planned. Keep original files immutable. Publish only metadata and outputs permitted by the data license.
 
 Every snapshot needs a manifest with provider/product/version, requested and returned dates, retrieval timestamp, schema and units, adjustment settings, timezone, row counts, file hashes, license restrictions, and unresolved fields. Never place API keys, passwords or credential-bearing request URLs in manifests or Git history.
 
@@ -72,7 +72,9 @@ sample = yf.download(
 
 Retain vendor column names and adjustment metadata. `auto_adjust=False` disables the library's automatic OHLC adjustment; it does **not** establish that Yahoo's supplied Open is a true historical unadjusted executable price. Verify split behavior against a known split and do not silently map the result to `raw_open`. Keep vendor Close, Adj Close, dividend and split fields separate. Repair routines must be explicitly approved by the research protocol and logged, rather than silently changing observations.
 
-After the network change, the [public SPMO chart request](https://query1.finance.yahoo.com/v8/finance/chart/SPMO?range=5d&interval=1d) returned HTTP 200 with no chart error. It contained five session timestamps dated 2026-10-02, 05, 06, 07 and 08, but only **four complete non-null OHLC bars**. The missing observation was not filled. This was a direct unauthenticated endpoint probe, not the illustrative yfinance download above, a benchmark reconciliation, or full historical coverage. The SDK may contact additional Yahoo hosts for data or session handling; permit only required documented destinations and preserve missingness in subsequent checks.
+The initial [five-day SPMO request](https://query1.finance.yahoo.com/v8/finance/chart/SPMO?range=5d&interval=1d) returned five timestamps but only four complete OHLC bars; the missing observation was not filled. It has been superseded for pipeline development by `scripts/ingest_diagnostic.py`, which makes direct unauthenticated requests to `query1.finance.yahoo.com/v8/finance/chart/<symbol>` with explicit dates and separate split/dividend events. It does not execute the illustrative yfinance call above.
+
+The fixed request returned **711 observations per ETF from 2023-12-01 through 2026-10-02**, with zero missing or invalid OHLC records and no structural/value errors. Each response included 12 dividend events. Original bytes were retained with SHA-256 hashes; offline replay reproduced all normalized files and the quality report. SPMO/SPY observed dates agreed. These facts do not prove exchange-calendar completeness, action completeness, payment-date correctness, raw-price adjustment conventions or benchmark reconciliation. The [saved summary](../site/data/ingestion-summary.json) records the snapshot and parser hashes.
 
 Do not publish downloaded Yahoo data merely because the client code has an open-source license. Data usage and redistribution rights are separate.
 
@@ -180,7 +182,7 @@ The full experiment is not data-ready. The next useful milestone is a documented
 
 1. Preserve the completed public probes and their limits. Further attempts at an authenticated dictionary or dataset require supported credentials/entitlements; FMP's unresolved failure remains a network prerequisite, not evidence of subscription status.
 2. If existing institutional exports are available, audit WRDS/CRSP components first. Otherwise verify Sharadar product contracts plus a historical membership source before selecting a commercial route.
-3. Extend the Yahoo diagnostic only as a price-ingestion and missingness check. It must not silently become a current-constituent backtest.
+3. Use the implemented Yahoo diagnostic for price-ingestion development. Next audit exchange sessions and adjustment/action semantics against authoritative evidence; do not silently turn it into a current-constituent backtest.
 4. Use Norgate only as an authorized Windows export option with its historical-cap gap explicitly resolved.
 5. Populate and validate the shared contract before the strategy engine consumes any market data. Keep documented, sampled, entitled, coverage-audited and PIT-audited statuses separate.
 

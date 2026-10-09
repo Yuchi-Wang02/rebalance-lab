@@ -18,6 +18,8 @@ jobs:
     permissions:
       contents: read
       pages: read
+    outputs:
+      pages_enabled: ${{ steps.pages.outputs.enabled }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,14 +27,38 @@ jobs:
           python-version: '3.12'
       - name: Validate protocol and site links
         run: python3 scripts/validate_design.py
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload static site
+      - name: Upload static site without research data
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
+      - name: Check Pages activation
+        id: pages
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let enabled = false;
+            let explanation;
+            try {
+              const { data } = await github.rest.repos.getPages(context.repo);
+              enabled = data.build_type === 'workflow';
+              explanation = enabled
+                ? 'Pages is configured for GitHub Actions; deployment may proceed.'
+                : 'Pages uses a different publishing source. This workflow leaves that setting unchanged.';
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              explanation = 'Pages is not configured. The static artifact was built, but no public deployment was attempted.';
+            }
+            core.setOutput('enabled', String(enabled));
+            if (!enabled) core.notice(explanation);
+            await core.summary
+              .addHeading(enabled ? 'Pages deployment enabled' : 'Pages activation required')
+              .addRaw(explanation)
+              .addBreak()
+              .addRaw('To activate this site, select Settings → Pages → Source → GitHub Actions, then rerun this workflow. A successful build with deployment skipped does not mean the site is live.')
+              .write();
   deploy:
     needs: build
+    if: needs.build.outputs.pages_enabled == 'true'
     runs-on: ubuntu-latest
     permissions:
       pages: write

@@ -8,6 +8,8 @@ From the repository root:
 
 ```bash
 python3 scripts/validate_design.py
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+node --check site/app.js
 python3 -m http.server 8000 --directory site
 ```
 
@@ -15,7 +17,11 @@ Inspect the local server in a browser. Stop it when finished. A local preview do
 
 ## GitHub Pages
 
-The repository includes `.github/workflows/pages.yml`, which validates the design, uploads only `site/`, and deploys the Pages artifact after a push to `main` or a manual workflow dispatch. It uses GitHub's official Pages actions and repository-scoped permissions.
+The independent **Research checks** workflow validates the protocol, ingestion tests and JavaScript syntax on pushes and pull requests. It does not require Pages activation or live provider requests.
+
+The **Validate and publish research site** workflow validates the design and uploads only `site/` after a push to `main` or a manual dispatch. It then checks Pages configuration through GitHub's API. If no site exists, the build keeps its downloadable static artifact, adds an explicit activation notice, and skips deployment. If the source is GitHub Actions, it deploys using GitHub's official Pages action. Other publishing sources are left unchanged; unexpected API errors fail visibly.
+
+A successful artifact build with **deploy skipped** means the site is ready for hosting, not that it is public. The ingestion summary under `site/data/` contains aggregate diagnostics only. No workflow acquires or uploads raw market data.
 
 The repository's **Settings → Pages → Build and deployment → Source** must be **GitHub Actions**. Enabling that setting requires sufficient repository permissions and a GitHub plan that supports Pages for the repository's visibility. Do not change repository visibility simply to make hosting work.
 
@@ -29,7 +35,7 @@ Future tasks should use the existing `/workspace/SPMO-ETF-test` checkout rather 
 
 ## Current activation blocker
 
-The source and workflow are on `main`, and the configuration validation step succeeded in GitHub Actions. Initial Pages configuration failed because the repository does not yet have a Pages site. A direct attempt to create it returned GitHub HTTP 403, **Resource not accessible by integration**, even though repository metadata reports that the user has admin permission. User permission and the connected integration's granted permission are different.
+Earlier workflow runs passed configuration validation but failed initial Pages configuration because the repository did not have a Pages site. A direct attempt to create it returned GitHub HTTP 403, **Resource not accessible by integration**, even though repository metadata reports that the user has admin permission. User permission and the connected integration's granted permission are different. The current workflow handles the unconfigured state explicitly without attempting to create a site.
 
 A repository administrator can finish activation in **Settings → Pages → Source → GitHub Actions**, then rerun **Validate and publish research site** from the Actions tab. No repository visibility change or provider data key is required. GitHub's [official configure-pages input contract](https://github.com/actions/configure-pages/blob/v5/action.yml) states that automatic initial enablement needs a token other than the workflow's default `GITHUB_TOKEN`, with the corresponding Pages/administration permissions. No extra token is requested or embedded here.
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_status": "documentation_and_public_endpoint_probes_no_full_data_audit",
+  "catalog_status": "documentation_public_endpoint_diagnostics_no_full_data_audit",
   "review_date": "2026-10-08",
   "review_timezone": "America/New_York",
   "selected_provider_route": null,
@@ -10,7 +10,7 @@
   "purchase_or_signup_performed": false,
   "storage": {
     "raw_pattern": "data/raw/<provider>/<snapshot-id>/",
-    "normalized_pattern": "data/processed/<snapshot-id>/",
+    "normalized_pattern": "data/processed/<provider>/<snapshot-id>/",
     "market_data_publication_default": "do_not_publish_without_license_permission",
     "required_manifest_fields": [
       "provider",
@@ -96,7 +96,10 @@
         "market_rows_committed_to_repository": false,
         "probe_method": "direct_unauthenticated_HTTP_not_yfinance_SDK"
       },
-      "prior_sample_result": "proxy_connect_403"
+      "prior_sample_result": "proxy_connect_403",
+      "implemented_connection": "scripts/ingest_diagnostic.py: direct unauthenticated Yahoo chart HTTP, not the optional yfinance SDK",
+      "latest_diagnostic_summary": "site/data/ingestion-summary.json",
+      "historical_diagnostic_result": "711_daily_rows_each_SPMO_SPY_2023-12-01_to_2026-10-02; structural_checks_passed; offline_replay_reproduced; calendar_adjustments_PIT_unverified"
     },
     {
       "id": "wrds_crsp_institutional",

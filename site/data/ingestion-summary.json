@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-09T01:35:00.736570+00:00",
+  "source_run_id": "20261009T013442590989Z-ca607b42753b",
+  "replay_run_id": "20261009T013454429172Z-7ee4d33fd938",
+  "source_script_sha256": "1c3f772369abbcc0dad77e9c0cdfa9447cfe48e4a5516b84ff340ce605a3a0de",
+  "quality_report_sha256": "86ebc5d1b32d346121819b460b654e75d5425b6ee3c5dc83b03adb09f40340b3",
+  "requested_start": "2023-12-01",
+  "requested_end": "2026-10-02",
+  "diagnostic_passed": true,
+  "research_ready": false,
+  "calendar_coverage": "not_verified",
+  "price_adjustment_semantics": "not_verified",
+  "cache_replay_verified": true,
+  "symbols": [
+    {
+      "symbol": "SPMO",
+      "observed_start": "2023-12-01",
+      "observed_end": "2026-10-02",
+      "rows": 711,
+      "complete_ohlc_rows": 711,
+      "missing_ohlc_rows": 0,
+      "invalid_ohlc_rows": 0,
+      "error_count": 0,
+      "warning_count": 5,
+      "raw_sha256": "c7565fb281a330c3520f1474efa4f3a6fcc69be35faf984e8b9d4b0d06d2a0c7",
+      "retrieved_at_utc": "2026-10-09T01:34:43.331077+00:00"
+    },
+    {
+      "symbol": "SPY",
+      "observed_start": "2023-12-01",
+      "observed_end": "2026-10-02",
+      "rows": 711,
+      "complete_ohlc_rows": 711,
+      "missing_ohlc_rows": 0,
+      "invalid_ohlc_rows": 0,
+      "error_count": 0,
+      "warning_count": 5,
+      "raw_sha256": "f1c9e25d77d4a2758752cafd9c64e4b5fd51eab12c25ad59c796c48b0b3ef742",
+      "retrieved_at_utc": "2026-10-09T01:34:43.936028+00:00"
+    }
+  ],
+  "cross_symbol_dates_agree": true,
+  "global_error_count": 0,
+  "warnings": [
+    "exchange_calendar_coverage_unverified",
+    "vendor_OHLC_adjustments_and_raw_execution_prices_unverified",
+    "adjclose_kept_separate_no_total_returns_derived",
+    "vendor_action_dates_are_not_verified_dividend_payment_dates",
+    "historical_membership_market_caps_and_point_in_time_integrity_unverified"
+  ]
+}

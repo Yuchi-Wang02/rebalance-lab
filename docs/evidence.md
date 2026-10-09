@@ -1,6 +1,6 @@
 # Evidence record and claim boundaries
 
-Review date: October 8, 2026 (America/New_York).
+Source review: October 8, 2026 (America/New_York). Reproducible diagnostic run: October 9, 2026 UTC.
 
 ## What has been inspected
 
@@ -32,7 +32,9 @@ Inspected PDF SHA-256: `1aeb5efbd5799f49512784f8cab7d0dc275519aabb2bae36fc9d35e6
 
 ## Latest access evidence
 
-Nine credential-free documentation probes succeeded. A separate Yahoo chart diagnostic returned five session timestamps (October 2, 5, 6, 7 and 8, 2026), of which four had complete non-null OHLC fields. That small response remains temporary and is not a licensed full-universe extract, a point-in-time audit or input to a reported backtest. Its dates do not extend the fixed October 2 research cutoff.
+Nine credential-free documentation probes succeeded. The first Yahoo chart probe returned five timestamps and four complete OHLC bars. The subsequent fixed-window ingestion requested December 1, 2023 through October 2, 2026 and returned 711 rows for each of SPMO and SPY. Both had zero missing/invalid OHLC records, no structural/value errors and 12 vendor dividend events. Their observed dates agreed. Offline replay verified original hashes and reproduced the normalized files and quality report exactly.
+
+The [aggregate summary](../site/data/ingestion-summary.json) records run identities, dates, counts, parser/response hashes and unresolved warnings. The [pipeline guide](data-pipeline.md) explains reproduction. Raw observations remain in ignored private directories. This is not a licensed full-universe extract, an exchange-calendar/point-in-time audit, a validated benchmark-return series or input to a reported backtest. It does not extend the October 2 cutoff.
 
 The source registry distinguishes this sample from authenticated downloads and records more specific product/schema limitations. GitHub API connectivity also recovered; Pages activation nevertheless returned an origin authorization error for the connected integration. Network reachability and application permission are separate gates.
 
@@ -41,7 +43,8 @@ The source registry distinguishes this sample from authenticated downloads and r
 | State | What it establishes | Current position |
 |---|---|---|
 | Documentation reviewed | A specific guide or SDK states a capability or requirement | Available for selected sources; see registry |
-| Endpoint reachable | A particular request reached a server | Documentation, a small Yahoo price sample and selected metadata requests succeeded; not a subscription or data-quality test |
+| Endpoint reachable | A particular request reached a server | Documentation, Yahoo chart captures and selected metadata requests succeeded; not proof of a subscription |
+| Diagnostic reproduced | Fixed inputs pass structural checks and replay produces the same files | SPMO/SPY diagnostic passed; calendar, adjustments and point-in-time semantics remain unaudited |
 | Licensed extraction completed | Entitled data were retrieved for a named query/window | Not completed |
 | Data audit completed | IDs, time semantics, coverage and actions passed acceptance | Not completed |
 | Engine verified | Deterministic tests establish accounting and timing behavior | No engine implemented |
