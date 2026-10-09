@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#172c35">
-    <meta name="description" content="Real-market results from a nine-sector ETF momentum pilot over 2001–2025, with an inspectable protocol and a separate stock-level research plan.">
+    <meta name="description" content="Explore fixed-cohort stock and sector ETF momentum experiments, with all costs, yearly comparisons, data limitations and reproducible methods.">
     <title>SPMO Fast Lab — Does faster momentum actually pay?</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%275%27 fill=%27%23172c35%27/%3E%3Cpath d=%27M8 24v-7m8 7V12m8 12V7%27 stroke=%27%23f6f4ed%27 stroke-width=%274%27/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
@@ -16,7 +16,7 @@
       <a class="brand" href="#" aria-label="SPMO Fast Lab home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>SPMO <strong>Fast Lab</strong></span></a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">+</span></button>
       <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
-        <a href="pilot.html">Pilot results</a><a href="#costs">The trade-off</a><a href="#research">The research</a>
+        <a href="stocks.html">Stock pilot</a><a href="pilot.html">ETF pilot</a><a href="#research">The research</a>
         <a class="nav-github" href="https://github.com/Yuchi-Wang02/SPMO-ETF-test">View on GitHub <span aria-hidden="true"><svg class="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M2 2h8v8" stroke="currentColor" stroke-width="1.2"/></svg></span></a>
       </nav>
     </header>
@@ -26,8 +26,8 @@
         <div class="hero-copy">
           <p class="eyebrow"><span class="tiny-line" aria-hidden="true"></span> Independent momentum research</p>
           <h1 id="hero-title">Does faster<br>momentum<br><em>actually pay?</em></h1>
-          <p class="hero-description"><strong class="hero-status">Real-market pilot completed.</strong> A real-market sector ETF pilot, with the original stock-level study still pending. Explore what monthly selection changed in a narrower test of returns, risk, and trading costs.</p>
-          <div class="hero-actions"><a class="button button-dark" href="pilot.html">Read the pilot results <span aria-hidden="true"><svg class="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M2 2h8v8" stroke="currentColor" stroke-width="1.2"/></svg></span></a><a class="text-link" href="https://github.com/Yuchi-Wang02/SPMO-ETF-test/blob/main/docs/research-blueprint.md">Original stock protocol <span aria-hidden="true"><svg class="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M2 2h8v8" stroke="currentColor" stroke-width="1.2"/></svg></span></a></div>
+          <p class="hero-description"><strong class="hero-status">Two completed pilot experiments.</strong> Explore a new 100-issuer stock pilot and a longer sector ETF study. Each shows returns, risk, trading costs and the limits of its data. The original 75-stock protocol remains separate.</p>
+          <div class="hero-actions"><a class="button button-dark" href="stocks.html">Explore the stock results <span aria-hidden="true"><svg class="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M2 2h8v8" stroke="currentColor" stroke-width="1.2"/></svg></span></a><a class="text-link" href="pilot.html">Longer ETF experiment <span aria-hidden="true"><svg class="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M2 2h8v8" stroke="currentColor" stroke-width="1.2"/></svg></span></a></div>
         </div>
         <aside class="tempo-card" aria-labelledby="tempo-title">
           <div class="card-topline"><span>THE RESEARCH QUESTION</span><span class="issue">01 / FREQUENCY</span></div>
@@ -44,7 +44,12 @@
         </aside>
       </section>
 
-      <div class="status-strip wrap" aria-label="Current research status"><div><span class="status-dot" aria-hidden="true"></span><strong>Sector ETF pilot completed</strong></div><p id="research-status">Real-market history, 2001–2025. The original 75-stock experiment still awaits accepted inputs.</p><a href="pilot.html">Explore the findings <span aria-hidden="true"><svg class="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M2 2h8v8" stroke="currentColor" stroke-width="1.2"/></svg></span></a></div>
+      <div class="status-strip wrap" aria-label="Current research status"><div><span class="status-dot" aria-hidden="true"></span><strong>Stock pilot completed</strong></div><p id="research-status">100 baseline issuers, 20 target holdings, all 16 strategy/cost paths. The original 75-stock protocol remains uncompleted.</p><a href="stocks.html">Explore the findings <span aria-hidden="true"><svg class="arrow-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M2 2h8v8" stroke="currentColor" stroke-width="1.2"/></svg></span></a></div>
+
+      <section class="pilot-lead section wrap" aria-labelledby="stock-intro-title">
+        <div class="section-heading"><p class="eyebrow">New / fixed-cohort stock pilot</p><div><h2 id="stock-intro-title">A good year is<br><em>not the whole story.</em></h2><p>At 5 bps per side, monthly 12–1 selection led the semiannual portfolio by 8.84 percentage points in 2026 through October 2. It lagged by 6.93 points in 2025. Across both periods the difference was just 1.23 points, and reversed at higher costs.</p></div></div>
+        <div class="research-note"><span class="note-label">Read the scope</span><p>The 100 largest baseline issuers supply a fixed starting cohort, with 20 target positions and one security class per issuer. Sharadar supplies issuer metrics; Yahoo supplies adjusted-price proxies. One missing daily observation was reconstructed from hourly bars. Spin-off treatment remains a model limitation. <a href="stocks.html">Inspect all results and source checks</a>.</p></div>
+      </section>
 
       <section class="pilot-lead section wrap" id="pilot" aria-labelledby="pilot-title">
         <div class="section-heading"><p class="eyebrow">Real-market pilot · retrospective</p><div><h2 id="pilot-title">First evidence from<br><em>a narrower test.</em></h2><p>Monthly versus twice-yearly selection across nine sector ETFs, over the 25 complete years from 2001 through 2025. March/September stays the primary control; all six twice-yearly schedules are reported.</p></div></div>

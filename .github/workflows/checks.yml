@@ -21,6 +21,8 @@ jobs:
         run: python3 scripts/validate_design.py
       - name: Validate published market-pilot results and independent-replay provenance
         run: python3 scripts/validate_pilot_artifacts.py
+      - name: Validate stock-pilot results and independent replay
+        run: python3 scripts/validate_stock_pilot_artifacts.py
       - name: Test ingestion and research engine with synthetic inputs only
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Exercise every synthetic strategy and cost scenario
@@ -31,3 +33,5 @@ jobs:
         run: node --check site/app.js
       - name: Check market-pilot report JavaScript syntax
         run: node --check site/pilot.js
+      - name: Check stock-pilot report JavaScript syntax
+        run: node --check site/stocks.js

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "data_track": "baseline_issuer_stock_pilot",
+  "formal_protocol_compliant": false,
+  "config_sha256": "245fa15b7d5b0387fa1854cb45e9db600caaa791174648c2a95386bee1ffd328",
+  "normalized_inputs_sha256": "28a356b2cddbb8e2da0277cf6090804b517226f0a739cc4c9535a0ca832ab9cb",
+  "original_results_sha256": "ef120e97272a35acd17a58496057dfc807bfa24fce4ecbe7830a51f2b5a31431",
+  "method": "Change only reconstructed FISV signal/adjusted close by +/-1%; keep its observed opening price unchanged; rerun all16 strategy/cost paths.",
+  "not_a_confidence_interval": true,
+  "scenarios": [
+    {
+      "reconstructed_close_change": -0.01,
+      "strategy_paths": 16,
+      "max_relative_nav_change": 0.0,
+      "paths_with_changed_targets": 0
+    },
+    {
+      "reconstructed_close_change": 0.01,
+      "strategy_paths": 16,
+      "max_relative_nav_change": 0.0,
+      "paths_with_changed_targets": 0
+    }
+  ],
+  "spin_off_exposure": [
+    {
+      "ticker": "HON",
+      "date": "2025-10-30",
+      "paths_holding_at_event_close": [],
+      "entitlement_model": "vendor_adjusted_proxy_not_independently_verified"
+    },
+    {
+      "ticker": "CMCSA",
+      "date": "2026-01-05",
+      "paths_holding_at_event_close": [],
+      "entitlement_model": "vendor_adjusted_proxy_not_independently_verified"
+    },
+    {
+      "ticker": "HON",
+      "date": "2026-06-29",
+      "paths_holding_at_event_close": [
+        "SMIX-0bps",
+        "SMIX-5bps",
+        "SMIX-10bps",
+        "SMIX-25bps"
+      ],
+      "entitlement_model": "vendor_adjusted_proxy_not_independently_verified"
+    },
+    {
+      "ticker": "SPGI",
+      "date": "2026-07-01",
+      "paths_holding_at_event_close": [],
+      "entitlement_model": "vendor_adjusted_proxy_not_independently_verified"
+    }
+  ],
+  "fisv_paths_holding_on_reconstruction_date": []
+}

@@ -1,5 +1,7 @@
 # Where to obtain the original experiment's data
 
+**Pilot update:** authorized Sharadar membership, issuer metrics and corporate-action records now support a completed [100-issuer stock pilot](stock-pilot-retrospective.md), paired with free Yahoo price proxies. No additional price subscription was needed for that limited experiment. The requirements below concern the original full-universe protocol; they are not instructions to buy more data before inspecting the published pilot.
+
 **Recommendation: request a Sharadar sample and a quote for the exact tables below first.** Its own `SP500` table is a newly verified candidate for historical membership. An additional membership supplier is conditional, not automatically required. If an existing institutional WRDS subscription is available, inspect that entitlement in parallel. **Norgate Platinum is a priced alternative for membership and prices, but buying it alone will not complete this experiment.**
 
 Checked **October 8, 2026, America/New_York**. The [procurement evidence](../results/data-purchase-audit.json) records official sources, hashes and the limits of each observation. No account was created, subscription purchased or provider contacted. The completed [ETF pilot](pilot-retrospective.md) is separate from these requirements.

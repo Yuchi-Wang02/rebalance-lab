@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "specified_after_source_inspection_before_any_portfolio_run",
+  "core_strategy_config": "stock-pilot.v1.json",
+  "core_strategy_changed": false,
+  "sourced_price_reconstruction": {
+    "permitted_symbol": "FISV",
+    "permitted_date": "2025-11-12",
+    "source": "seven observed Yahoo 60-minute bars covering the complete regular session",
+    "method": "first open, maximum high, minimum low, last close",
+    "adjustment": "factor one only when all available daily adjustment ratios equal one and no split or dividend event occurs on the date",
+    "retain_original_daily_null_row": true,
+    "official_daily_closing_auction_verified": false,
+    "other_imputation": false
+  },
+  "corporate_actions": {
+    "dividends_and_spinoffs": "represented only through vendor adjusted-price units; report all source spin-off events and held exposure",
+    "payment_date_cash_or_distributed_security_entitlements_verified": false,
+    "unsupported_terminal_events": "block execution; never sell at a fabricated last quote"
+  },
+  "required_sensitivity": "perturb reconstructed FISV close by plus/minus one percent and report effects on selections and endpoint NAVs"
+}

@@ -29,6 +29,8 @@ jobs:
         run: python3 scripts/validate_design.py
       - name: Validate published market-pilot artifacts
         run: python3 scripts/validate_pilot_artifacts.py
+      - name: Validate stock-pilot artifacts
+        run: python3 scripts/validate_stock_pilot_artifacts.py
       - name: Upload static site without research data
         uses: actions/upload-pages-artifact@v3
         with:

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "experiment_id": "baseline-issuer-stock-pilot-v1",
+  "data_track": "baseline_issuer_stock_pilot",
+  "formal_protocol_compliant": false,
+  "design_frozen_before_price_acquisition": true,
+  "cohort": {
+    "baseline": "2024-12-31",
+    "source_universe": "SHARADAR/SP500 historical snapshot",
+    "size": 100,
+    "ranking": "descending SHARADAR/DAILY marketcap on baseline; ticker ascending breaks exact ties",
+    "share_class": "one directly covered Sharadar fundamental representative per issuer; no market-cap copying to other classes",
+    "replacement_for_missing_future_prices": false,
+    "future_additions": false,
+    "membership_removals": "exit at next open after first inactive close"
+  },
+  "request_start": "2023-12-01",
+  "initial_signal": "2024-12-31",
+  "report_anchor": "2025-12-31",
+  "report_end": "2026-10-02",
+  "slots": 20,
+  "cap": 0.08,
+  "initial_cash": 1000000,
+  "lookbacks": [252, 126, 63],
+  "skip": 21,
+  "annualization": 252,
+  "semiannual_months": [3, 9],
+  "costs": [0, 5, 10, 25],
+  "base_cost": 5,
+  "arms": {
+    "S12": {"frequency": "semiannual", "signal_weights": [1, 0, 0]},
+    "M12": {"frequency": "monthly", "signal_weights": [1, 0, 0]},
+    "SMIX": {"frequency": "semiannual", "signal_weights": [0.5, 0.3, 0.2]},
+    "MMIX": {"frequency": "monthly", "signal_weights": [0.5, 0.3, 0.2]}
+  },
+  "benchmarks": ["SPY", "SPMO"],
+  "signal_price": "Yahoo vendor close: split-adjusted price proxy, not dividend-adjusted",
+  "account_price": "Yahoo adjusted-close units; adjusted open = vendor open * adjusted close / vendor close",
+  "dividend_accounting": "embedded in vendor adjusted-price proxy; no separate cash credit",
+  "capitalization": "historical DAILY issuer marketcap * 1000000; same-date observation, not certified historical vintage",
+  "membership_availability": "effective date treated as known at that close; historical announcement timestamps unverified",
+  "strict_failures": [
+    "unexplained interior price gap",
+    "missing required historical capitalization",
+    "missing held-security quote",
+    "unsupported corporate action while held",
+    "no post-hoc cohort replacement"
+  ],
+  "reporting": {
+    "2025": "initialization and burn-in, reported separately",
+    "2026_ytd": "NAV rebased at 2025-12-31 without resetting holdings or charging initialization again",
+    "interpretation": "within-cohort retrospective comparison; not full-universe or original-protocol validation"
+  }
+}

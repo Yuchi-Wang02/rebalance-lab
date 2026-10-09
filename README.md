@@ -4,6 +4,12 @@
 
 A controlled study of monthly versus twice-yearly momentum selection. Both portfolios use the same signal, investment universe, weighting rules and trading-cost assumptions. The question is whether updating the portfolio more often leaves investors better off after costs.
 
+**New: a separate stock pilot has run using Sharadar fundamentals and free Yahoo price proxies.** Its fixed cohort contains the 100 largest baseline issuers on December 31, 2024, and selects 20 positions. At 5 bps per side, monthly 12–1 momentum returned **35.89% in 2026 through October 2**, versus **27.05%** for March/September selection. The comparison reversed in 2025: **13.56% versus 20.49%**. Over both periods together, the monthly advantage was only **1.23 percentage points**, and became negative at 25 bps per side.
+
+Explore the [stock results](https://yuchi-wang02.github.io/SPMO-ETF-test/stocks.html) and [English retrospective](docs/stock-pilot-retrospective.md). All four strategies, four costs and both years are shown. The [frozen cohort rules](configs/stock-pilot.design-freeze.json), [clarified price definition](configs/stock-pilot.v1.json), [source-audit policy](configs/stock-pilot-audit.v1.json) and [derived outputs](site/data/stock-pilot-summary.json) make the scope explicit. This is a vendor-adjusted price experiment; it does not complete the original 75-stock, class-capitalization and payment-date protocol.
+
+![Six modeled portfolio paths in the stock-pilot report](docs/assets/stock-pilot-preview.png)
+
 **A separate real-market sector ETF pilot is complete.** At 5 bps per side over 2001–2025, monthly selection returned **8.02% CAGR**, versus **8.51%** for March/September selection: **−0.49 percentage points per year**. Monthly had a shallower maximum drawdown (−30.32% versus −32.81%) and much higher trading activity. Calendar choice changes the sign of the comparison.
 
 Read the [complete experimental retrospective](docs/pilot-retrospective.md), inspect the [derived results](site/data/etf-pilot-summary.json), or explore the [live interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html). All six calendars and four costs are published. The 2026 primary pair favored monthly selection, which does not overturn the longer-period result.
@@ -12,7 +18,7 @@ Read the [complete experimental retrospective](docs/pilot-retrospective.md), ins
 
 ## Original stock protocol — still awaiting accepted data
 
-The comparison below remains the original research question; the completed sector ETF pilot is a separate experiment.
+The comparison below remains the original research question; both completed pilots are separate experiments.
 
 ### Start with one comparison
 
@@ -45,7 +51,7 @@ The original **2026 period through October 2** remains a retrospective case stud
 |---|---|---|
 | Historical inputs | SPMO/SPY price diagnostics and offline replay work | Audit constituent history, historical capitalization, prices and corporate actions |
 | Engine reconciliation | Accounting and execution can be exercised on fictional data | Broader event support and independent reconciliation against accepted market/event records |
-| Market comparisons | Not run; the primary and supplementary protocols are documented | Accept the inputs and engine, then complete all prespecified comparisons |
+| Original stock comparisons | Not run; separate stock and ETF pilot results are available | Accept the inputs and engine, then complete all prespecified comparisons |
 
 The [live English website](https://yuchi-wang02.github.io/SPMO-ETF-test/) explains the question first, then offers progressively deeper methods and reproduction details. GitHub Pages deployment and public file integrity were verified on October 9, 2026. The image below is a tested local preview of the same site.
 
@@ -53,11 +59,13 @@ The [live English website](https://yuchi-wang02.github.io/SPMO-ETF-test/) explai
 
 ## The next data decision
 
+The current Sharadar access supplied historical membership, issuer capitalization and corporate actions for the fixed-cohort stock pilot. SEP/SFP price requests remained empty, so that pilot used free price proxies. Additional purchases are not a prerequisite for inspecting its results. Full-universe departed-stock coverage, true class capitalization and event timing remain requirements for the original protocol.
+
 The [buying guide](docs/data-purchase-guide.md) now gives verified purchase links, Norgate prices and a ready-to-send sample request. First investigate Sharadar’s own `SP500` historical-membership table alongside its prices, daily metrics and corporate actions; a separate membership supplier is only needed if that coverage fails acceptance. Norgate Platinum is a priced partial alternative, with explicit capitalization and settlement gaps.
 
 First obtain a small, authorized [acceptance sample](docs/data-acceptance-sample.md) covering ordinary securities and difficult events: membership entry/exit, ticker changes, splits, dividends, multiple share classes and merger/delisting settlement. Historical class-level capitalization and information-availability dates must be demonstrated before a provider is treated as sufficient.
 
-If institutional access already exists, inspect an entitled WRDS/CRSP export. Otherwise verify the required licensed components before choosing a commercial route. The [source guide](docs/data-sources.md) records what was actually inspected and each remaining gap. No subscription, credential or complete historical dataset is assumed.
+If institutional access already exists, inspect an entitled WRDS/CRSP export. Otherwise verify the required licensed components before choosing a commercial route. The [source guide](docs/data-sources.md) records what was actually inspected and each remaining gap. The completed pilot does not certify the complete original-study dataset.
 
 <details>
 <summary><strong>Inspect the full methods and implementation</strong></summary>

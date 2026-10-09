@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore a fixed-cohort, 20-position stock momentum pilot: four strategies, every cost scenario, and explicit data limitations.">
+  <title>Stock pilot results · SPMO Fast Lab</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="stocks.css">
+  <script src="stocks.js" defer></script>
+</head>
+<body class="stock-page">
+  <a class="skip-link" href="#stock-main">Skip to content</a>
+  <header class="site-header wrap stock-header">
+    <a class="brand" href="index.html">SPMO <strong>Fast Lab</strong></a>
+    <nav aria-label="Report navigation"><a href="index.html">The project</a><a href="pilot.html">Sector ETF pilot</a><a href="#stock-method">Method &amp; limits</a></nav>
+  </header>
+  <main id="stock-main" class="wrap stock-main">
+    <aside class="stock-scope" aria-label="Research scope">
+      <span class="stock-scope-label">A separate stock pilot</span>
+      <p>A fixed <strong>100-issuer baseline cohort</strong>, with a target of <strong>20 positions</strong>. This is a restricted-universe experiment. The original historical-universe, 75-stock study is <strong>not completed</strong>.</p>
+    </aside>
+
+    <section class="stock-hero" aria-labelledby="stock-title">
+      <div><p class="eyebrow">Stock momentum / the frequency question</p><h1 id="stock-title">Same starting universe.<br><em>A different rhythm.</em></h1><p class="stock-lead" id="stock-result-story">Loading the saved stock-pilot results. Returns will appear only after the summary and portfolio paths have been checked against each other.</p></div>
+      <div class="stock-headline-result"><span class="eyebrow">Primary frequency difference</span><strong id="stock-primary-spread">Loading…</strong><span id="stock-primary-caption">M12 minus S12 · net total return</span><p>Monthly and semiannual selection use the same signal and portfolio rules. A positive difference favors monthly selection within this experiment.</p></div>
+    </section>
+
+    <section class="stock-explorer" aria-labelledby="stock-explorer-title">
+      <div class="stock-explorer-heading"><div><p class="eyebrow">01 / Explore the saved runs</p><h2 id="stock-explorer-title">One comparison.<br><em>Every cost scenario.</em></h2></div><div class="stock-controls"><label for="stock-period">Measurement window<select id="stock-period" disabled><option value="ytd2026" selected>2026 YTD · through October 2</option><option value="year2025">2025 · formation year</option><option value="full_period">Full period · 2025–2026</option></select></label><label for="stock-cost">Trading cost, per side<select id="stock-cost" disabled><option value="0">0 bps</option><option value="5" selected>5 bps · base case</option><option value="10">10 bps</option><option value="25">25 bps</option></select></label></div></div>
+      <p id="stock-load-status" class="stock-load-status" role="status" aria-live="polite">Loading saved data…</p>
+      <noscript><p class="stock-error">JavaScript is needed to explore the saved results. Download the <a href="data/stock-pilot-summary.json">summary</a> and <a href="data/stock-pilot-nav.json">portfolio paths</a> directly.</p></noscript>
+      <div class="stock-facts" aria-label="Selected run metrics">
+        <article><span>Monthly · M12</span><strong id="stock-monthly-return">Loading…</strong><small>Net total return</small></article>
+        <article><span>Semiannual · S12</span><strong id="stock-slow-return">Loading…</strong><small>Net total return</small></article>
+        <article><span>Blended-signal comparison</span><strong id="stock-mixed-spread">Loading…</strong><small>MMIX minus SMIX · percentage points</small></article>
+        <article><span>Monthly maximum drawdown</span><strong id="stock-monthly-drawdown">Loading…</strong><small id="stock-drawdown-context">Daily closing portfolio values</small></article>
+      </div>
+      <div class="stock-perspective" aria-label="The primary comparison in both years"><div><h3 id="stock-perspective-title">Read both years.</h3><p id="stock-perspective-note">The same monthly-minus-semiannual comparison, at the selected cost.</p></div><div><span>2025 formation year</span><strong id="stock-spread-2025">Loading…</strong></div><div><span>2026 through October 2</span><strong id="stock-spread-2026">Loading…</strong></div></div>
+
+      <figure class="stock-chart-card" aria-labelledby="stock-chart-heading">
+        <div class="stock-chart-top"><div><h3 id="stock-chart-heading">Six portfolios, one starting value.</h3><p id="stock-chart-window">Each path is rebased to 100 at the selected window's first close.</p></div><span class="stock-chart-unit">Portfolio value / linear scale</span></div>
+        <ul class="stock-legend" aria-label="Portfolio line legend"><li><span class="stock-line line-m12"></span>M12 · monthly</li><li><span class="stock-line line-s12"></span>S12 · semiannual</li><li><span class="stock-line line-mmix"></span>MMIX · monthly blend</li><li><span class="stock-line line-smix"></span>SMIX · semiannual blend</li><li><span class="stock-line line-spmo"></span>SPMO · context</li><li><span class="stock-line line-spy"></span>SPY · context</li></ul>
+        <div id="stock-chart-placeholder" class="stock-chart-placeholder">Waiting for validated saved paths.</div>
+        <svg id="stock-chart" viewBox="0 0 1100 420" role="img" aria-labelledby="stock-svg-title stock-svg-desc" hidden><title id="stock-svg-title">Normalized portfolio paths</title><desc id="stock-svg-desc">All six portfolios over the selected period. Exact return and drawdown values are available in the following table.</desc></svg>
+        <figcaption>These are modeled portfolios using vendor-adjusted price units. The four stock arms test frequency; SPMO and SPY provide product context. Lines show saved daily observations, not forecasts. The table below supplies exact endpoint and drawdown figures.</figcaption>
+      </figure>
+      <p id="stock-price-caveat" class="stock-price-caveat">Vendor price adjustments and spin-off entitlement completeness are not independently verified. Specific source repairs are disclosed with the saved audit.</p>
+
+      <div class="stock-table-heading"><h3>Return is only part of the result.</h3><p>Read the drawdown and the amount of trading alongside it.</p></div>
+      <div class="stock-table-scroll" role="region" tabindex="0" aria-label="All six portfolios, selected period and cost"><table><caption id="stock-table-caption">Waiting for saved results</caption><thead><tr><th scope="col">Portfolio</th><th scope="col">Total return</th><th scope="col">Max drawdown</th><th scope="col">Traded NAV</th><th scope="col">Mean cash</th></tr></thead><tbody id="stock-table-body"><tr><td colspan="5">Loading saved results…</td></tr></tbody></table></div>
+      <p class="stock-table-note">Traded NAV is the sum of each execution's buys plus sells divided by its pretrade NAV; it is not divided by two or annualized. Returns are net of the selected cost, unannualized, and pre-tax. Cash earns zero interest.</p>
+      <div class="stock-reading-note"><span class="eyebrow">Keep the interpretation narrow</span><p id="stock-interpretation">The measured window, cost assumption, fixed cohort, and price model all matter. No result from this pilot establishes an advantage for the original 75-stock design.</p></div>
+    </section>
+
+    <section id="stock-method" class="stock-method" aria-labelledby="stock-method-title">
+      <div class="stock-section-heading"><p class="eyebrow">02 / Where the result comes from</p><h2 id="stock-method-title">Real inputs.<br><em>A deliberately limited model.</em></h2></div>
+      <div class="stock-method-grid">
+        <article><span class="stock-method-number">01</span><h3>A frozen starting cohort</h3><p>The baseline ranks issuers by Sharadar DAILY capitalization at December 31, 2024, and retains 100 issuers with one covered security class each. The cohort stays fixed. Later additions to the wider index do not expand it.</p><p class="stock-method-small">This tests a restricted starting universe, not the full evolving S&amp;P 500.</p></article>
+        <article><span class="stock-method-number">02</span><h3>Four arms, 20 target holdings</h3><p>Each arm selects positive-momentum candidates with the same portfolio rules. S12 and M12 use 12–1 momentum. SMIX and MMIX use the 50/30/20 blend. Selection is monthly or at March/September month-end; orders use the next session.</p><p class="stock-method-small">Cost scenarios: 0, 5, 10 and 25 bps per side. The blended pair is a prespecified replication.</p></article>
+        <article><span class="stock-method-number">03</span><h3>Dated data, with limits</h3><p>Purchased Sharadar SF1, DAILY, SP500 and ACTIONS components support the data work; Yahoo supplies free price proxies. Vendor dates do not prove original publication-time availability, and adjusted prices do not reproduce a raw-share corporate-action ledger.</p><p class="stock-method-small">No dividend cash is added a second time to the adjusted accounting units. Raw vendor observations are not published here.</p></article>
+        <article><span class="stock-method-number">04</span><h3>Holdings cross the year-end</h3><p>Portfolios form after the December 31, 2024 signal and run through 2025. The 2026 view starts with their existing holdings at December 31, 2025 close, and ends October 2, 2026. Changing the displayed window does not reset the simulated strategy.</p><p class="stock-method-small">This history was already observable. It remains retrospective exploration, not a new out-of-sample test.</p></article>
+      </div>
+      <details class="stock-audit"><summary>Inspect the reported checks and remaining limitations</summary><div class="stock-audit-grid"><div><h3>Engine checks</h3><ul id="stock-engine-checks"><li>Waiting for the saved check record.</li></ul></div><div><h3>Data audit record</h3><dl id="stock-data-audit"><div><dt>Status</dt><dd>Waiting for saved audit metadata.</dd></div></dl></div></div><h3>Limitations attached to this run</h3><ul id="stock-limitations"><li>The restricted cohort and proxy accounting differ from the original formal study.</li></ul><p class="stock-audit-note">A separate implementation replayed all 24 paths, 10,560 daily account states and 21,600 signal records. Maximum relative NAV error was 2.21 × 10⁻¹⁵. <a href="data/stock-pilot-validation.json">Read the independent receipt</a>. These checks do not certify complete historical coverage, point-in-time integrity, or achievable live returns.</p></details>
+    </section>
+
+    <section class="stock-downloads" aria-labelledby="stock-downloads-title"><div><p class="eyebrow">03 / Inspect, reproduce, question</p><h2 id="stock-downloads-title">The numbers have<br><em>a source.</em></h2><p>This page reads saved summaries and daily portfolio paths. It performs no market-data downloads or live strategy execution.</p></div><div class="stock-download-links"><a href="https://github.com/Yuchi-Wang02/SPMO-ETF-test/blob/main/docs/stock-pilot-retrospective.md">Read the full retrospective <span aria-hidden="true">↗</span></a><a href="data/stock-pilot-summary.json">Download run summary <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M3 3h8v8" stroke="currentColor" stroke-width="1.3"/></svg></a><a href="data/stock-pilot-nav.json">Download portfolio paths <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M3 3h8v8" stroke="currentColor" stroke-width="1.3"/></svg></a><a href="https://github.com/Yuchi-Wang02/SPMO-ETF-test">Inspect the repository <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M3 3h8v8" stroke="currentColor" stroke-width="1.3"/></svg></a><a href="pilot.html">Compare the separate sector ETF pilot <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M3 3h8v8" stroke="currentColor" stroke-width="1.3"/></svg></a></div></section>
+  </main>
+  <footer class="wrap stock-footer"><span>SPMO Fast Lab · Independent research</span><p>Not affiliated with Invesco or S&amp;P Dow Jones Indices. Modeled historical results are not forecasts or investment advice.</p></footer>
+</body>
+</html>

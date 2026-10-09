@@ -36,5 +36,18 @@
     "summary_path": "site/data/etf-pilot-summary.json",
     "validation_path": "site/data/etf-pilot-validation.json",
     "report_path": "docs/pilot-retrospective.md"
+  },
+  "separate_stock_pilot": {
+    "experiment_id": "baseline-issuer-stock-pilot-v1",
+    "status": "completed_and_independently_replayed",
+    "data_track": "baseline_issuer_stock_pilot",
+    "cohort_issuers": 100,
+    "target_positions": 20,
+    "strategy_paths": 16,
+    "benchmark_paths": 8,
+    "original_protocol_completed": false,
+    "summary": "site/data/stock-pilot-summary.json",
+    "validation": "site/data/stock-pilot-validation.json",
+    "retrospective": "docs/stock-pilot-retrospective.md"
   }
 }
