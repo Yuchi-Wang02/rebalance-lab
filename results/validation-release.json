@@ -1,0 +1,130 @@
+{
+  "artifact_sha256": {
+    "README.md": "ecc6014d125d0baa19a656c7f1ff7189bc482577242ae5c8187cce5918310f6a",
+    "docs/methods/design-decisions.md": "0b443903f1d22e5424017c7d5148e7429781873eb2143f7c27dbcb938cf96cb4",
+    "docs/methods/validation-study.md": "6b08ae2b0a32ef16db7379c2d95518b0a0996cf06a18ce54a26831ff3b65d752",
+    "docs/reproduction.md": "fc67e4f61d4895080bb3bdc80938558c44f6cb36a5528779ad5f869fa3c6b71f",
+    "docs/studies/validation-study.md": "2a77d7958cd399bc7043254badf08cded43ebe925e7bb6a58d32c822452fda0f",
+    "docs/validation/validation-memo.md": "6dd99a3818f840b664500cf7503064ae72c8d11269bb9e413bdb9a1166adae23",
+    "notebooks/validation-study.ipynb": "675272523564fefdb34108c48e561ba26fef70020a45f543ef7e79eb56c115a8",
+    "results/owner-review-progress.json": "a646dc03e09746568204b32fd50b1825e3bb521edf6a1eb041ae1bab4ea52da1",
+    "results/presentation-review.json": "0a524e6d2e5360fab08b5df0386aa294264b9a64a5c53fc44fe5446714cb68ba",
+    "results/status.json": "9060e74107ee10e5be4fcc2bc883cd53b2b3a8a81b15aacab679230861eb6582",
+    "site/app.js": "cfc1feffe06c416c749a6094044e7c7a26dafab73989cf9ae872c121b136fbd4",
+    "site/assets/favicon.svg": "63b3bbe87f3866f2b922d0e68ed6e91baa580bce3c38d7b3d8374e0a99071a2b",
+    "site/assets/pilot-annual-spread.svg": "40281a32c4b6c1c3311025b7e4ee9537faa7b358b167a7f165ca84396690a74e",
+    "site/assets/pilot-calendar-costs.svg": "ab7643b354c91ddca18e0d506675a7999a039c467ca5bbf7d6fb9bbf86ee4847",
+    "site/assets/pilot-wealth-drawdown.svg": "2e833cc7a3ce4eb7fc158e168105e1c2b06bef74a2be1d788becba807642fcd7",
+    "site/assets/rebalance-lab-validation-brief.pdf": "ba9c02a0933cb7fb45c452cfe60d113983df72cc11cf7de0e106dbcdb6dfd6d7",
+    "site/assets/rebalance-lab-validation-memo.pdf": "f571e5d98e173a201786e02aeb67e8ec055b2bbdc8cea138716761dfe824cb28",
+    "site/assets/research-overview.png": "9767dc9e84c054458723272f04dfc72c469d2531352df658ca57928cc48a592e",
+    "site/assets/validation-calendar-costs.png": "2bcd6c3d89a3e31c5450d4e9cd2947c90821a0e32b39913f9473dfda1d5e859d",
+    "site/assets/validation-calendar-costs.svg": "d9370ac4778150902ddb93a625d2e1d2125e16bec5dce238a87e06eb72397dc3",
+    "site/assets/validation-costs.png": "25406283d5c9a9cc21a51945252bcf6309789bd02727ff037acc5e6815db11c3",
+    "site/assets/validation-costs.svg": "1a68fac38fb71ea9b904ec182d176675d7486eb0f080e9020c12e9ebe23bac1e",
+    "site/assets/validation-intervals.png": "a267fc3a757bacb88364c955033f086e980d912f7f6f6aca1cbc1b00e0694406",
+    "site/assets/validation-intervals.svg": "01e6f24d4be7048c21d8f18b7ea008e50d5e43fd1ea24c3690bf300e36fa9ecc",
+    "site/assets/validation-preview.png": "704524f686f5fe6452a83d70cc9a94f435924b0774da52df200c8b671b59fa3a",
+    "site/assets/validation-wealth-drawdown.png": "78fdf032ceeb926c91ab84acdaf9dd663663bb105be5e11dc384684ccd5ee0a6",
+    "site/assets/validation-wealth-drawdown.svg": "59546770dab1069caaa708ed900ae23724f7383dcf16c7c64a84a97cc20dc8a6",
+    "site/data/calendar-sensitivity-status.json": "eb820980f98fe46f80e512e0b3249dc70a985666acd3546e4af8915e80c46643",
+    "site/data/engine-status.json": "0b2c214d9758202183121c835e6797c913c7c3b6cc5a11b57806ade8c498543a",
+    "site/data/etf-pilot-annual.csv": "290e61211e362544092b7830980944193d1837a6a63e0a6031d140dc11d30d32",
+    "site/data/etf-pilot-full_period.csv": "8a399e0cab5ebb56fadcb8b1bfad7eee58caa581b5975e1983f236e05f0fdcc1",
+    "site/data/etf-pilot-summary.json": "c0c28ab2573e076f2a53a28d292908b6e8c8ba917a536cc02e015760104e44da",
+    "site/data/etf-pilot-validation.json": "1b3137dd71ed0ec536e99760ca5e5b56d7f667263af8da9c08207206fd01000f",
+    "site/data/etf-pilot-ytd2026.csv": "35305220711ccda2efa0f8baec540fd07691ff71d28e2830aa36e673695f693c",
+    "site/data/ingestion-summary.json": "2f108356e697a56ed6d7a6494f8325e871ab9874d3a3b477e027a0246f2f3b1f",
+    "site/data/stock-pilot-nav.json": "8ec78a8f34597db3f3b2ed4694046ed24c0a5c1f30b5b254e6bdb82bf8d9cb44",
+    "site/data/stock-pilot-sensitivity.json": "a477672f8b398e0f19d03487528648b5dae9674bffc5f06e23f651eca314694e",
+    "site/data/stock-pilot-summary.json": "585091281cd3b33f0b96bfc4e498d8fbb4a69dee098bad7e7715cef638ed9f9f",
+    "site/data/stock-pilot-validation.json": "ba8c166c6ad762484d9358ea3dd149bcb734d24dafb37794466b8cdc45d8d636",
+    "site/data/validation-daily-nav.csv": "0ac53b58c77eea93f94f50f87638cf057d70eab6631af0e4822439d7c101160c",
+    "site/data/validation-monthly-returns.csv": "c8e354ed9a04773d917e2686ec0f81de04dc41e1d18beadd8ba31590dacf5787",
+    "site/data/validation-risk-metrics.csv": "d38905c39f60a2a56ef35ed34b25f7cc59f00ce28da27d3b70fb42c8e838d81f",
+    "site/data/validation-study-replay.json": "2b117afafa821a86fbca4cd6ddb9928396bcd7d8bb3cae703d4ce7f9241db46f",
+    "site/data/validation-study-summary.json": "9b727f816af638772cd19b98ee7911cc97bf3290ee9b72dcd79bce4ba5bc6619",
+    "site/downloads/validation-study.ipynb": "675272523564fefdb34108c48e561ba26fef70020a45f543ef7e79eb56c115a8",
+    "site/index.html": "e79b28cb569fd05f17588784c5821c5e75bf76faae225be4cbfc79030ec286b8",
+    "site/methods.html": "98fdff42a7f7ed5cba77c450041f59dd44c7a368d7a04853dd7a8260d88483c1",
+    "site/notebook.html": "ec5b01ead3908294a0ae6dfad7d563c02f21bf7a0d5b1ecd192a89c3262f025a",
+    "site/pilot.css": "f37a7fa3b2973c806a360d0a54714da47adffe0c0658cea6da123a46767ad564",
+    "site/pilot.html": "406ad60c85027ce36553c9b02a122ea348ae86fc32170ffe4c3c98d7c4024ac7",
+    "site/pilot.js": "e9a1de2e2b76c7fa2dc20652079fbeba05bae698b1abf1d21dc02f342dc5f70f",
+    "site/stocks.css": "14337f694e2173b660eab0f07277c35da728a5d33aff35182edbb640e47eb76c",
+    "site/stocks.html": "0b4dba455ce253f421ce8dc54f7e0a79f07b173cf9c78848ad0a5f77cb5f4711",
+    "site/stocks.js": "3bdfb8ff1cb2c889536fac4cbf511992a5ba63f86f57fbd8a3a30c17749d1a0d",
+    "site/styles.css": "1e03910c048b21a153bf3dbdc600fc7387a87a6143227c2b96ae090035852014",
+    "site/validation.css": "5d1ec427975d091fb87133d94ed8050406c6e8eab6a9b1c7648244c0620fff24",
+    "site/validation.js": "f3caaae5e02c765ab9350cb3c3055da84dca56a6b7e9c51bcb644ff814bdb90b"
+  },
+  "baseline_commit": "56479fc9bfef756f81eba269e6114ac35b36d375",
+  "checks": {
+    "browser": {
+      "blocked_data_request_fails_closed": true,
+      "desktop_viewport": [
+        1440,
+        950
+      ],
+      "javascript_disabled_static_results_available": true,
+      "keyboard_select_and_horizontal_scroll": true,
+      "methods_exact_window_example_checked": true,
+      "mobile_viewport": [
+        390,
+        844
+      ],
+      "no_page_wide_mobile_overflow": true,
+      "notebook_broken_images": 0,
+      "notebook_native_plots": 4,
+      "scenario_combinations_checked": 8,
+      "screenshots": [
+        "home-desktop.jpg",
+        "etf-mobile.jpg",
+        "etf-uncertainty-desktop.jpg",
+        "etf-data-failure.jpg",
+        "notebook-desktop.jpg"
+      ],
+      "temporary_emulation_restored": true
+    },
+    "javascript_syntax": true,
+    "javascript_tests": {
+      "passed": 21
+    },
+    "pdf": {
+      "all_pages_rendered_and_visually_reviewed": true,
+      "brief_pages": 4,
+      "memo_pages": 1,
+      "standalone_memo_footer": "1 / 1"
+    },
+    "public_only_notebook": {
+      "clean_kernel": true,
+      "executed_cells": 8,
+      "native_plots": 4,
+      "private_inputs_present": false
+    },
+    "public_site_links": {
+      "html_pages": 5,
+      "local_links_and_assets": 82
+    },
+    "python_tests": {
+      "passed": 150,
+      "skipped": 0
+    },
+    "validate_design": true,
+    "validate_pilot_artifacts": true,
+    "validate_stock_pilot_artifacts": true,
+    "validate_validation_artifacts": true
+  },
+  "implementation_is_uncommitted": true,
+  "new_version_deployed": false,
+  "owner_presentation_ready": false,
+  "recorded_at_utc": "2026-10-09T06:49:13.739150+00:00",
+  "release_scope": {
+    "credentials": false,
+    "private_ledgers": false,
+    "private_owner_material": false,
+    "raw_vendor_data": false
+  },
+  "research_and_presentation_complete": true,
+  "schema_version": 2
+}

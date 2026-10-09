@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "as_of_utc": "2026-10-09T06:35:43.186545+00:00",
+  "owner_mastery_verified": false,
+  "owner_presentation_ready": false,
+  "actual_answers_recorded": true,
+  "checkpoint_1": "trade_review_accepted_signal_window_followup_pending",
+  "checkpoint_2": "written_review_accepted",
+  "checkpoint_3": "written_judgment_review_accepted_oral_timing_not_observed",
+  "confirmed_contributions": [
+    "Selected validation readers, financial-only scope and the review process.",
+    "Personally reconciled one historical trade and its fees, NAV, residual cash and turnover using Python, per direct owner confirmation.",
+    "Explained calendar sensitivity, paired uncertainty, pooled drawdown and the source-price/fill-evidence distinction in writing."
+  ],
+  "AI_assistance": "Implementation, numerical research checks and narrative drafting; the owner reports AI only organized the wording or format of submitted answers.",
+  "deferred": [
+    "Exact signal-window explanation by the owner",
+    "Observed timed oral presentation"
+  ],
+  "owner_notebook_execution_verified": false,
+  "independent_external_reviewer": false,
+  "provenance": "Owner worksheet and direct user messages retained privately; this is an assistant assessment of those answers, not independent certification.",
+  "private_submission_sha256": [
+    "a8800aa011b94c50c09c31726456f63403bc88af5ec938b4627a522b3750b746",
+    "8219eb732bfe7e168f3b381118dc26aa255bfb8d36e30e4ac61b7ad7a9c00744",
+    "57595f0593f162aba7fa5094b689d0df57709c154cb441e4ebf682d7f4ef68c5"
+  ]
+}
