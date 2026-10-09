@@ -1,0 +1,29 @@
+name: Research finding or data concern
+description: Question a result, assumption, source, or accounting step.
+title: "[Research] "
+body:
+  - type: dropdown
+    id: study
+    attributes:
+      label: Study
+      options:
+        - Stock pilot (2025–2026)
+        - Sector ETF pilot (2001–2025)
+        - Original full-universe protocol (not completed)
+        - Cross-study interpretation
+    validations:
+      required: true
+  - type: textarea
+    id: finding
+    attributes:
+      label: Finding
+      description: Explain the issue, relevant dates, cost scenario, and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and reproduction
+      description: Link public sources or provide commands. Do not attach API keys, account information, or licensed raw data.
+    validations:
+      required: true

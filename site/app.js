@@ -1,343 +1,203 @@
-'use strict';
+"use strict";
 
-// The site reads saved pilot results and original-model diagnostic receipts,
-// and illustrates fee arithmetic. It does not request prices or simulate returns.
-const arms = {
-  S12: {
-    tag: 'Primary control',
-    title: 'The baseline tempo.',
-    description: 'Rebalance twice a year using 12–1 risk-adjusted momentum. Comparing M12 with this arm isolates the scheduled rebalance frequency within the same model.',
-    signal: '12–1 risk-adjusted momentum',
-    schedule: 'March / September month-end → next open',
-    compare: 'M12 · change frequency only',
-  },
-  M12: {
-    tag: 'Primary comparison',
-    title: 'Faster rhythm, same signal.',
-    description: 'Rebalance monthly using the same 12–1 momentum signal as S12. This is the cleanest test of whether frequency earns its additional costs.',
-    signal: '12–1 risk-adjusted momentum',
-    schedule: 'Every month-end → next open',
-    compare: 'S12 · change frequency only',
-  },
-  SMIX: {
-    tag: 'Within-study robustness control',
-    title: 'A broader lens, a slower rhythm.',
-    description: 'Blend long, medium, and shorter momentum horizons while retaining semiannual rebalancing. This is the control for a within-study robustness check, not independent replication.',
-    signal: '50% 12–1 + 30% 6–1 + 20% 3–1',
-    schedule: 'March / September month-end → next open',
-    compare: 'MMIX · change frequency only',
-  },
-  MMIX: {
-    tag: 'Within-study robustness comparison',
-    title: 'The same question, a blended signal.',
-    description: 'Rebalance the blended signal monthly. Compare with SMIX to see whether the frequency effect also appears under a different, prespecified signal. Both comparisons use the same market history.',
-    signal: '50% 12–1 + 30% 6–1 + 20% 3–1',
-    schedule: 'Every month-end → next open',
-    compare: 'SMIX · change frequency only',
-  },
-};
-
-document.querySelectorAll('[data-arm]').forEach((button) => {
-  button.addEventListener('click', () => {
-    const arm = arms[button.dataset.arm];
-    if (!arm) return;
-    document.querySelectorAll('[data-arm]').forEach((candidate) => {
-      const selected = candidate === button;
-      candidate.classList.toggle('selected', selected);
-      candidate.setAttribute('aria-pressed', String(selected));
-    });
-    document.getElementById('detail-code').textContent = button.dataset.arm;
-    for (const [key, value] of Object.entries(arm)) {
-      document.getElementById(`detail-${key}`).textContent = value;
-    }
+// The homepage reads saved study summaries. It does not fetch prices or run a strategy.
+(() => {
+  const COSTS = [0, 5, 10, 25];
+  const PERIODS = ["year2025", "ytd2026", "full_period"];
+  const number = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
-});
+  const $ = (id) => document.getElementById(id);
+  const finite = (value) => typeof value === "number" && Number.isFinite(value);
+  const pp = (value) =>
+    `${value > 0 ? "+" : value < 0 ? "−" : ""}${number.format(Math.abs(value))} pp`;
+  const percent = (value) => `${number.format(value * 100)}%`;
+  const assert = (condition) => {
+    if (!condition) throw new Error("Saved summary does not match this study.");
+  };
 
-const costInput = document.getElementById('cost-bps');
-const tradedInput = document.getElementById('traded-multiple');
-const compactNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
-const dollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-
-function updateCosts() {
-  const costBps = Number(costInput.value);
-  const tradedMultiple = Number(tradedInput.value);
-  const feeBps = costBps * tradedMultiple;
-  const feePercent = feeBps / 100;
-  document.getElementById('bps-output').textContent = `${costBps} bps`;
-  document.getElementById('multiple-output').textContent = `${compactNumber.format(tradedMultiple)}× reference NAV`;
-  document.getElementById('fee-percent').textContent = feePercent.toFixed(2);
-  document.getElementById('fee-dollar').textContent = dollars.format(1_000_000 * feeBps / 10_000);
-  document.getElementById('fee-formula').textContent = `${costBps} bps × ${compactNumber.format(tradedMultiple)} = ${compactNumber.format(feeBps)} bps = ${feePercent.toFixed(2)}%`;
-  costInput.setAttribute('aria-valuetext', `${costBps} basis points per side`);
-  tradedInput.setAttribute('aria-valuetext', `${tradedMultiple} times fixed reference net asset value`);
-  [costInput, tradedInput].forEach((input) => {
-    const fraction = (Number(input.value) - Number(input.min)) / (Number(input.max) - Number(input.min));
-    input.style.setProperty('--fill', `${fraction * 100}%`);
-  });
-}
-
-costInput.addEventListener('input', updateCosts);
-tradedInput.addEventListener('input', updateCosts);
-updateCosts();
-
-const menuToggle = document.querySelector('.menu-toggle');
-const navigation = document.getElementById('primary-nav');
-function closeMenu() {
-  menuToggle.setAttribute('aria-expanded', 'false');
-  navigation.classList.remove('open');
-}
-menuToggle.addEventListener('click', () => {
-  const open = menuToggle.getAttribute('aria-expanded') !== 'true';
-  menuToggle.setAttribute('aria-expanded', String(open));
-  navigation.classList.toggle('open', open);
-});
-navigation.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
-    closeMenu();
-    menuToggle.focus();
-  }
-});
-
-// Keep deep links usable when the requested evidence lives in a closed section.
-function revealHashTarget() {
-  const target = document.getElementById(window.location.hash.slice(1));
-  if (!target) return;
-  let parent = target;
-  let opened = false;
-  while (parent) {
-    if (parent.tagName === 'DETAILS' && !parent.open) {
-      parent.open = true;
-      opened = true;
+  async function load(path) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10000);
+    try {
+      const response = await fetch(path, { signal: controller.signal });
+      if (!response.ok) throw new Error("Summary unavailable.");
+      return await response.json();
+    } finally {
+      clearTimeout(timer);
     }
-    parent = parent.parentElement;
   }
-  if (opened) requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
-}
-window.addEventListener('hashchange', revealHashTarget);
-revealHashTarget();
 
-function validateDiagnosticSummary(summary) {
-  const countFields = ['rows', 'complete_ohlc_rows', 'missing_ohlc_rows', 'invalid_ohlc_rows', 'error_count', 'warning_count'];
-  const isoDate = /^\d{4}-\d{2}-\d{2}$/;
-  if (!summary || summary.schema_version !== 1 || summary.research_ready !== false
-      || typeof summary.diagnostic_passed !== 'boolean'
-      || typeof summary.cache_replay_verified !== 'boolean'
-      || summary.calendar_coverage !== 'not_verified'
-      || summary.price_adjustment_semantics !== 'not_verified'
-      || !isoDate.test(summary.requested_start) || !isoDate.test(summary.requested_end)
-      || typeof summary.generated_at_utc !== 'string' || !Number.isFinite(Date.parse(summary.generated_at_utc))
-      || !Array.isArray(summary.symbols) || summary.symbols.length === 0 || summary.symbols.length > 2) {
-    throw new Error('Unsupported diagnostic summary');
-  }
-  const symbolNames = new Set();
-  for (const entry of summary.symbols) {
-    if (!entry || !['SPMO', 'SPY'].includes(entry.symbol) || symbolNames.has(entry.symbol)
-        || !countFields.every((field) => Number.isSafeInteger(entry[field]) && entry[field] >= 0)
-        || entry.complete_ohlc_rows + entry.missing_ohlc_rows + entry.invalid_ohlc_rows !== entry.rows
-        || (entry.observed_start !== null && !isoDate.test(entry.observed_start))
-        || (entry.observed_end !== null && !isoDate.test(entry.observed_end))
-        || (entry.rows > 0 && (!entry.observed_start || !entry.observed_end))) {
-      throw new Error('Invalid symbol diagnostic');
+  function stockScenarios(data) {
+    const metadata = data?.metadata;
+    assert(
+      data?.data_track === "baseline_issuer_stock_pilot" &&
+        data.formal_protocol_compliant === false,
+    );
+    assert(data.cohort_size === 100 && metadata?.selected_count === 20);
+    assert(
+      data.initial_signal === "2024-12-31" &&
+        data.report_anchor === "2025-12-31" &&
+        data.report_end === "2026-10-02",
+    );
+    assert(
+      Array.isArray(data.runs) &&
+        data.runs.length === 16 &&
+        Array.isArray(data.comparisons),
+    );
+    const runs = new Map();
+    for (const run of data.runs) {
+      assert(
+        ["M12", "S12", "MMIX", "SMIX"].includes(run.strategy_id) &&
+          COSTS.includes(run.cost_bps_per_side),
+      );
+      const key = `${run.strategy_id}|${run.cost_bps_per_side}`;
+      assert(!runs.has(key));
+      for (const period of PERIODS) {
+        const metric = run.metrics?.[period];
+        assert(
+          metric && finite(metric.total_return) && metric.total_return > -1,
+        );
+        assert(
+          finite(metric.start_nav) &&
+            metric.start_nav > 0 &&
+            finite(metric.end_nav) &&
+            metric.end_nav > 0,
+        );
+        assert(
+          Math.abs(
+            metric.total_return - (metric.end_nav / metric.start_nav - 1),
+          ) < 0.000001,
+        );
+      }
+      runs.set(key, run);
     }
-    symbolNames.add(entry.symbol);
-  }
-  return summary;
-}
-
-function renderDiagnosticSummary(summary) {
-  const body = document.getElementById('diagnostic-symbols');
-  const rows = document.createDocumentFragment();
-  for (const entry of summary.symbols) {
-    const row = document.createElement('tr');
-    const symbol = document.createElement('th');
-    symbol.scope = 'row';
-    symbol.textContent = entry.symbol;
-    row.append(symbol);
-    const observed = entry.observed_start && entry.observed_end
-      ? `${entry.observed_start} to ${entry.observed_end}` : 'No records observed';
-    const issueDetails = [];
-    if (entry.error_count || entry.warning_count) {
-      issueDetails.push(`${entry.error_count} error${entry.error_count === 1 ? '' : 's'} · ${entry.warning_count} warning${entry.warning_count === 1 ? '' : 's'}`);
+    const scenarios = new Map();
+    for (const cost of COSTS) {
+      const values = {};
+      for (const period of PERIODS) {
+        const monthly = runs.get(`M12|${cost}`).metrics[period].total_return;
+        const slow = runs.get(`S12|${cost}`).metrics[period].total_return;
+        const spread = 100 * (monthly - slow);
+        const published = data.comparisons.filter(
+          (row) => row.cost_bps_per_side === cost && row.period === period,
+        );
+        assert(
+          published.length === 1 &&
+            finite(published[0].primary_frequency_difference_pp),
+        );
+        assert(
+          Math.abs(spread - published[0].primary_frequency_difference_pp) <
+            0.000001,
+        );
+        // The chart's fixed ±10 pp axis is shared across every displayed scenario.
+        assert(Math.abs(spread) <= 10);
+        values[period] = spread;
+      }
+      scenarios.set(cost, values);
     }
-    if (entry.missing_ohlc_rows > 0) {
-      issueDetails.push(`${entry.missing_ohlc_rows} bar${entry.missing_ohlc_rows === 1 ? '' : 's'} missing OHLC values`);
+    return scenarios;
+  }
+
+  function showStockCost(scenarios, cost) {
+    const values = scenarios.get(cost);
+    assert(values);
+    for (const [period, suffix] of [
+      ["year2025", "2025"],
+      ["ytd2026", "2026"],
+      ["full_period", "full"],
+    ]) {
+      const value = values[period];
+      $(`home-gap-${suffix}`).textContent = pp(value);
+      const bar = $(`home-bar-${suffix}`);
+      bar.classList.toggle("positive", value >= 0);
+      bar.classList.toggle("negative", value < 0);
+      bar.style.setProperty("--bar-width", `${Math.abs(value) * 5}%`);
     }
-    if (entry.invalid_ohlc_rows > 0) {
-      issueDetails.push(`${entry.invalid_ohlc_rows} bar${entry.invalid_ohlc_rows === 1 ? '' : 's'} with invalid OHLC values`);
-    }
-    const issues = issueDetails.length ? issueDetails.join('; ')
-      : entry.rows === 0 ? 'No records to assess' : 'None reported';
-    for (const value of [observed, `${entry.complete_ohlc_rows.toLocaleString('en-US')} / ${entry.rows.toLocaleString('en-US')}`, issues]) {
-      const cell = document.createElement('td');
-      cell.textContent = value;
-      row.append(cell);
-    }
-    rows.append(row);
+    $("home-cost-label").textContent = `${cost} bps per side`;
+    const base = scenarios.get(5).full_period,
+      stressed = scenarios.get(25).full_period;
+    $("home-cost-reading").textContent =
+      cost === 5
+        ? `The full-period difference falls from ${pp(base)} at 5 bps to ${pp(stressed)} at 25 bps per side.`
+        : `At ${cost} bps per side, the full-period difference is ${pp(values.full_period)}. The same comparison is ${pp(base)} at 5 bps and ${pp(stressed)} at 25 bps.`;
+    $("home-stock-status").textContent =
+      `Saved results · ${cost} bps per side · three observed windows. No interpolated scenarios.`;
   }
-  body.replaceChildren(rows);
-  const passed = summary.diagnostic_passed
-    && summary.symbols.every((entry) => entry.rows > 0 && entry.error_count === 0
-      && entry.missing_ohlc_rows === 0 && entry.invalid_ohlc_rows === 0);
-  const badge = document.getElementById('diagnostic-badge');
-  badge.textContent = passed ? 'Ingestion checks passed' : 'Diagnostic issues recorded';
-  badge.classList.toggle('needs-review', !passed);
-  document.getElementById('diagnostic-state').textContent = passed
-    ? 'Price ingestion checks passed. The research data audit remains pending.'
-    : 'The diagnostic has unresolved issues. Inspect the saved summary and pipeline notes before using these inputs.';
-  const generated = new Date(summary.generated_at_utc).toISOString().replace('T', ' ').replace('.000Z', ' UTC');
-  document.getElementById('diagnostic-meta').textContent = `Requested: ${summary.requested_start} to ${summary.requested_end}. Summary generated: ${generated}. Cache replay: ${summary.cache_replay_verified ? 'verified' : 'not verified'}.`;
-  document.getElementById('diagnostic-results').hidden = false;
-}
 
-async function loadDiagnosticSummary() {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-  try {
-    const response = await fetch('data/ingestion-summary.json', { signal: controller.signal });
-    if (!response.ok) throw new Error('Diagnostic summary unavailable');
-    renderDiagnosticSummary(validateDiagnosticSummary(await response.json()));
-  } catch {
-    document.getElementById('diagnostic-badge').textContent = 'Summary unavailable';
-    document.getElementById('diagnostic-state').textContent = 'The saved diagnostic summary could not be loaded or validated. Read the pipeline notes for status; no data-readiness claim is inferred.';
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
-loadDiagnosticSummary();
-
-function validateEngineSummary(summary) {
-  const expectedStrategies = ['S12', 'M12', 'SMIX', 'MMIX'];
-  const expectedCosts = [0, 5, 10, 25];
-  const matchesSet = (values, expected) => Array.isArray(values)
-    && values.length === expected.length && new Set(values).size === expected.length
-    && values.every((value) => expected.includes(value));
-  const isRecord = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
-  if (!summary || summary.schema_version !== 1 || summary.engine_status !== 'synthetic_prototype'
-      || summary.data_track !== 'synthetic' || summary.formal_engine_accepted !== false
-      || summary.market_backtest_executed !== false || summary.research_ready !== false
-      || !matchesSet(summary.strategy_ids, expectedStrategies) || !matchesSet(summary.cost_bps, expectedCosts)
-      || !Number.isSafeInteger(summary.run_count)
-      || summary.run_count !== expectedStrategies.length * expectedCosts.length
-      || !isRecord(summary.checks) || Object.keys(summary.checks).length === 0
-      || Object.keys(summary.checks).length > 40
-      || !Object.entries(summary.checks).every(([name, value]) => name.length > 0 && name.length <= 120 && typeof value === 'boolean')
-      || typeof summary.generated_at_utc !== 'string' || !Number.isFinite(Date.parse(summary.generated_at_utc))
-      || !Array.isArray(summary.limitations) || summary.limitations.length > 20
-      || !summary.limitations.every((value) => typeof value === 'string' && value.trim().length > 0 && value.length <= 2000)) {
-    throw new Error('Unsupported synthetic engine receipt');
-  }
-  return summary;
-}
-
-function renderEngineSummary(summary) {
-  const checks = Object.entries(summary.checks);
-  const passedCount = checks.filter(([, passed]) => passed).length;
-  document.getElementById('engine-run-count').textContent = String(summary.run_count);
-  document.getElementById('engine-check-count').textContent = `${passedCount} / ${checks.length}`;
-  document.getElementById('engine-combinations').textContent = `${summary.strategy_ids.join(' · ')}. Each tested at ${summary.cost_bps.join(' / ')} bps per side, on synthetic data.`;
-  const checkList = document.createDocumentFragment();
-  for (const [name, passed] of checks) {
-    const item = document.createElement('li');
-    const label = document.createElement('span');
-    const humanName = name.replace(/[_-]+/g, ' ');
-    label.textContent = humanName.charAt(0).toUpperCase() + humanName.slice(1);
-    const result = document.createElement('strong');
-    result.textContent = passed ? 'Passed' : 'Needs review';
-    result.className = passed ? 'check-passed' : 'check-unresolved';
-    item.append(label, result);
-    checkList.append(item);
-  }
-  document.getElementById('engine-checks').replaceChildren(checkList);
-  const limitations = document.createDocumentFragment();
-  for (const limitation of summary.limitations) {
-    const item = document.createElement('li');
-    item.textContent = limitation;
-    limitations.append(item);
-  }
-  if (summary.limitations.length === 0) {
-    const item = document.createElement('li');
-    item.textContent = 'No additional limitations listed in this receipt. The original stock model still needs market validation and formal acceptance.';
-    limitations.append(item);
-  }
-  document.getElementById('engine-limitations').replaceChildren(limitations);
-  document.getElementById('engine-state').textContent = passedCount === checks.length
-    ? 'The recorded synthetic checks passed. They establish only the specific software behavior tested.'
-    : 'Some recorded synthetic checks need review. This receipt does not establish engine acceptance.';
-  const generated = new Date(summary.generated_at_utc).toISOString().replace('T', ' ').replace(/Z$/, ' UTC');
-  document.getElementById('engine-meta').textContent = `Receipt generated: ${generated}. See the saved JSON for the code, fixture, and configuration hashes.`;
-  document.getElementById('engine-results').hidden = false;
-}
-
-async function loadEngineSummary() {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-  try {
-    const response = await fetch('data/engine-status.json', { signal: controller.signal });
-    if (!response.ok) throw new Error('Engine receipt unavailable');
-    renderEngineSummary(validateEngineSummary(await response.json()));
-  } catch {
-    document.getElementById('engine-state').textContent = 'The saved engine receipt could not be loaded or validated. No check results are inferred; read the engine guide for implementation details.';
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
-loadEngineSummary();
-
-function validatePilotSummary(summary) {
-  const primary = summary?.primary?.full_period;
-  if (!summary || summary.schema_version !== 1
-      || summary.experiment_id !== 'sector-etf-frequency-v1'
-      || summary.data_track !== 'real_market_adjusted_price_pilot'
-      || summary.market_pilot_executed !== true
-      || summary.original_stock_experiment_completed !== false
-      || summary.scope !== 'separate_public_market_pilot_not_original_stock_experiment'
-      || summary.audit?.passed !== true || !primary
-      || summary.boundaries?.report_anchor_on_or_before !== '2000-12-29'
-      || summary.boundaries?.full_year_end_on_or_before !== '2025-12-31'
-      || primary.monthly_run_id !== 'M12-5bps'
-      || primary.semiannual_run_id !== 'S12-03-09-5bps'
-      || primary.signal !== '12-1' || primary.cost_bps_per_side !== 5
-      || !Array.isArray(primary.phase) || primary.phase.length !== 2
-      || primary.phase[0] !== 3 || primary.phase[1] !== 9
-      || !['monthly_cagr', 'semiannual_cagr', 'cagr_difference_pp'].every((key) =>
-        typeof primary[key] === 'number' && Number.isFinite(primary[key]))
-      || primary.monthly_cagr <= -1 || primary.semiannual_cagr <= -1
-      || Math.abs(primary.cagr_difference_pp
-        - 100 * (primary.monthly_cagr - primary.semiannual_cagr)) > 0.000001) {
-    throw new Error('Unsupported sector ETF pilot summary');
-  }
-  return primary;
-}
-
-async function loadPilotSummary() {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-  try {
-    const response = await fetch('data/etf-pilot-summary.json', { signal: controller.signal });
-    if (!response.ok) throw new Error('Pilot summary unavailable');
-    const primary = validatePilotSummary(await response.json());
-    const difference = primary.cagr_difference_pp;
-    const percent = new Intl.NumberFormat('en-US', {
-      style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2,
+  load("data/stock-pilot-summary.json")
+    .then((data) => {
+      const scenarios = stockScenarios(data);
+      showStockCost(scenarios, 5);
+      $("home-cost-controls").disabled = false;
+      document.querySelectorAll('input[name="home-cost"]').forEach((input) => {
+        input.addEventListener("change", () => {
+          if (input.checked) showStockCost(scenarios, Number(input.value));
+        });
+      });
+    })
+    .catch(() => {
+      $("home-cost-controls").disabled = true;
+      $("home-stock-status").textContent =
+        "Other saved scenarios could not be checked. The published 5 bps snapshot remains visible; consult the full stock report.";
     });
-    document.getElementById('pilot-headline').textContent = difference < 0
-      ? 'Monthly finished with lower annualized growth.'
-      : difference > 0 ? 'Monthly finished with higher annualized growth.'
-        : 'The primary annualized growth rates were equal.';
-    document.getElementById('pilot-primary-gap').textContent = new Intl.NumberFormat('en-US', {
-      signDisplay: 'exceptZero', minimumFractionDigits: 2, maximumFractionDigits: 2,
-    }).format(difference);
-    document.getElementById('pilot-comparison').textContent = `Monthly: ${percent.format(primary.monthly_cagr)}. March/September: ${percent.format(primary.semiannual_cagr)}. Both after modeled trading costs.`;
-    document.getElementById('pilot-comparison-state').textContent = 'Observed in the primary sector ETF comparison; the original stock study remains pending.';
-    document.getElementById('pilot-results').hidden = false;
-  } catch {
-    document.getElementById('pilot-comparison-state').textContent = 'The saved primary comparison could not be loaded or validated. Read the pilot report for the results and their limitations.';
-  } finally {
-    clearTimeout(timeout);
-  }
-}
 
-loadPilotSummary();
+  load("data/etf-pilot-summary.json")
+    .then((data) => {
+      const primary = data?.primary?.full_period;
+      assert(
+        data?.experiment_id === "sector-etf-frequency-v1" &&
+          data.market_pilot_executed === true,
+      );
+      assert(
+        data.data_track === "real_market_adjusted_price_pilot" &&
+          data.original_stock_experiment_completed === false,
+      );
+      assert(
+        data.boundaries?.report_anchor_on_or_before === "2000-12-29" &&
+          data.boundaries?.full_year_end_on_or_before === "2025-12-31",
+      );
+      assert(
+        primary?.monthly_run_id === "M12-5bps" &&
+          primary.semiannual_run_id === "S12-03-09-5bps",
+      );
+      assert(
+        primary.signal === "12-1" &&
+          primary.cost_bps_per_side === 5 &&
+          primary.phase?.[0] === 3 &&
+          primary.phase?.[1] === 9,
+      );
+      assert(
+        [
+          "monthly_cagr",
+          "semiannual_cagr",
+          "cagr_difference_pp",
+          "monthly_max_drawdown",
+          "semiannual_max_drawdown",
+        ].every((field) => finite(primary[field])),
+      );
+      assert(
+        Math.abs(
+          primary.cagr_difference_pp -
+            100 * (primary.monthly_cagr - primary.semiannual_cagr),
+        ) < 0.000001,
+      );
+      const unit = document.createElement("small");
+      unit.textContent = "pp";
+      $("home-etf-gap").replaceChildren(
+        document.createTextNode(
+          `${primary.cagr_difference_pp < 0 ? "−" : primary.cagr_difference_pp > 0 ? "+" : ""}${number.format(Math.abs(primary.cagr_difference_pp))} `,
+        ),
+        unit,
+      );
+      $("home-etf-monthly").textContent = percent(primary.monthly_cagr);
+      $("home-etf-slow").textContent = percent(primary.semiannual_cagr);
+      $("home-etf-status").textContent =
+        "Saved primary comparison checked · 2001–2025 · 5 bps per side.";
+    })
+    .catch(() => {
+      $("home-etf-status").textContent =
+        "The saved summary could not be checked. Published figures are shown; see the full report and its source files.";
+    });
+})();

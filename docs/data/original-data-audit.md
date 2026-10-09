@@ -2,7 +2,7 @@
 
 **The original four-arm stock experiment is not complete. Its acquisition status is `acquisition_not_complete`.** This audit explains the observed input gaps; it contains no stock-strategy performance result. A separately declared ETF pilot can produce real market results, but cannot substitute for the original experiment.
 
-The public probes below were repeated on **2026-10-09 at 02:16:30 UTC** using normal unauthenticated HTTPS requests. Exact URLs, response hashes, statuses and findings are in the [machine-readable audit](../results/original-data-audit.json). HTTP success establishes access to that response, not a complete, accurate or point-in-time dataset. No finance-provider credential binding was found in the process environment; secret values were not inspected. No subscription was purchased, restriction bypassed or raw market time series committed.
+The public probes below were repeated on **2026-10-09 at 02:16:30 UTC** using normal unauthenticated HTTPS requests. Exact URLs, response hashes, statuses and findings are in the [machine-readable audit](../../results/original-data-audit.json). HTTP success establishes access to that response, not a complete, accurate or point-in-time dataset. No finance-provider credential binding was found in the process environment; secret values were not inspected. No subscription was purchased, restriction bypassed or raw market time series committed.
 
 ## What is missing and why it matters
 
@@ -60,4 +60,4 @@ An **authorized export or entitled feed**, from one or several sources, needs to
 3. Historical class-level capitalization or validated class shares plus prices, with units, observation dates, historical availability, vintage provenance and an explicit staleness convention at every signal.
 4. Complete splits, dividends and merger/delisting records, including ex/pay dates, successor securities, final consideration and settlement timing sufficient to resolve relevant events.
 
-No particular provider or new purchase is required. A permitted local export can satisfy the acquisition step. It must then pass the [event-led acceptance sample](data-acceptance-sample.md), full coverage checks and independent engine reconciliation before any original stock-strategy result is labeled complete. The separate ETF pilot should be evaluated on its own declared question, input conventions and limitations.
+No particular provider or new purchase is required. A permitted local export can satisfy the acquisition step. It must then pass the [event-led acceptance sample](acceptance-sample.md), full coverage checks and independent engine reconciliation before any original stock-strategy result is labeled complete. The separate ETF pilot should be evaluated on its own declared question, input conventions and limitations.

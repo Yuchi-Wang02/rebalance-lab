@@ -1,31 +1,31 @@
 # Data sources and connection plan
 
-**The SPMO/SPY price diagnostic is executable; the original stock experiment has no validated market dataset.** A separate [sector ETF pilot](pilot-retrospective.md) has acquired and audited a public adjusted-price snapshot; its narrower data convention does not satisfy the original stock contract. This document separates documentation that was actually read, public endpoint diagnostics, and untested authenticated access. The machine-readable catalog is [data-sources.json](../configs/data-sources.json); commands and replay instructions are in the [pipeline guide](data-pipeline.md).
+**Two market-price pilots have run; the original 75-stock experiment still lacks an accepted dataset.** Authorized Sharadar Core Fundamentals access supplied `SF1`, `DAILY`, `TICKERS`, `SP500` and `ACTIONS` records. The [fixed-cohort stock pilot](../studies/stock-pilot.md) combined the required membership, issuer-capitalization and action records with free Yahoo price proxies. The [sector ETF pilot](../studies/sector-etf-pilot.md) used a separate public adjusted-price snapshot. Both retain material source limitations and do not satisfy the original stock contract. The machine-readable [source catalog](../../configs/data-sources.json) preserves earlier inspection evidence; current pilot summaries and independent receipts record the later captures.
 
-**Updated buying decision:** see the [purchase guide](data-purchase-guide.md) and [official-source evidence](../results/data-purchase-audit.json). The October 8 follow-up verified `SHARADAR/SP500`, `ACTIONS` and `SFP`; the earlier assumption that Sharadar necessarily needs a separate membership supplier is corrected below. Norgate Platinum is USD 346.50 for six months or USD 630 for twelve months, but is not a complete solution by itself.
+**Updated buying decision:** see the [purchase guide](purchase-guide.md) and [official-source evidence](../../results/data-purchase-audit.json). The October 8 follow-up verified `SHARADAR/SP500`, `ACTIONS` and `SFP`; the earlier assumption that Sharadar necessarily needs a separate membership supplier is corrected below. Norgate Platinum is USD 346.50 for six months or USD 630 for twelve months, but is not a complete solution by itself.
 
-The recommended order is: use an existing institutional entitlement if one is available; otherwise verify the required commercial data components before choosing a subscription. Use Yahoo/yfinance only for a no-cost diagnostic. Norgate is a conditional Windows export route, not a native connection for this Linux workspace. No purchase, signup, credential request, or authenticated data download has been performed.
+The current route reuses the user's authorized Core Fundamentals access and Yahoo chart captures. Authenticated `SEP` and `SFP` sample requests returned no price rows; price-table entitlement and usable coverage were not demonstrated. No additional subscription is required to inspect the completed pilots. Norgate remains a conditional Windows export route, not a native connection for this Linux workspace. Additional sources should be considered only for documented gaps in the original protocol.
 
-## 1. What was verified
+## 1. Current access and dated inspection history
 
-Source documentation was inspected on 2026-10-08, America/New_York. The fixed-window diagnostic was acquired on 2026-10-09 UTC. Rechecks followed an applied network configuration change. These observations describe this environment at inspection time, not permanent availability.
+Initial source documentation was inspected on October 8, 2026, America/New_York. Later that day, authorized captures and public-price acquisition supported the two pilot studies. Early credential-free probes are retained below as history, not statements that authenticated access never occurred. These observations describe the inspected requests and cannot establish permanent availability or full original-protocol coverage.
 
-| Route | Documentation actually read | Market API/sample | Authenticated full coverage | Point-in-time integrity |
+| Route | Documentation actually read | Market API/sample | Observed authenticated access | Point-in-time integrity |
 |---|---|---|---|---|
-| Yahoo/yfinance | Maintainer README and download source | Direct chart capture: 711 daily rows each for SPMO/SPY, zero missing/invalid OHLC; hash-verified offline replay | Not established; yfinance SDK not used | Not established |
+| Yahoo/yfinance | Maintainer README and download source | SPMO/SPY diagnostic; separate ETF and 102-series stock-pilot chart captures | Unauthenticated chart access; yfinance SDK not used | Vendor adjustment and historical information semantics not independently established |
 | WRDS/CRSP | Official WRDS SDK and public demo; full manual entrypoint redirects to login | Fixed public monthly demo: 24 records for IBM/MSFT in 2006; no entitled query | No entitlement or coverage verified | Membership, revisions and delisting contract not established |
-| Nasdaq Data Link / Sharadar | Official SDK plus public metadata for SEP, DAILY, SF1, TICKERS, SP500, ACTIONS and SFP | Seven metadata endpoints HTTP 200; actual sample and dictionary requests require an API key | No entitlement or price/fundamental rows verified | Field definitions, coverage and revision/availability semantics not established |
+| Nasdaq Data Link / Sharadar | Official SDK, public metadata and authorized response schemas | Core Fundamentals records retrieved from SF1, DAILY, TICKERS, SP500 and ACTIONS; stock pilot uses 44,000 dated capitalization rows | Core Fundamentals access demonstrated for captured queries; SEP/SFP price access not demonstrated by empty samples | Full-universe membership, class capitalization, historical publication vintages and complete event settlements remain unresolved |
 | Norgate | Provider-published package description and public data-content page | No NDU connection or export | No subscription verified | Historical membership coverage is documented; announcement-time correctness is not established; documented fundamentals are current-only |
 
-Initial requests to several provider sites failed with proxy CONNECT 403. After the supported network change, Yahoo, Nasdaq, WRDS and Norgate were reachable. Results must be classified by layer: the old Nasdaq collection and WRDS membership-guide URLs returned origin 404; WRDS manuals redirected to login; Nasdaq's product page returned an HTML application shell; its indicator dictionary returned origin 403 with API error `QEPx04` requiring a valid API key. An initial concurrent TICKERS metadata request returned origin 429 (`QELx04`); a later sequential request succeeded. FMP documentation still failed at proxy CONNECT 403, before any origin response. No proxy, TLS, authentication or network restriction was bypassed.
+During the initial credential-free inspection, several provider sites failed with proxy CONNECT 403. After the supported network change, Yahoo, Nasdaq, WRDS and Norgate were reachable. The old Nasdaq collection and WRDS membership-guide URLs returned origin 404; WRDS manuals redirected to login; Nasdaq's product page returned an HTML application shell; its unauthenticated indicator dictionary returned origin 403 with API error `QEPx04`. An initial concurrent TICKERS metadata request returned origin 429 (`QELx04`); a later sequential request succeeded. FMP documentation failed at proxy CONNECT 403, before any origin response. Those earlier outcomes do not describe the subsequent authorized Core Fundamentals extracts. No proxy, TLS, authentication or network restriction was bypassed.
 
-The initial Yahoo probe and provider metadata evidence were held in temporary files. The repeatable diagnostic now stores private raw and derived snapshots in ignored data directories. Only an [aggregate summary](../site/data/ingestion-summary.json) is committed; no market bars are published. Successful acquisition and replay do not establish permission to redistribute vendor data or complete historical research coverage.
+The initial Yahoo probe and provider metadata evidence were held in temporary files. The repeatable diagnostic now stores private raw and derived snapshots in ignored data directories. Only an [aggregate summary](../../site/data/ingestion-summary.json) is committed; no market bars are published. Successful acquisition and replay do not establish permission to redistribute vendor data or complete historical research coverage.
 
 “Historical data,” “survivorship-bias-free” and “point-in-time” are different claims. A table indexed by a past date does not establish when a record first became available or whether later revisions replaced the original value.
 
 ## 2. Shared acquisition contract
 
-Provider exports belong in ignored `data/raw/<provider>/<snapshot-id>/`; normalized tables belong in ignored `data/processed/<provider>/<snapshot-id>/`. Yahoo diagnostic snapshots now use this layout; the broader research tables below are still planned. Keep original files immutable. Publish only metadata and outputs permitted by the data license.
+Provider exports belong in ignored `data/raw/<provider>/<snapshot-id>/`; normalized tables belong in ignored `data/processed/<provider>/<snapshot-id>/`. Diagnostic and pilot captures follow private snapshot layouts. The broader original-protocol contract below remains unfulfilled even where a pilot has narrower normalized tables. Keep original files immutable. Publish only metadata and outputs permitted by the data license.
 
 Every snapshot needs a manifest with provider/product/version, requested and returned dates, retrieval timestamp, schema and units, adjustment settings, timezone, row counts, file hashes, license restrictions, and unresolved fields. Never place API keys, passwords or credential-bearing request URLs in manifests or Git history.
 
@@ -44,9 +44,11 @@ Every snapshot needs a manifest with provider/product/version, requested and ret
 
 For any chosen route, begin with a small schema and coverage sample: SPMO, SPY, a continuing constituent, a dated addition/removal, a split event, and a delisted or acquired security. Check fields and accounting before requesting the entire historical universe. A successful one-symbol sample is still not a completed data audit.
 
-## 3. Route A: Yahoo/yfinance diagnostic
+## 3. Route A: Yahoo diagnostics and pilot price proxies
 
 **Use:** establish whether ordinary prices, benchmark series and split/dividend events can be acquired and parsed. This route alone does not supply the complete historical universe, reliable historical class-level caps, announcement timestamps, or verified terminal delisting proceeds required by the full experiment.
+
+Direct chart captures also supply both published pilots under their own explicit proxy conventions. The stock pilot uses vendor corporate-action-adjusted closes for signals and adjusted-price accounting units; the ETF pilot uses adjusted fund-price units. Neither is a verified raw-share, payment-date distribution ledger. The stock pilot records a single sourced FISV reconstruction, whose ±1% sensitivity left all 16 strategy paths unchanged, and unverified spin-off treatment; see its [source qualifications](../studies/stock-pilot.md#inputs-reconstruction-and-unresolved-events).
 
 Verified sources:
 
@@ -76,7 +78,7 @@ Retain vendor column names and adjustment metadata. `auto_adjust=False` disables
 
 The initial [five-day SPMO request](https://query1.finance.yahoo.com/v8/finance/chart/SPMO?range=5d&interval=1d) returned five timestamps but only four complete OHLC bars; the missing observation was not filled. It has been superseded for pipeline development by `scripts/ingest_diagnostic.py`, which makes direct unauthenticated requests to `query1.finance.yahoo.com/v8/finance/chart/<symbol>` with explicit dates and separate split/dividend events. It does not execute the illustrative yfinance call above.
 
-The fixed request returned **711 observations per ETF from 2023-12-01 through 2026-10-02**, with zero missing or invalid OHLC records and no structural/value errors. Each response included 12 dividend events. Original bytes were retained with SHA-256 hashes; offline replay reproduced all normalized files and the quality report. SPMO/SPY observed dates agreed. These facts do not prove exchange-calendar completeness, action completeness, payment-date correctness, raw-price adjustment conventions or benchmark reconciliation. The [saved summary](../site/data/ingestion-summary.json) records the snapshot and parser hashes.
+The fixed request returned **711 observations per ETF from 2023-12-01 through 2026-10-02**, with zero missing or invalid OHLC records and no structural/value errors. Each response included 12 dividend events. Original bytes were retained with SHA-256 hashes; offline replay reproduced all normalized files and the quality report. SPMO/SPY observed dates agreed. These facts do not prove exchange-calendar completeness, action completeness, payment-date correctness, raw-price adjustment conventions or benchmark reconciliation. The [saved summary](../../site/data/ingestion-summary.json) records the snapshot and parser hashes.
 
 Do not publish downloaded Yahoo data merely because the client code has an open-source license. Data usage and redistribution rights are separate.
 
@@ -112,7 +114,7 @@ Before implementation, establish whether the selected return field already incor
 
 ## 5. Route C: Nasdaq Data Link / Sharadar components
 
-**Candidate commercial HTTPS route when institutional access is unavailable.** The official SDK interface and basic public table metadata are verified; field contracts, product coverage and point-in-time claims are not. Do not select or purchase a plan until the component gaps below are resolved.
+**An authorized Core Fundamentals HTTPS route is now in use for the stock pilot.** `SF1`, `DAILY`, `TICKERS`, `SP500` and `ACTIONS` returned records. The fixed baseline cohort uses one representative class per issuer and dated issuer capitalization, not verified historical class-level capitalization. Membership effective dates are treated as known at that close; original announcement timestamps and publication vintages remain unverified. The [original-data audit](original-data-audit.md) explains why this access does not complete the broader protocol. Empty authenticated SEP/SFP price responses do not demonstrate a working price entitlement.
 
 Verified sources:
 
@@ -120,7 +122,7 @@ Verified sources:
 - [Official configuration source](https://github.com/Nasdaq/data-link-python/blob/main/nasdaqdatalink/api_config.py) specifies the API base `https://data.nasdaq.com/api/v3` and TLS verification enabled.
 - [Official table pagination source](https://github.com/Nasdaq/data-link-python/blob/main/nasdaqdatalink/get_table.py) handles cursor pagination through `paginate=True`; an initial page alone is not complete data.
 
-The following public metadata endpoints returned HTTP 200. The follow-up adds SP500, ACTIONS and SFP to the original four. They establish names, premium flags, filters and keys. All seven responses had an empty `columns` array and null description, so they do not establish the underlying field contracts.
+The following public metadata endpoints returned HTTP 200 during the earlier credential-free inspection. That follow-up added SP500, ACTIONS and SFP to the original four. The metadata established names, premium flags, filters and keys; its empty `columns` arrays and null descriptions did not establish field contracts. Subsequent authorized response schemas and captured data provide the more specific pilot evidence described above.
 
 | Verified metadata endpoint | Name / premium flag | Filters | Primary key |
 |---|---|---|---|
@@ -132,7 +134,7 @@ The following public metadata endpoints returned HTTP 200. The follow-up adds SP
 | [ACTIONS](https://data.nasdaq.com/api/v3/datatables/SHARADAR/ACTIONS/metadata.json) | Corporate Actions / true | action, contraticker, date, ticker | date, ticker, name, action, contraname, contraticker |
 | [SFP](https://data.nasdaq.com/api/v3/datatables/SHARADAR/SFP/metadata.json) | Sharadar Fund Prices / true | date, lastupdated, ticker | ticker, date |
 
-The following remain **intended component mappings to validate**, not inspected field contracts:
+The following are **component requirements for the original protocol**. Retrieved Core Fundamentals rows establish access and support specific pilot uses; they do not resolve every requirement in this table:
 
 | Candidate table | Intended component | Required confirmation |
 |---|---|---|
@@ -160,11 +162,11 @@ sample = nasdaqdatalink.get_table(
 )
 ```
 
-The origin is reachable and SEP's ticker/date filters are listed in public metadata. The [SEP indicator dictionary request](https://data.nasdaq.com/api/v3/datatables/SHARADAR/INDICATORS.json?table=SEP&qopts.per_page=100) returned origin 403 with `QEPx04`: a valid API key is required. Its field definitions were therefore not read. Obtain the entitled dictionary and a small authorized data sample before using the example. Store access keys only in supported secure settings; never paste a real key into the example, output, request log or repository. A valid key does not establish entitlement to premium tables; conversely, metadata saying `premium=false` does not guarantee keyless data access.
+The origin is reachable and SEP's ticker/date filters are listed in public metadata. The earlier unauthenticated [SEP indicator dictionary request](https://data.nasdaq.com/api/v3/datatables/SHARADAR/INDICATORS.json?table=SEP&qopts.per_page=100) returned origin 403 with `QEPx04`. The later Core Fundamentals access should not be mistaken for verified SEP price access: its authenticated price sample was empty. An entitled price dictionary and nonempty coverage sample are still required before relying on that table. Store access keys only in supported secure settings; never paste a real key into the example, output, request log or repository. A valid key does not establish entitlement to every premium table; metadata saying `premium=false` does not guarantee keyless data access.
 
-**Membership candidate now identified:** `SHARADAR/SP500` is a premium table named “S&P500 Current and Historical Constituents.” First request its dictionary and an authorized sample. A separate supplier is needed only if its coverage or timing is insufficient. Its date filter does not prove announcement-time availability. Reconstruct a validated starting snapshot and all subsequent changes; today’s constituents plus an incomplete events list is insufficient.
+**Membership records were captured:** `SHARADAR/SP500` supplied the stock pilot's 503-security baseline snapshot and subsequent membership events. Its date filter does not prove announcement-time availability. The fixed cohort had no removals during the holding period, so this realization did not test a removed cohort security's settlement. A separate supplier is needed only where the original protocol's full history, timing or security coverage remains insufficient; today's constituents plus an incomplete events list would not meet that contract.
 
-The old Sharadar collection-documentation URL returned origin 404. The [SEP product page](https://data.nasdaq.com/databases/SEP/documentation) returned HTTP 200, but its HTML was an application shell without the required table definitions. Neither response establishes full historical coverage, raw prices, field units or PIT correctness. No price or fundamental records were downloaded from Nasdaq.
+The old Sharadar collection-documentation URL returned origin 404. The [SEP product page](https://data.nasdaq.com/databases/SEP/documentation) returned HTTP 200, but its HTML was an application shell without the required table definitions. No fundamental records had been downloaded at that early stage. Authorized Core Fundamentals captures subsequently superseded that access status; full price coverage and original-protocol point-in-time correctness remain unestablished.
 
 ## 6. Route D: Norgate Windows export
 
@@ -186,12 +188,12 @@ Import the permitted export into this Linux workspace. Do not install NDU here o
 
 ## 7. Decision and next action
 
-The full experiment is not data-ready. The next useful milestone is a documented schema/coverage sample, not a backtest result:
+The original 75-stock experiment is not data-ready. Two narrower pilot result sets are already published. The remaining original-protocol work is:
 
-1. Preserve the completed public probes and their limits. Further attempts at an authenticated dictionary or dataset require supported credentials/entitlements; FMP's unresolved failure remains a network prerequisite, not evidence of subscription status.
-2. If existing institutional exports are available, audit WRDS/CRSP components first. Otherwise request a sample and quote for Sharadar SEP, DAILY, SP500, ACTIONS and TICKERS, adding SF1/SFP when needed; verify the exact entitlement and field coverage before buying.
-3. Use the implemented Yahoo diagnostic for price-ingestion development. Next audit exchange sessions and adjustment/action semantics against authoritative evidence; do not silently turn it into a current-constituent backtest.
+1. Preserve both the dated public probes and later authorized captures. FMP's unresolved failure remains a network prerequisite, not evidence of subscription status.
+2. Reuse existing Core Fundamentals access and identify the exact missing coverage, class-capitalization and timing fields. Audit an available institutional export or a provider sample for those gaps before considering another purchase; Core access alone does not establish SEP/SFP entitlement.
+3. Preserve the pilots' narrower proxy labels. Audit raw-price, adjustment, distribution and terminal-event semantics against authoritative evidence before extending them to the original protocol.
 4. Use Norgate only as an authorized Windows export option with its historical-cap gap explicitly resolved.
-5. Populate and validate the shared contract before the strategy engine consumes any market data. Keep documented, sampled, entitled, coverage-audited and PIT-audited statuses separate.
+5. Populate and validate the full shared contract before the original stock engine consumes market data. Keep documented, sampled, entitled, coverage-audited and PIT-audited statuses separate.
 
 No route should be described as “connected,” “complete” or “point-in-time verified” solely because its package imports or its documentation is reachable.

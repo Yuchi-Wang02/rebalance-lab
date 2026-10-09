@@ -1,6 +1,6 @@
 # Experiment protocol v0.2
 
-**Status: proposed protocol with a synthetic engine prototype; no completed market backtest.** The purpose is to test faster momentum rotation, not to establish in advance that a faster strategy wins. The [engine guide](engine.md) describes the fictional-data implementation and its remaining acceptance work. This release supersedes the v0.1 cumulative ablation chain; the previous commit remains in Git history.
+**Status: proposed protocol with a synthetic engine prototype; no completed market backtest.** The purpose is to test faster momentum rotation, not to establish in advance that a faster strategy wins. The [engine guide](../validation/engine.md) describes the fictional-data implementation and its remaining acceptance work. This release supersedes the v0.1 cumulative ablation chain; the previous commit remains in Git history.
 
 ## 1. What changed and why
 
@@ -109,13 +109,13 @@ Read net return together with drawdown, extra traded notional and cash exposure.
 
 ## 9. Release and extension rules
 
-Before any market result: audit the [data contract](feasibility.md), verify the chosen [source route](data-sources.md), implement and test accounting, freeze the code/configuration/data manifest, and execute every prespecified arm/cost pair. Store the full reporting and burn-in ledgers separately.
+Before any market result: audit the [data contract](../data/feasibility.md), verify the chosen [source route](../data/sources.md), implement and test accounting, freeze the code/configuration/data manifest, and execute every prespecified arm/cost pair. Store the full reporting and burn-in ledgers separately.
 
 The initial release deliberately does not test buffers, a 200-day filter, weekly stops, Turbo variants, parameter sweeps or live trading. They become separate future protocols only after the four-arm result is understood. Report negative outcomes as readily as positive ones.
 
 ## 10. Supplementary calendar sensitivity
 
-Keep March/September as the primary semiannual schedule. The supplementary [calendar configuration](../configs/calendar-sensitivity.v1.json) prespecifies all six month pairs: January/July, February/August, March/September, April/October, May/November and June/December. Use each month's last exchange-session close and the same next-open execution rule. Apply the full burn-in separately to every account; changing the schedule also changes its reporting-anchor holdings.
+Keep March/September as the primary semiannual schedule. The supplementary [calendar configuration](../../configs/calendar-sensitivity.v1.json) prespecifies all six month pairs: January/July, February/August, March/September, April/October, May/November and June/December. Use each month's last exchange-session close and the same next-open execution rule. Apply the full burn-in separately to every account; changing the schedule also changes its reporting-anchor holdings.
 
 For each signal and cost scenario, report the monthly-minus-semiannual contrast for every pair, including the original March/September pair. Also report the descriptive mean and minimum/maximum of those six contrasts. Do not select the most favorable phase, redefine the primary comparison or present the phases as six independent experiments. They reuse prices, overlap in holdings and share the same market episodes. The mean of phase-level results is not the return of a tradable blended portfolio. See the [calendar sensitivity guide](calendar-sensitivity.md) for execution and output details.
 
@@ -125,4 +125,4 @@ The fixed 2026 cutoff remains a retrospective case study. A stronger claim about
 
 Use continuing accounts through the accepted interval and report annual paired frequency effects alongside the full-period result. Annual measurement anchors normalize existing portfolios without resetting holdings or charging initial formation again. Show losing years, drawdown episodes, traded notional and cash exposure; adjacent years and different calendar phases are not independent observations. Partial years remain separately labeled. Earlier historical windows are still retrospective research, not automatically untouched holdouts. A genuinely prospective track begins only after a timestamped freeze.
 
-The [research blueprint](research-blueprint.md) explains the decision and presentation priorities. The [data acceptance sample](data-acceptance-sample.md) defines the next evidence needed before a market run.
+The [research blueprint](research-blueprint.md) explains the decision and presentation priorities. The [data acceptance sample](../data/acceptance-sample.md) defines the next evidence needed before a market run.

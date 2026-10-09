@@ -2,7 +2,7 @@
 
 **Question: does faster momentum rotation pay after trading costs?** The primary reader is an ETF investor who understands diversification and expenses but should not need to inspect Python to understand the comparison. The research record remains available to technical reviewers.
 
-This is a plan for evaluating a strategy, not a market result. Price diagnostics and a synthetic engine exist; audited historical strategy inputs and formal engine acceptance remain outstanding. The [protocol](experiment-design.md) and [primary configuration](../configs/experiment.v1.json) retain the existing v0.2 trading rules.
+This is a plan for evaluating a strategy, not a market result. Price diagnostics and a synthetic engine exist; audited historical strategy inputs and formal engine acceptance remain outstanding. The [protocol](original-stock-protocol.md) and [primary configuration](../../configs/experiment.v1.json) retain the existing v0.2 trading rules.
 
 ## The main comparison
 
@@ -31,9 +31,9 @@ There is no new numerical risk hurdle or overall winner score. Report the return
 
 ## What would make the evidence stronger
 
-1. **Verify the data on a small event-led sample.** Check historical membership, identifiers, price units, class-level cap, availability times and corporate-action accounting against inspectable source records. The [sample plan](data-acceptance-sample.md) defines the acceptance evidence. A larger price download cannot replace this step.
+1. **Verify the data on a small event-led sample.** Check historical membership, identifiers, price units, class-level cap, availability times and corporate-action accounting against inspectable source records. The [sample plan](../data/acceptance-sample.md) defines the acceptance evidence. A larger price download cannot replace this step.
 2. **Keep the fixed 2026 case study.** Preserve its existing warm-up, 2025 burn-in, December 2025 measurement anchor and October 2, 2026 cutoff. The market history informed the idea, so the result is retrospective even with correct data timing.
-3. **Check all six semiannual phases.** Keep March/September primary and report every pair in the [supplementary configuration](../configs/calendar-sensitivity.v1.json). A descriptive mean and range reveal schedule sensitivity; overlapping phases do not add independent evidence. See the [execution guide](calendar-sensitivity.md).
+3. **Check all six semiannual phases.** Keep March/September primary and report every pair in the [supplementary configuration](../../configs/calendar-sensitivity.v1.json). A descriptive mean and range reveal schedule sensitivity; overlapping phases do not add independent evidence. See the [execution guide](calendar-sensitivity.md).
 4. **Freeze a longer-history extension after coverage is known.** Prespecify the exact interval, complete calendar years, warm-up, burn-in, annual paired comparisons, costs and data versions before running it. Continue accounts across years; measure annual changes without resetting holdings. Report all eligible years and explain excluded coverage. No start date or result is invented in this plan.
 
 The multi-year extension remains retrospective, and annual effects can be dependent. It may show persistence or fragility across episodes; it does not automatically establish statistical significance or an untouched holdout. A future forward-recorded study would require its own timestamped freeze.

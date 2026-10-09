@@ -8,8 +8,12 @@ From the repository root:
 
 ```bash
 python3 scripts/validate_design.py
+python3 scripts/validate_pilot_artifacts.py
+python3 scripts/validate_stock_pilot_artifacts.py
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 node --check site/app.js
+node --check site/pilot.js
+node --check site/stocks.js
 python3 -m http.server 8000 --directory site
 ```
 
@@ -32,6 +36,14 @@ The workflow publishes presentation files, not raw research data. Repository sec
 ## Runtime notes
 
 Future tasks should use the existing `/workspace/SPMO-ETF-test` checkout rather than creating another worktree. The files and Python runtime can persist in an environment snapshot; a local HTTP server does not. Start a new server only when a task needs a preview. No server is required to read or validate the design.
+
+## Rebalance Lab presentation revision
+
+The October 9, 2026 presentation revision reorganizes the repository around the two published pilot studies, with an English homepage, cost exploration, and a separate research index. The public name is **Rebalance Lab**. The current live address stays unchanged because GitHub rejected repository-name, description and topic updates from the connected integration. See the exact [owner settings and rename procedure](repository-settings.md).
+
+The revision preserves all numerical configurations, engines and published research data. Before publication, 122 unit tests, the three research validators, JavaScript syntax checks and moved-document links passed. Chromium checks covered six homepage widths and all four stock cost choices, plus both report pages. Additional checks exercised keyboard selection, unavailable summaries and malformed data; unsupported values were not substituted. The README screenshot comes from the local browser preview.
+
+The historical deployment receipt below predates this presentation revision. A new push still requires successful Research checks, successful Pages deployment, and comparison of the newly hosted files with the local files.
 
 ## Verified deployment and activation history
 

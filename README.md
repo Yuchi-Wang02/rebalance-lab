@@ -1,127 +1,67 @@
-# SPMO Fast Lab
+# Rebalance Lab
 
-**Does faster momentum actually pay?**
+## Does trading more often pay?
 
-A controlled study of monthly versus twice-yearly momentum selection. Both portfolios use the same signal, investment universe, weighting rules and trading-cost assumptions. The question is whether updating the portfolio more often leaves investors better off after costs.
+**The answer changes with the period, the portfolio and the cost of trading.** Two published pilot experiments compare monthly momentum selection with a fixed March/September schedule. One found a small cumulative advantage for monthly selection; the longer study found lower annualized returns. Both publish the unfavorable comparisons alongside the favorable ones.
 
-**New: a separate stock pilot has run using Sharadar fundamentals and free Yahoo price proxies.** Its fixed cohort contains the 100 largest baseline issuers on December 31, 2024, and selects 20 positions. At 5 bps per side, monthly 12–1 momentum returned **35.89% in 2026 through October 2**, versus **27.05%** for March/September selection. The comparison reversed in 2025: **13.56% versus 20.49%**. Over both periods together, the monthly advantage was only **1.23 percentage points**, and became negative at 25 bps per side.
+[![Research checks](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/workflows/checks.yml/badge.svg)](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/workflows/checks.yml)
+[![Website deployment](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/workflows/pages.yml/badge.svg)](https://github.com/Yuchi-Wang02/SPMO-ETF-test/actions/workflows/pages.yml)
 
-Explore the [stock results](https://yuchi-wang02.github.io/SPMO-ETF-test/stocks.html) and [English retrospective](docs/stock-pilot-retrospective.md). All four strategies, four costs and both years are shown. The [frozen cohort rules](configs/stock-pilot.design-freeze.json), [clarified price definition](configs/stock-pilot.v1.json), [source-audit policy](configs/stock-pilot-audit.v1.json) and [derived outputs](site/data/stock-pilot-summary.json) make the scope explicit. This is a vendor-adjusted price experiment; it does not complete the original 75-stock, class-capitalization and payment-date protocol.
+[Explore the research](https://yuchi-wang02.github.io/SPMO-ETF-test/) · [Stock experiment](https://yuchi-wang02.github.io/SPMO-ETF-test/stocks.html) · [ETF experiment](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html) · [Methods and reproduction](docs/README.md)
 
-![Six modeled portfolio paths in the stock-pilot report](docs/assets/stock-pilot-preview.png)
+### Two experiments, two different answers
 
-**A separate real-market sector ETF pilot is complete.** At 5 bps per side over 2001–2025, monthly selection returned **8.02% CAGR**, versus **8.51%** for March/September selection: **−0.49 percentage points per year**. Monthly had a shallower maximum drawdown (−30.32% versus −32.81%) and much higher trading activity. Calendar choice changes the sign of the comparison.
-
-Read the [complete experimental retrospective](docs/pilot-retrospective.md), inspect the [derived results](site/data/etf-pilot-summary.json), or explore the [live interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html). All six calendars and four costs are published. The 2026 primary pair favored monthly selection, which does not overturn the longer-period result.
-
-**Scope matters:** this pilot selects three slots from nine sector ETFs using adjusted total-return prices. It does **not** complete the original 75-stock, historical-capitalization-weighted experiment described below. The [data-access audit](docs/original-data-audit.md) documents concrete missing inputs, including historical membership gaps, class-level share-count ambiguity and unavailable former-constituent prices.
-
-## Original stock protocol — still awaiting accepted data
-
-The comparison below remains the original research question; both completed pilots are separate experiments.
-
-### Start with one comparison
-
-| Portfolio | Selection schedule | Signal |
+| Study | What was compared | Finding at 5 bps per side |
 |---|---|---|
-| **S12 — primary control** | March and September month-end | 12–1 risk-adjusted price momentum |
-| **M12 — primary comparison** | Every month-end | The same 12–1 signal |
+| [100-issuer stock cohort](docs/studies/stock-pilot.md) | Select 20 stocks from a fixed December 2024 cohort; 2025 through October 2, 2026 | Monthly led by **1.23 percentage points of cumulative return**. It trailed by **6.93 points in 2025**, then led by **8.84 points in 2026 YTD**. |
+| [Nine sector ETFs](docs/studies/sector-etf-pilot.md) | Select up to three ETFs; 25 complete years, 2001–2025 | Monthly returned **8.02% CAGR**, versus **8.51%** for March/September: **−0.49 percentage points per year**. Its maximum drawdown was shallower, and trading activity was higher. |
 
-The primary outcome is **M12 minus S12 net return**, measured over the same dates. Common maintenance rules still process dividends, splits and required constituent exits between scheduled selections. These custom portfolios differ from the official SPMO index; actual SPMO and SPY provide product context.
+![Rebalance Lab research homepage with the stock and sector ETF experiments](docs/assets/site-preview.png)
 
-## What would make a useful answer?
+These studies use different universes, weights, price conventions and measurement periods. The stock figure is a cumulative-return difference; the ETF figure is an annualized-growth difference. They cannot be added or averaged into one result.
 
-- **Benefit:** the net-return difference, including unfavorable periods.
-- **Risk:** the drawdown difference over the same reporting period.
-- **Trading burden:** the additional amount bought and sold, associated costs and cash exposure.
+Five basis points means a modeled cost of **0.05% on each purchase or sale**. Every study also reports 0, 10 and 25 bps scenarios. In the stock study, the full-period monthly advantage became **−0.74 points at 25 bps**. In the ETF study, changing the semiannual months could change the comparison's sign. A favorable year or calendar does not establish a durable advantage.
 
-Show these together at **0 / 5 / 10 / 25 basis points per side**. A higher gross return alone does not establish that faster selection is worthwhile. No arbitrary composite score or unagreed risk threshold selects a winner.
+### Inspect an answer, then inspect its limits
 
-## Check whether the finding survives
+- **Stocks:** [interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/stocks.html), [written findings](docs/studies/stock-pilot.md), [aggregate results](site/data/stock-pilot-summary.json), [independent replay](site/data/stock-pilot-validation.json).
+- **ETFs:** [interactive report](https://yuchi-wang02.github.io/SPMO-ETF-test/pilot.html), [written findings](docs/studies/sector-etf-pilot.md), [all calendar/cost comparisons](site/data/etf-pilot-full_period.csv), [independent replay](docs/validation/pilot-validation.md).
 
-The additional SMIX/MMIX pair repeats the frequency comparison using a 50/30/20 blend of 12–1, 6–1 and 3–1 signals. It is **within-study robustness**, sharing the same market observations and many exposures.
+Both use vendor-adjusted price proxies. Independent implementations reproduce the saved calculations; they do not independently verify every source price or reconstruct dividend payment and spin-off entitlements. The stock study also uses a restricted baseline cohort, issuer capitalization without certified historical publication vintages, and one disclosed price reconstruction. These limitations stay attached to the results.
 
-A separate [calendar-sensitivity protocol](docs/calendar-sensitivity.md) fixes all six possible semiannual month pairs in advance. March/September remains the primary schedule; every other schedule is reported alongside it. The implementation cannot replace the primary result with the best-looking calendar.
+The [original 75-stock protocol](docs/methods/original-stock-protocol.md) remains a separate, uncompleted study. It requires accepted historical membership, class-level capitalization, dividend-excluding signals and a raw-share corporate-action ledger. Neither completed experiment meets that full contract. The [data audit](docs/data/original-data-audit.md) records the missing inputs.
 
-The original **2026 period through October 2** remains a retrospective case study, with portfolios established during 2025. A broader historical study needs a separately fixed, coverage-audited set of complete years. It will show yearly paired differences as well as the overall path. The [research blueprint](docs/research-blueprint.md) explains the evidence hierarchy and extension rules.
+### Find your way around
 
-## Evidence available today
-
-| Gate | Current evidence | Next requirement |
-|---|---|---|
-| Historical inputs | SPMO/SPY price diagnostics and offline replay work | Audit constituent history, historical capitalization, prices and corporate actions |
-| Engine reconciliation | Accounting and execution can be exercised on fictional data | Broader event support and independent reconciliation against accepted market/event records |
-| Original stock comparisons | Not run; separate stock and ETF pilot results are available | Accept the inputs and engine, then complete all prespecified comparisons |
-
-The [live English website](https://yuchi-wang02.github.io/SPMO-ETF-test/) explains the question first, then offers progressively deeper methods and reproduction details. GitHub Pages deployment and public file integrity were verified on October 9, 2026. The image below is a tested local preview of the same site.
-
-![SPMO Fast Lab preview: the primary comparison and evidence-led research story](docs/assets/site-preview.png)
-
-## The next data decision
-
-The current Sharadar access supplied historical membership, issuer capitalization and corporate actions for the fixed-cohort stock pilot. SEP/SFP price requests remained empty, so that pilot used free price proxies. Additional purchases are not a prerequisite for inspecting its results. Full-universe departed-stock coverage, true class capitalization and event timing remain requirements for the original protocol.
-
-The [buying guide](docs/data-purchase-guide.md) now gives verified purchase links, Norgate prices and a ready-to-send sample request. First investigate Sharadar’s own `SP500` historical-membership table alongside its prices, daily metrics and corporate actions; a separate membership supplier is only needed if that coverage fails acceptance. Norgate Platinum is a priced partial alternative, with explicit capitalization and settlement gaps.
-
-First obtain a small, authorized [acceptance sample](docs/data-acceptance-sample.md) covering ordinary securities and difficult events: membership entry/exit, ticker changes, splits, dividends, multiple share classes and merger/delisting settlement. Historical class-level capitalization and information-availability dates must be demonstrated before a provider is treated as sufficient.
-
-If institutional access already exists, inspect an entitled WRDS/CRSP export. Otherwise verify the required licensed components before choosing a commercial route. The [source guide](docs/data-sources.md) records what was actually inspected and each remaining gap. The completed pilot does not certify the complete original-study dataset.
-
-<details>
-<summary><strong>Inspect the full methods and implementation</strong></summary>
-
-| Document | Purpose |
-|---|---|
-| [Research blueprint](docs/research-blueprint.md) | Main question, evidence hierarchy, time-window and interpretation rules |
-| [Primary protocol](docs/experiment-design.md) | Exact signal, weighting, timing, cash and cost rules |
-| [Calendar sensitivity](docs/calendar-sensitivity.md) | Six prespecified schedules, shared controls and complete reporting |
-| [Data acceptance sample](docs/data-acceptance-sample.md) | Concrete sample request, required fields and reconciliation checks |
-| [Data sources](docs/data-sources.md) | Provider links, connection routes and verified limitations |
-| [Feasibility and data contract](docs/feasibility.md) | Full market-data and release requirements |
-| [Engine guide](docs/engine.md) | Synthetic execution, accounting and remaining acceptance work |
-| [Evidence record](docs/evidence.md) | Observed checks and claim boundaries |
-| [Research status](results/status.json) | Machine-readable implementation and market-readiness status |
-| [Site strategy](docs/site-strategy.md) | Audience, information hierarchy and accessibility |
-
-</details>
-
-<details>
-<summary><strong>Run and reproduce the engineering checks</strong></summary>
-
-Python 3.12+ is sufficient; the Python code has no third-party dependencies. Node is needed only for the JavaScript syntax check. Use the existing checkout in cloud tasks; no extra Git worktree is required.
-
-```bash
-python3 scripts/validate_design.py
-python3 -m unittest discover -s tests -p 'test_*.py' -v
-node --check site/app.js
+```text
+site/                 Interactive research and published aggregates
+  stocks.html         Fixed-cohort stock experiment
+  pilot.html          Long-history sector ETF experiment
+docs/
+  studies/            Findings and interpretation
+  methods/            Frozen rules and research design
+  validation/         Replay evidence and engine checks
+  data/               Sources, audits and acceptance requirements
+  project/            Presentation and publishing
+configs/              Machine-readable experiment specifications
+scripts/              Acquisition, execution, validation and publication
+tests/                Automated checks
 ```
 
-Run the primary fictional experiment or the separate calendar-sensitivity exercise:
+The [research index](docs/README.md) connects each result to its own method and reproduction instructions. Historical artifact names remain traceable even though the public project is now Rebalance Lab.
+
+### Run the project
+
+The site is static HTML, CSS and JavaScript. Python powers the experiments; the market-data workflows use pinned dependencies.
 
 ```bash
-python3 scripts/run_synthetic.py --output-dir results/generated/synthetic
-python3 scripts/run_calendar_sensitivity.py --output-dir results/generated/calendar-sensitivity
-```
-
-Both create new immutable run directories. Primary and supplementary outputs have distinct experiment labels. The generated ledgers and fictional performance figures remain in ignored directories. Public receipts contain only checks, counts and provenance.
-
-The [price pipeline guide](docs/data-pipeline.md) documents `python3 scripts/ingest_diagnostic.py`, raw-response hashing and offline replay. Its Yahoo observations remain separate from the synthetic engine and do not satisfy the historical-universe contract.
-
-To inspect the static site, run `python3 -m http.server 8000 --directory site` from the repository root. [Publishing instructions](docs/publishing.md) explain deployment and how to verify the published files.
-
-</details>
-
-Publish methods, permitted results and reproducibility records together, including negative findings. Credentials, raw conversation and market data without redistribution rights stay out of Git.
-
-## Reproduce the real-market pilot
-
-The original engine and its offline tests need no third-party packages. The separate pilot adds a pinned exchange calendar and plotting tools:
-
-```bash
-python3 -m venv --system-site-packages .venv
+python3 -m venv .venv
 .venv/bin/pip install -r requirements-pilot.txt
-.venv/bin/python scripts/etf_pilot_data.py --acquire --audit-output results/generated/pilot-data-audit
-.venv/bin/python scripts/run_etf_pilot.py --raw-dir data/raw/sector-etf-pilot/<snapshot> --public-dir site/data
+.venv/bin/python scripts/validate_design.py
+.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v
+python3 -m http.server 8000 --directory site
 ```
 
-Use the actual snapshot directory returned by acquisition. [The pilot protocol](docs/sector-etf-pilot.md) documents offline replay, independent reconciliation and publication. Raw vendor bars and detailed account ledgers stay in ignored directories. Re-downloading can change revised source values; hashes identify the original run.
+Open `http://localhost:8000` for the local site. The [reproduction guide](docs/README.md#reproduce-and-check) links acquisition, private-input replay and independent-validation commands. Source hashes identify the captured data; a fresh vendor download can contain revisions. Raw market data, credentials and detailed private ledgers are excluded from Git.
+
+Rebalance Lab publishes bounded historical evidence, including negative results. It offers no forecast or trading recommendation.

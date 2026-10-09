@@ -2,11 +2,11 @@
 
 **In this separate sector-ETF pilot, monthly rebalancing did not improve the primary long-run return comparison.** Over 2001–2025 at 5 basis points per side, monthly 12–1 momentum earned **8.02% CAGR**, versus **8.51%** for the fixed March/September schedule. Monthly had a shallower maximum drawdown, but traded substantially more. The answer is a return/risk/trading tradeoff, not a general recommendation to use one frequency.
 
-This is a completed run on historical market prices under an adjusted-price proxy. **It is not completion of the original top-75 stock experiment.** That experiment still lacks accepted historical membership, class capitalization and event data; the [original data audit](original-data-audit.md) documents the evidence and unresolved inputs.
+This is a completed run on historical market prices under an adjusted-price proxy. **It is not completion of the original top-75 stock experiment.** That experiment still lacks accepted historical membership, class capitalization and event data; the [original data audit](../data/original-data-audit.md) documents the evidence and unresolved inputs.
 
 ## The experiment we actually ran
 
-The [pilot protocol](sector-etf-pilot.md) and [configuration](../configs/sector-etf-pilot.v1.json) were frozen in commit [`8bb2e11`](https://github.com/Yuchi-Wang02/SPMO-ETF-test/commit/8bb2e11) before calculating this pilot's performance. The research question and historical window were chosen retrospectively. Freezing the implementation does **not** make the results out of sample or prospectively preregistered.
+The [pilot protocol](../methods/sector-etf-protocol.md) and [configuration](../../configs/sector-etf-pilot.v1.json) were frozen in commit [`8bb2e11`](https://github.com/Yuchi-Wang02/SPMO-ETF-test/commit/8bb2e11) before calculating this pilot's performance. The research question and historical window were chosen retrospectively. Freezing the implementation does **not** make the results out of sample or prospectively preregistered.
 
 The investable set is the original nine Select Sector SPDR funds: XLB, XLE, XLF, XLI, XLK, XLP, XLU, XLV and XLY. At each signal date, rank positive risk-adjusted momentum scores and select at most three funds, allocating one-third of post-fee value to each. Unfilled slots stay in zero-interest cash. Monthly and semiannual arms use the same selection, weights and execution rule; frequency is the changed treatment within each signal pair. The primary signal is 252-session momentum skipping the latest 21 sessions; the blended check combines 252/126/63-session scores at 50/30/20 weights.
 
@@ -30,7 +30,7 @@ The primary monthly-minus-semiannual CAGR difference is **−0.49 percentage poi
 
 SPY had greater long-run growth than either primary arm and a substantially deeper drawdown in this sample. It is a useful opportunity-cost reference, not a control isolating frequency: it holds different exposures and stays invested. Its reported turnover is zero during 2001–2025 because the benchmark was purchased before the reporting anchor; its initialization was not silently charged again. Embedded fund expenses are not subtracted twice.
 
-![Daily normalized wealth and drawdown for the primary pair and SPY, 2001–2025 at 5 bps per side. Wealth uses a log scale.](../site/assets/pilot-wealth-drawdown.svg)
+![Daily normalized wealth and drawdown for the primary pair and SPY, 2001–2025 at 5 bps per side. Wealth uses a log scale.](../../site/assets/pilot-wealth-drawdown.svg)
 
 ## Costs strengthen the case against a blanket “faster is better” claim
 
@@ -66,15 +66,15 @@ The table reports **monthly minus semiannual CAGR, in percentage points**. Posit
 
 At 5 bps, monthly 12–1 beats **three of six** phases and loses to three. Its comparison changes sign when only the semiannual calendar changes. At 25 bps it loses to all six. The blended monthly arm beats only **one of six** phases at each tested cost. These are overlapping schedules on the same securities and dates, with shared monthly controls. They cannot be counted as independent confirmations, and the most favorable observed schedule is not promoted as a new strategy.
 
-![Every calendar phase and cost scenario, showing monthly-minus-semiannual CAGR differences for both signals.](../site/assets/pilot-calendar-costs.svg)
+![Every calendar phase and cost scenario, showing monthly-minus-semiannual CAGR differences for both signals.](../../site/assets/pilot-calendar-costs.svg)
 
 ## Annual outcomes: a small majority of wins did not compound into a win
 
 Monthly 12–1 beats the primary March/September arm in **13 of 25** full calendar years, loses in **12**, and ties in none. Despite that small majority, its 25-year compounded return is lower. Win counts ignore the size and sequence of gains and losses; they are not a profitability test.
 
-All 25 annual primary outcomes and all other signal/phase/cost combinations are in the [annual comparison CSV](../site/data/etf-pilot-annual.csv). Annual boundaries measure returns on continuing accounts; they do not reset positions. Adjacent annual returns and overlapping momentum windows remain dependent. No binomial test, p-value or independent-replication claim is made from this count.
+All 25 annual primary outcomes and all other signal/phase/cost combinations are in the [annual comparison CSV](../../site/data/etf-pilot-annual.csv). Annual boundaries measure returns on continuing accounts; they do not reset positions. Adjacent annual returns and overlapping momentum windows remain dependent. No binomial test, p-value or independent-replication claim is made from this count.
 
-![All 25 annual return differences for the primary monthly versus March/September comparison.](../site/assets/pilot-annual-spread.svg)
+![All 25 annual return differences for the primary monthly versus March/September comparison.](../../site/assets/pilot-annual-spread.svg)
 
 ## The separate 2026 case points in a different direction
 
@@ -88,7 +88,7 @@ From the **December 31, 2025 close through October 2, 2026**, the primary monthl
 | SMIX: March/September | -1.31% | -10.12% | 266.62% |
 | SPY: buy and hold | 13.75% | -8.88% | 0.00% |
 
-The striking difference between the 12–1 and blended monthly outcomes in this same partial year is another reason to avoid a frequency-only story. The short window cannot establish durable superiority or support causal claims about a market regime. All phases and cost cases remain available in the [2026 CSV](../site/data/etf-pilot-ytd2026.csv).
+The striking difference between the 12–1 and blended monthly outcomes in this same partial year is another reason to avoid a frequency-only story. The short window cannot establish durable superiority or support causal claims about a market regime. All phases and cost cases remain available in the [2026 CSV](../../site/data/etf-pilot-ytd2026.csv).
 
 ## What worked, what failed, and what this does not answer
 
@@ -102,14 +102,14 @@ The acquisition audit found a common 6,987-session history from December 22, 199
 
 A separate accounting implementation reproduced all 60 paths, covering 56 strategy runs and four benchmark runs, within floating-point tolerance. This provides evidence for the simulation's arithmetic and timing under the supplied prices. It does not independently validate the market prices or adjustment factors.
 
-A stronger follow-up would first reconcile corporate-action adjustments with independent fund records, then test a newly frozen protocol on genuinely unseen observations or a separately justified sample. Any such extension must preserve this published baseline and report its changed assumptions. Completing the original stock study additionally requires the dataset and event-ledger work listed in the [source audit](original-data-audit.md).
+A stronger follow-up would first reconcile corporate-action adjustments with independent fund records, then test a newly frozen protocol on genuinely unseen observations or a separately justified sample. Any such extension must preserve this published baseline and report its changed assumptions. Completing the original stock study additionally requires the dataset and event-ledger work listed in the [source audit](../data/original-data-audit.md).
 
 ## Inspect the evidence
 
-- [Machine-readable summary, audits and input/code hashes](../site/data/etf-pilot-summary.json): run `20261009T021722928426Z-9e9cb830b3cb`; flags explicitly separate the executed market pilot from the uncompleted original experiment.
-- [All 48 full-period paired comparisons](../site/data/etf-pilot-full_period.csv).
-- [All 1,200 annual comparisons](../site/data/etf-pilot-annual.csv): 48 pairs × 25 complete years.
-- [All 48 separate 2026 comparisons](../site/data/etf-pilot-ytd2026.csv).
-- [Protocol](sector-etf-pilot.md), [configuration](../configs/sector-etf-pilot.v1.json), [run script](../scripts/run_etf_pilot.py) and [data acquisition/audit script](../scripts/etf_pilot_data.py).
+- [Machine-readable summary, audits and input/code hashes](../../site/data/etf-pilot-summary.json): run `20261009T021722928426Z-9e9cb830b3cb`; flags explicitly separate the executed market pilot from the uncompleted original experiment.
+- [All 48 full-period paired comparisons](../../site/data/etf-pilot-full_period.csv).
+- [All 1,200 annual comparisons](../../site/data/etf-pilot-annual.csv): 48 pairs × 25 complete years.
+- [All 48 separate 2026 comparisons](../../site/data/etf-pilot-ytd2026.csv).
+- [Protocol](../methods/sector-etf-protocol.md), [configuration](../../configs/sector-etf-pilot.v1.json), [run script](../../scripts/run_etf_pilot.py) and [data acquisition/audit script](../../scripts/etf_pilot_data.py).
 
 The published statistics were checked against the summary's paired differences and annual records. Input hashes identify the captured snapshot; a later vendor download may differ because adjusted histories can be revised. Raw source responses and detailed private ledgers are not redistributed with these summary outputs.

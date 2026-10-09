@@ -14,11 +14,11 @@ The separate sector ETF pilot passed an independent portfolio replay of **all 60
 | SPY buy-and-hold identity | Matched the adjusted-close return at all four costs |
 | Provenance | Configuration, code, raw captures and saved result hashes matched |
 
-The [machine-readable receipt](../site/data/etf-pilot-validation.json) binds these checks to the exact public summary, run manifest, input snapshot and verifier code. The reviewed run is `20261009T021722928426Z-9e9cb830b3cb`.
+The [machine-readable receipt](../../site/data/etf-pilot-validation.json) binds these checks to the exact public summary, run manifest, input snapshot and verifier code. The reviewed run is `20261009T021722928426Z-9e9cb830b3cb`.
 
 ## What makes this a separate check
 
-The [verifier](../scripts/validate_etf_pilot_independent.py) imports no engine, signal or accounting code from the project. It calculates sample volatility directly, ranks positive momentum scores, recreates month-end decisions and next-session executions, and rebuilds each account's cash and adjusted units. It solves the post-fee target equation analytically over its linear intervals; the main engine uses numerical bisection. The small differences above reflect floating-point arithmetic.
+The [verifier](../../scripts/validate_etf_pilot_independent.py) imports no engine, signal or accounting code from the project. It calculates sample volatility directly, ranks positive momentum scores, recreates month-end decisions and next-session executions, and rebuilds each account's cash and adjusted units. It solves the post-fee target equation analytically over its linear intervals; the main engine uses numerical bisection. The small differences above reflect floating-point arithmetic.
 
 The replay checks daily NAV, cash and held units; every selected portfolio and execution date; fees and two-sided turnover; annual observations; the 25-year CAGR; daily maximum drawdown; and mean cash exposure. It also confirms that 2026 returns remain unannualized and accounts continue through the reporting boundary. Independent arithmetic does not remove the shared input-data assumptions.
 
@@ -32,7 +32,7 @@ Vendor adjustment assumptions remain material. An inspection around XLF's Septem
 
 ## Reproduce the check
 
-After acquiring and saving a snapshot with the documented [pilot workflow](sector-etf-pilot.md), pass its preserved run directory:
+After acquiring and saving a snapshot with the documented [pilot workflow](../methods/sector-etf-protocol.md), pass its preserved run directory:
 
 ```bash
 python3 scripts/validate_etf_pilot_independent.py \

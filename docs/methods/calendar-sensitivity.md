@@ -15,7 +15,7 @@ This is a within-study robustness check using shared observations, not independe
 | 05 / 11 | May and November month-end | Sensitivity |
 | 06 / 12 | June and December month-end | Sensitivity |
 
-The machine-readable [supplementary specification](../configs/calendar-sensitivity.v1.json) pins the primary configuration hash, all six phases, both signal pairs and all four cost scenarios. The [primary configuration](../configs/experiment.v1.json) and its original 16 paths remain unchanged.
+The machine-readable [supplementary specification](../../configs/calendar-sensitivity.v1.json) pins the primary configuration hash, all six phases, both signal pairs and all four cost scenarios. The [primary configuration](../../configs/experiment.v1.json) and its original 16 paths remain unchanged.
 
 Every phase uses the same cash initialization, December 31, 2024 initial signal, 2025 burn-in, December 31, 2025 reporting anchor and October 2, 2026 endpoint. Trades occur at the next supplied session's opening price. Initial formation, forced exits and dividend maintenance remain common exceptions to the scheduled calendar. Normalization at the reporting anchor does not trigger a new trade. A December month-end signal can still execute at the following January open.
 

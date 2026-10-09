@@ -1,0 +1,16 @@
+name: Website or documentation improvement
+description: Improve navigation, accessibility, or explanation.
+title: "[Site] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is hard to understand or use?
+      description: Include the page URL and, for a display issue, the browser and screen size.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested improvement
+      description: Describe how the change would help a reader interpret or inspect the evidence.
