@@ -1,67 +1,62 @@
-# Rebalance Lab
+# Rebalance Lab: A Validation Study of Momentum Rebalancing
 
-## Rebalancing Frequency in Momentum Portfolios
+**The sign of the monthly-minus-semiannual performance difference changes across six rebalancing calendars.** In the 2001-2025 sector-ETF study, the 12-1 comparison at 5 bps per side ranges from **-0.92 to +0.53 percentage points of CAGR per year**. The designated March/September comparison is **-0.49 pp/year**.
 
-**An empirical comparison of monthly and semiannual rebalancing in momentum portfolios.** Two limited pilot studies evaluate net returns, drawdowns and transaction costs, using March/September as the primary semiannual schedule. The fixed-cohort stock pilot reports a small full-period cumulative advantage for monthly selection; the longer sector ETF study reports lower annualized growth. Both retain negative results and explicit data and modeling limitations.
+![All six semiannual calendars and four cost scenarios](site/assets/validation-calendar-costs.svg)
 
-[![Research checks](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/checks.yml/badge.svg)](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/checks.yml)
-[![Website deployment](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/pages.yml/badge.svg)](https://github.com/Yuchi-Wang02/rebalance-lab/actions/workflows/pages.yml)
+*Monthly minus semiannual CAGR; positive favors monthly. The outlined March/September row is the designated reference. Both signals and every calendar/cost cell are reported.*
 
-[Explore the research](https://yuchi-wang02.github.io/rebalance-lab/) · [Stock experiment](https://yuchi-wang02.github.io/rebalance-lab/stocks.html) · [ETF experiment](https://yuchi-wang02.github.io/rebalance-lab/pilot.html) · [Methods and reproduction](docs/README.md)
+[Research site](https://yuchi-wang02.github.io/rebalance-lab/) · [Four-page validation brief](site/assets/rebalance-lab-validation-brief.pdf) · [One-page validation memo](site/assets/rebalance-lab-validation-memo.pdf) · [Executed notebook](notebooks/validation-study.ipynb)
 
-### Pilot studies and empirical findings
+## What this repository demonstrates
 
-| Study | What was compared | Finding at 5 bps per side |
-|---|---|---|
-| [100-issuer stock cohort](docs/studies/stock-pilot.md) | Select 20 stocks from a fixed December 2024 cohort; 2025 through October 2, 2026 | Monthly led by **1.23 percentage points of cumulative return**. It trailed by **6.93 points in 2025**, then led by **8.84 points in 2026 YTD**. |
-| [Nine sector ETFs](docs/studies/sector-etf-pilot.md) | Select up to three ETFs; 25 complete years, 2001–2025 | Monthly returned **8.02% CAGR**, versus **8.51%** for March/September: **−0.49 percentage points per year**. Its maximum drawdown was shallower, and trading activity was higher. |
+- Rules fixed before the extension runs, with prior exposure to the history disclosed.
+- Signals formed at the close, with execution at the next exchange-session open.
+- Separate self-financing accounts for 0, 5, 10 and 25 bps per executed side.
+- All six semiannual phases reported, without choosing the best observed calendar.
+- A second accounting implementation and a separate tranche/statistical reconciliation.
 
-![Rebalance Lab research homepage with the stock and sector ETF experiments](docs/assets/site-preview.png)
+## Test the mitigation, then qualify the conclusion
 
-These studies use different universes, weights, price conventions and measurement periods. The stock figure is a cumulative-return difference; the ETF figure is an annualized-growth difference. They cannot be added or averaged into one result.
+Six semiannual sleeves receive one-sixth of initial capital and subsequently run without transfers or trade netting. This pooled portfolio returns **8.24% CAGR**, compared with **8.02%** for monthly and **8.51%** for March/September. Its **-40.91%** maximum drawdown is deeper than both primary alternatives.
 
-Five basis points means a modeled cost of **0.05% on each purchase or sale**. Every study also reports 0, 10 and 25 bps scenarios. In the stock study, the full-period monthly advantage became **−0.74 points at 25 bps**. In the ETF study, changing the semiannual months could change the comparison's sign. A favorable year or calendar does not establish a durable advantage.
+| Monthly minus | CAGR difference, pp/year | Paired 95% interval |
+|---|---:|---:|
+| March / September | -0.49 | [-3.03, +2.11] |
+| Six-sleeve tranche | -0.22 | [-2.44, +2.33] |
 
-### Results, methods and limitations
+Intervals use 10,000 paired stationary bootstrap draws of 300 net monthly returns, with mean block length 12 months. Both include zero. The observed primary monthly disadvantage does not establish a general frequency ranking. The tranche diversifies the calendar allocation; this sample does not show that it eliminates risk or timing dependence.
 
-- **Stocks:** [interactive report](https://yuchi-wang02.github.io/rebalance-lab/stocks.html), [written findings](docs/studies/stock-pilot.md), [aggregate results](site/data/stock-pilot-summary.json), [independent replay](site/data/stock-pilot-validation.json).
-- **ETFs:** [interactive report](https://yuchi-wang02.github.io/rebalance-lab/pilot.html), [written findings](docs/studies/sector-etf-pilot.md), [all calendar/cost comparisons](site/data/etf-pilot-full_period.csv), [independent replay](docs/validation/pilot-validation.md).
+## Read the evidence
 
-Both use vendor-adjusted price proxies. Independent implementations reproduce the saved calculations; they do not independently verify every source price or reconstruct dividend payment and spin-off entitlements. The stock study also uses a restricted baseline cohort, issuer capitalization without certified historical publication vintages, and one disclosed price reconstruction. These limitations stay attached to the results.
+| Material | Purpose |
+|---|---|
+| [Research report](docs/studies/validation-study.md) | Findings, risk, uncertainty and the A/B/C appendix |
+| [Method protocol](docs/methods/validation-study.md) | Exact portfolio, tranche and inference rules |
+| [Validation memo](docs/validation/validation-memo.md) | Scope, lineage, replication, judgment and residual risk |
+| [Design decisions](docs/methods/design-decisions.md) | Five technical choices and their alternatives |
+| [Reproduction guide](docs/reproduction.md) | Public-input analysis and private-snapshot engine replay |
 
-The [original 75-stock protocol](docs/methods/original-stock-protocol.md) remains a separate, uncompleted study. It requires accepted historical membership, class-level capitalization, dividend-excluding signals and a raw-share corporate-action ledger. Neither completed experiment meets that full contract. The [data audit](docs/data/original-data-audit.md) records the missing inputs.
+The [stock pilot](docs/archive/studies/stock-pilot.md) is a companion case. The [original 75-stock protocol](docs/archive/methods/original-stock-protocol.md) is archived as incomplete research history after its data requirements could not be met.
 
-### Repository structure
-
-```text
-site/                 Interactive research and published aggregates
-  stocks.html         Fixed-cohort stock experiment
-  pilot.html          Long-history sector ETF experiment
-docs/
-  studies/            Findings and interpretation
-  methods/            Frozen rules and research design
-  validation/         Replay evidence and engine checks
-  data/               Sources, audits and acceptance requirements
-  project/            Presentation and publishing
-configs/              Machine-readable experiment specifications
-scripts/              Acquisition, execution, validation and publication
-tests/                Automated checks
-```
-
-The [research index](docs/README.md) connects each result to its own method and reproduction instructions. Historical artifact names remain traceable even though the public project is now Rebalance Lab.
-
-### Run the project
-
-The site is static HTML, CSS and JavaScript. Python powers the experiments; the market-data workflows use pinned dependencies.
+## Reproduce locally
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-pilot.txt
-.venv/bin/python scripts/validate_design.py
-.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v
-python3 -m http.server 8000 --directory site
+python -m venv .venv
+.venv/Scripts/python -m pip install -r requirements-research.txt
+.venv/Scripts/python scripts/validate_validation_artifacts.py
+.venv/Scripts/python -m unittest discover -s tests -p 'test_*.py'
+.venv/Scripts/python -m http.server 8000 --directory site
 ```
 
-Open `http://localhost:8000` for the local site. The [reproduction guide](docs/README.md#reproduce-and-check) links acquisition, private-input replay and independent-validation commands. Source hashes identify the captured data; a fresh vendor download can contain revisions. Raw market data, credentials and detailed private ledgers are excluded from Git.
+The example uses Windows paths. On macOS/Linux replace `.venv/Scripts/python` with `.venv/bin/python`. Full commands and input requirements are in the reproduction guide. No network request or credential is required for the public companion notebook.
 
-Rebalance Lab publishes bounded historical evidence, including negative results. It offers no forecast or trading recommendation.
+## Evaluation focus and owner contribution
+
+The project connects accounting and control habits with Business Analytics and AI: define the measurement, reconcile the account, inspect exceptions and state what the evidence supports. It is a financial case for model-validation and AI-evaluation readers.
+
+The owner selected the audience, financial scope and validation focus; personally reconciled one historical trade using Python; and reviewed the calendar, uncertainty and evidence-boundary interpretations in writing. AI assisted the implementation, numerical checks and drafting. The exact signal-window explanation and an observed timed presentation remain pending; full owner reproduction of the notebook has not been verified. See the [dated contribution record](results/owner-review-progress.json).
+
+## Limitations
+
+This is a retrospective nine-sector-ETF study using vendor-adjusted price and next-open execution proxies, zero-interest cash and fixed modeled costs. Sector definitions changed over time. Bootstrap intervals are conditional on the observed history and resampling assumptions. Separate implementations reconcile arithmetic on the same inputs; the same AI agent authored them, so they do not establish independent reviewer agreement, source-price accuracy or achievable execution. Original code and documentation use the MIT license; raw vendor exports remain excluded.

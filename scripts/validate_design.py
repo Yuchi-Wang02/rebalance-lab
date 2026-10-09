@@ -36,9 +36,10 @@ def validate(root: Path) -> list[str]:
         if not condition:
             errors.append(message)
 
-    config = json.loads((root / "configs/experiment.v1.json").read_text())
-    status = json.loads((root / "results/status.json").read_text())
-    catalog = json.loads((root / "configs/data-sources.json").read_text())
+    config = json.loads((root / "configs/experiment.v1.json").read_text(encoding="utf-8"))
+    status = json.loads((root / "results/status.json").read_text(encoding="utf-8"))
+    original_status = status.get("studies", {}).get("original_stock", {})
+    catalog = json.loads((root / "configs/data-sources.json").read_text(encoding="utf-8"))
     period, common, arms = config["period"], config["common"], config["arms"]
     dates = [date.fromisoformat(period[key]) for key in ("warmup_request_start", "initial_signal_close", "report_anchor_close", "report_end_close")]
     require(all(a < b for a, b in zip(dates, dates[1:])), "Warmup, initialization, reporting anchor and end must be ordered.")
@@ -68,8 +69,9 @@ def validate(root: Path) -> list[str]:
     for pair in comparisons["product_context"]:
         require(len(pair) == 2 and all(x in known for x in pair), f"Unknown product comparison: {pair}.")
     require(not config["results"]["executed"] and config["results"]["market_returns"] is None, "No market result has been generated in this release.")
-    require(status["stage"] == "synthetic_engine_validation" and status["engine_implemented"] is True and status["engine_status"] == "synthetic_prototype" and status["formal_engine_accepted"] is False and not status["data_audit_completed"] and not status["market_backtest_executed"] and status["returns"] is None, "Research status must distinguish synthetic implementation from market acceptance.")
-    engine = json.loads((root / "site/data/engine-status.json").read_text())
+    require(status["schema_version"] == 2 and status["market_backtest_executed"] is True, "Project status must recognize completed market studies.")
+    require(original_status["stage"] == "synthetic_engine_validation" and original_status["engine_implemented"] is True and original_status["engine_status"] == "synthetic_prototype" and original_status["formal_engine_accepted"] is False and not original_status["data_audit_completed"] and not original_status["market_backtest_executed"] and original_status["returns"] is None, "Original-stock status must distinguish synthetic implementation from market acceptance.")
+    engine = json.loads((root / "site/data/engine-status.json").read_text(encoding="utf-8"))
     require(engine["engine_status"] == "synthetic_prototype" and engine["data_track"] == "synthetic" and engine["formal_engine_accepted"] is False and engine["market_backtest_executed"] is False and engine["research_ready"] is False, "Synthetic receipt cannot claim market readiness.")
     require(engine["run_count"] == 16 and engine["strategy_ids"] == list(arms) and engine["cost_bps"] == common["cost_bps_per_side_scenarios"], "Synthetic receipt must include every arm and cost scenario.")
     require(engine["checks"] and all(v is True for v in engine["checks"].values()), "Synthetic engineering checks must pass.")
@@ -79,8 +81,8 @@ def validate(root: Path) -> list[str]:
     for name, digest in engine["code_sha256"].items():
         require(name in expected_code and hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, "Synthetic receipt code hash mismatch; rerun the fixture.")
     sensitivity_path = root / "configs/calendar-sensitivity.v1.json"
-    sensitivity = json.loads(sensitivity_path.read_text())
-    calendar = json.loads((root / "site/data/calendar-sensitivity-status.json").read_text())
+    sensitivity = json.loads(sensitivity_path.read_text(encoding="utf-8"))
+    calendar = json.loads((root / "site/data/calendar-sensitivity-status.json").read_text(encoding="utf-8"))
     primary_hash = hashlib.sha256((root / "configs/experiment.v1.json").read_bytes()).hexdigest()
     phases = [[month, month + 6] for month in range(1, 7)]
     require(sensitivity["phase_pairs"] == calendar["phase_pairs"] == phases, "Calendar sensitivity must retain all six prespecified phases.")
@@ -96,8 +98,8 @@ def validate(root: Path) -> list[str]:
     require(set(calendar["code_sha256"]) == calendar_code, "Calendar receipt must identify the supplementary runner and every engine module.")
     for name, digest in calendar["code_sha256"].items():
         require(name in calendar_code and hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, "Calendar receipt code hash mismatch; rerun the supplementary fixture.")
-    summary = json.loads((root / "site/data/ingestion-summary.json").read_text())
-    diagnostic = status["price_ingestion_diagnostic"]
+    summary = json.loads((root / "site/data/ingestion-summary.json").read_text(encoding="utf-8"))
+    diagnostic = original_status["price_ingestion_diagnostic"]
     require(summary["research_ready"] is False and diagnostic["research_ready"] is False and diagnostic["full_dataset_audited"] is False, "Price diagnostics cannot certify the research dataset.")
     require(summary["calendar_coverage"] == "not_verified" and summary["price_adjustment_semantics"] == "not_verified", "Outstanding data audits must remain visible.")
     require(summary["requested_start"] == period["warmup_request_start"] and summary["requested_end"] == period["report_end_close"], "Public diagnostic must use the declared experiment window.")
@@ -132,15 +134,15 @@ def validate(root: Path) -> list[str]:
         require((document.parent / unquote(parsed.path)).exists(), f"Broken local link in {document.relative_to(root)}: {raw}")
 
     for document in sorted(root.rglob("*.md")):
-        if ".git" in document.parts:
+        if any(part in document.relative_to(root).parts for part in (".git", ".venv", "tmp", "output")):
             continue
-        for raw in re.findall(r"\]\(([^)]+)\)", document.read_text()):
+        for raw in re.findall(r"\]\(([^)]+)\)", document.read_text(encoding="utf-8")):
             check_link(document, raw.split(" ", 1)[0].strip("<>"))
     site = root / "site/index.html"
     require(site.exists(), "Static site entrypoint is missing.")
     if site.exists():
         parser = Links()
-        parser.feed(site.read_text())
+        parser.feed(site.read_text(encoding="utf-8"))
         for raw in parser.targets:
             check_link(site, raw, parser.ids)
     return errors

@@ -1,0 +1,9 @@
+The MIT license covers original project code and documentation. It does not
+grant rights to third-party market-data exports, vendor observations, brands,
+referenced publications, or other material governed by separate terms.
+
+Raw Yahoo responses, licensed Sharadar exports, credentials and complete
+private account ledgers are excluded from this repository. Public research
+inputs are derived portfolio series and aggregate results. The monthly RF
+series is attributed to the Kenneth R. French Data Library; captured source
+URLs, dates and hashes are recorded in the result provenance.

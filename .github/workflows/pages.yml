@@ -31,6 +31,10 @@ jobs:
         run: python3 scripts/validate_pilot_artifacts.py
       - name: Validate stock-pilot artifacts
         run: python3 scripts/validate_stock_pilot_artifacts.py
+      - name: Validate the calendar and tranche validation case
+        run: python3 scripts/validate_validation_artifacts.py
+      - name: Validate the versioned presentation and contribution record
+        run: python3 scripts/validate_release_integrity.py
       - name: Upload static site without research data
         uses: actions/upload-pages-artifact@v3
         with:

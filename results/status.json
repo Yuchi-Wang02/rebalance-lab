@@ -1,53 +1,90 @@
 {
-  "schema_version": 1,
-  "stage": "synthetic_engine_validation",
-  "market_backtest_executed": false,
-  "engine_implemented": true,
-  "engine_status": "synthetic_prototype",
-  "formal_engine_accepted": false,
-  "synthetic_validation_summary": "site/data/engine-status.json",
-  "calendar_phase_sensitivity": {
-    "specification": "configs/calendar-sensitivity.v1.json",
-    "summary_path": "site/data/calendar-sensitivity-status.json",
-    "data_track": "synthetic",
-    "market_backtest_executed": false,
-    "research_ready": false
+  "market_backtest_executed": true,
+  "owner_presentation_ready": false,
+  "owner_review": {
+    "actual_answers_recorded": true,
+    "checkpoint_1": "trade_review_accepted_signal_window_followup_pending",
+    "checkpoint_2": "written_review_accepted",
+    "checkpoint_3": "written_judgment_review_accepted_oral_timing_not_observed",
+    "progress_path": "results/owner-review-progress.json"
   },
-  "data_audit_completed": false,
-  "returns": null,
-  "reason": "The original stock protocol remains blocked by historical-universe inputs and real-event accounting. A separate sector ETF adjusted-price pilot has completed; its results cannot substitute for the original experiment.",
-  "protocol_version": "0.2.0",
-  "price_ingestion_diagnostic": {
-    "provider": "Yahoo chart API",
-    "authenticated": false,
-    "scope": "fixed_window_benchmark_diagnostic_not_experiment_input",
-    "summary_path": "site/data/ingestion-summary.json",
-    "diagnostic_passed": true,
-    "cache_replay_verified": true,
-    "full_dataset_audited": false,
-    "research_ready": false
+  "publication": {
+    "authorization_basis": "Direct user approval to merge PR #1 and deploy GitHub Pages after all remote CI checks pass; unfinished owner review remains explicitly deferred.",
+    "authorization_for_new_version": true,
+    "existing_public_version_commit": "56479fc9bfef756f81eba269e6114ac35b36d375",
+    "local_review_package_complete": true,
+    "new_version_deployed": false,
+    "production_publication_authorized": true,
+    "review_branch": "codex/research-continuation",
+    "review_branch_authorized": true,
+    "authorization_recorded_at_utc": "2026-10-09T06:55:20.941801+00:00",
+    "approved_review_url": "https://github.com/Yuchi-Wang02/rebalance-lab/pull/1",
+    "approved_review_head": "b11cecf15732dcedd7c72669d63a581582a8002e"
   },
-  "original_stock_experiment_completed": false,
-  "sector_etf_pilot": {
-    "experiment_id": "sector-etf-frequency-v1",
-    "status": "completed_with_caveats",
-    "market_pilot_executed": true,
-    "original_stock_experiment_completed": false,
-    "summary_path": "site/data/etf-pilot-summary.json",
-    "validation_path": "site/data/etf-pilot-validation.json",
-    "report_path": "docs/studies/sector-etf-pilot.md"
-  },
-  "separate_stock_pilot": {
-    "experiment_id": "baseline-issuer-stock-pilot-v1",
-    "status": "completed_and_independently_replayed",
-    "data_track": "baseline_issuer_stock_pilot",
-    "cohort_issuers": 100,
-    "target_positions": 20,
-    "strategy_paths": 16,
-    "benchmark_paths": 8,
-    "original_protocol_completed": false,
-    "summary": "site/data/stock-pilot-summary.json",
-    "validation": "site/data/stock-pilot-validation.json",
-    "retrospective": "docs/studies/stock-pilot.md"
+  "research_and_presentation_complete": true,
+  "schema_version": 2,
+  "stage": "production_release_authorized_pending_ci",
+  "studies": {
+    "original_stock": {
+      "archive_protocol": "docs/archive/methods/original-stock-protocol.md",
+      "calendar_phase_sensitivity": {
+        "data_track": "synthetic",
+        "market_backtest_executed": false,
+        "research_ready": false,
+        "specification": "configs/calendar-sensitivity.v1.json",
+        "summary_path": "site/data/calendar-sensitivity-status.json"
+      },
+      "completed": false,
+      "data_audit_completed": false,
+      "engine_implemented": true,
+      "engine_status": "synthetic_prototype",
+      "formal_engine_accepted": false,
+      "market_backtest_executed": false,
+      "price_ingestion_diagnostic": {
+        "authenticated": false,
+        "cache_replay_verified": true,
+        "diagnostic_passed": true,
+        "full_dataset_audited": false,
+        "provider": "Yahoo chart API",
+        "research_ready": false,
+        "scope": "fixed_window_benchmark_diagnostic_not_experiment_input",
+        "summary_path": "site/data/ingestion-summary.json"
+      },
+      "protocol_version": "0.2.0",
+      "reason": "The original stock protocol remains blocked by historical-universe inputs and real-event accounting. A separate sector ETF adjusted-price pilot has completed; its results cannot substitute for the original experiment.",
+      "returns": null,
+      "stage": "synthetic_engine_validation",
+      "synthetic_validation_summary": "site/data/engine-status.json"
+    },
+    "sector_etf_legacy": {
+      "experiment_id": "sector-etf-frequency-v1",
+      "market_pilot_executed": true,
+      "original_stock_experiment_completed": false,
+      "report_path": "docs/archive/studies/sector-etf-pilot.md",
+      "status": "completed_with_caveats",
+      "summary_path": "site/data/etf-pilot-summary.json",
+      "validation_path": "site/data/etf-pilot-validation.json"
+    },
+    "sector_etf_validation": {
+      "calculation_completed": true,
+      "experiment_id": "sector-etf-validation-v1",
+      "owner_mastery_verified": false,
+      "report_path": "docs/studies/validation-study.md",
+      "separate_reconciliation_passed": true,
+      "summary_path": "site/data/validation-study-summary.json"
+    },
+    "stock_companion": {
+      "benchmark_paths": 8,
+      "cohort_issuers": 100,
+      "data_track": "baseline_issuer_stock_pilot",
+      "experiment_id": "baseline-issuer-stock-pilot-v1",
+      "original_protocol_completed": false,
+      "retrospective": "docs/archive/studies/stock-pilot.md",
+      "status": "completed_and_independently_replayed",
+      "strategy_paths": 16,
+      "summary": "site/data/stock-pilot-summary.json",
+      "target_positions": 20,
+      "validation": "site/data/stock-pilot-validation.json"
+    }
   }
 }

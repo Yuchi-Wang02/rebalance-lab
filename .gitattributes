@@ -23,3 +23,10 @@
 *.ico binary
 *.pdf binary
 *.zip binary
+
+# Frozen receipts bind exact bytes, including existing line endings. Disable
+# conversion for every path so a Windows commit and a Linux checkout retain
+# the same scientific inputs, code and presentation evidence hashes.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Matplotlib SVG path records contain generated separator spaces.
+site/assets/validation-*.svg -whitespace

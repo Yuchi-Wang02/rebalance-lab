@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "experiment_id": "sector-etf-mechanisms-v1",
+  "design_status": "retrospective_protocol_fixed_before_new_B_arm_performance",
+  "legacy_config": "configs/sector-etf-pilot.v1.json",
+  "legacy_config_sha256": "b1236c23038e567b2a7bcfd7a3d9f8cfae195775ba593d054d0e2bb075c88af2",
+  "input_run_id": "20261009T021722928426Z-9e9cb830b3cb",
+  "input_data_gzip_sha256": "204711ba32495c7cca328d5d6c89773b4e3ea877446b4072cac42cd9807eabf5",
+  "policies": {
+    "A": {"selection": "semiannual", "reset": "semiannual"},
+    "B": {"selection": "semiannual", "reset": "monthly"},
+    "C": {"selection": "monthly", "reset": "monthly"}
+  },
+  "frozen_target_rule": "B freezes selected names, one-third slot weights and unused cash slots until the next semiannual refresh; no intermediate eligibility test",
+  "primary_signal": "12-1",
+  "robustness_signal": "mixed",
+  "primary_phase": [3, 9],
+  "primary_cost_bps_per_side": 5,
+  "contrasts": ["C-A", "B-A", "C-B"],
+  "headline_contrast": "C-A",
+  "full_period": ["2001-01", "2025-12"],
+  "expected_month_count": 300,
+  "inference": {
+    "unit": "paired_calendar_month_log_returns",
+    "hac_lags": 12,
+    "hac_kernel": "bartlett",
+    "hac_small_sample_correction": true,
+    "reference_distribution": "normal_asymptotic",
+    "confidence_level": 0.95,
+    "p_value_family": "three_primary_contrasts_Holm_two_sided",
+    "bootstrap": "stationary_paired_rows_percentile",
+    "bootstrap_repetitions": 10000,
+    "bootstrap_expected_block_length": 12,
+    "bootstrap_block_sensitivity": [6, 24],
+    "bootstrap_seed": 20261009
+  },
+  "states": {
+    "timing": "preceding_month_end_close",
+    "trend": {"benchmark": "SPY", "lookback": 252, "skip": 21, "positive_if": "return > 0"},
+    "volatility": {"benchmark": "SPY", "daily_returns": 63, "ddof": 1, "annualization": 252, "high_if": "volatility > 0.20", "threshold": 0.20},
+    "cross_states": false,
+    "minimum_state_months": 24,
+    "interpretation": "descriptive_full_timeline_regressions_no_state_significance_claim"
+  },
+  "stress_windows": [
+    {"label": "2001-2002 equity downturn", "start_year": 2001, "end_year": 2002},
+    {"label": "2007-2009 financial crisis", "start_year": 2007, "end_year": 2009},
+    {"label": "2020 pandemic shock and rebound", "start_year": 2020, "end_year": 2020},
+    {"label": "2022 inflation and tightening", "start_year": 2022, "end_year": 2022}
+  ],
+  "factor_diagnostic": {
+    "source": "Kenneth French official U.S. monthly FF3 and Momentum",
+    "factors": ["Mkt-RF", "SMB", "HML", "Mom"],
+    "method": "OLS_HAC12",
+    "strategy_dependent_variable": "monthly_simple_return_minus_RF",
+    "contrast_dependent_variable": "paired_simple_return_difference_no_second_RF_subtraction",
+    "alpha_display": "basis_points_per_month",
+    "interpretation": "descriptive_exposure_diagnostic_not_causal_alpha_or_live_vintage"
+  },
+  "nonzero_trade_relative_tolerance": 1e-12,
+  "limitations": [
+    "Previously inspected history; not prospective registration or untouched holdout",
+    "Sequential conditional comparisons, not a unique causal decomposition",
+    "Adjusted-price and next-open proxies, zero-interest cash, fixed costs, no capacity model",
+    "Fund sector definitions and exposures changed historically",
+    "Six phases share monthly controls and are not independent replications",
+    "HAC and bootstrap inference remains sensitive to nonstationarity and design selection",
+    "2026 YTD already observed and excluded from primary inference",
+    "Current Sharadar access does not establish 2001 stock-input coverage"
+  ]
+}

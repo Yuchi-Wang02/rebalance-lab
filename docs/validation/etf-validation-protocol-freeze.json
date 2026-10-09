@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-09T05:28:27.098828+00:00",
+  "protocol_sha256": "df649c91c94861a7e765ac1810bef44d60f02de275bf9df1ae90132188b57366",
+  "stage": "before_first_tranche_and_interval_calculation",
+  "prospective_registration": false,
+  "source_history_already_inspected": true
+}

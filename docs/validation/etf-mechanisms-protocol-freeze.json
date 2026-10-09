@@ -1,0 +1,19 @@
+{
+  "fixed_choices": [
+    "policies",
+    "signals",
+    "primary_phase",
+    "costs",
+    "inference",
+    "state_thresholds",
+    "stress_windows",
+    "factor_model"
+  ],
+  "input_data_gzip_sha256": "204711ba32495c7cca328d5d6c89773b4e3ea877446b4072cac42cd9807eabf5",
+  "prospective_registration": false,
+  "protocol_sha256": "fdf2a194e77f8aee20a1c9ef492681a2204e38dfaea0d609ba2e1ceacfaccff3",
+  "recorded_at_utc": "2026-10-09T05:05:58.075842+00:00",
+  "schema_version": 1,
+  "source_history_already_inspected": true,
+  "stage": "before_first_real_market_B_arm_execution"
+}

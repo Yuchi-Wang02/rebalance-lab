@@ -4,7 +4,7 @@ Help make the evidence easier to inspect, reproduce, and challenge. Useful contr
 
 ## Start with a specific study
 
-Read the [research index](docs/README.md), then the study's limitations and saved artifacts. The stock and sector ETF studies have different universes, periods, and accounting assumptions. A change to one does not validate the other. The original full-universe stock protocol is not completed.
+Read the [validation case](README.md), then the study's limitations and saved artifacts. The stock and sector ETF studies have different universes, periods, and accounting assumptions. A change to one does not validate the other. The original full-universe stock protocol is not completed.
 
 ## Reproduce before interpreting
 
@@ -21,9 +21,9 @@ node --check site/stocks.js
 node --test tests/test_pilot_ui.mjs
 ```
 
-They check saved artifacts and software behavior. They do not download the private research inputs or independently establish that vendor observations are correct. See the [publishing guide](docs/project/publishing.md) for a local site preview and the [data guide](docs/data/sources.md) for source access.
+They check saved artifacts and software behavior. They do not download the private research inputs or independently establish that vendor observations are correct. See the [publishing guide](docs/archive/project/publishing.md) for a local site preview and the [data guide](docs/archive/data/sources.md) for source access.
 
-For PowerShell commands, UTF-8 mode and the exact-byte line-ending policy, see [local checks on Windows](docs/project/local-reproduction.md).
+For PowerShell commands, UTF-8 mode and the exact-byte line-ending policy, see [local checks on Windows](docs/archive/project/local-reproduction.md).
 
 ## Keep results auditable
 

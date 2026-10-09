@@ -1,0 +1,30 @@
+{
+  "account_count": 116,
+  "checks": {
+    "capital_aggregation": true,
+    "cash_and_units": true,
+    "daily_export": true,
+    "gross_costs_without_netting": true,
+    "monthly_returns": true,
+    "paired_bootstrap_percentiles": true,
+    "risk_metrics": true
+  },
+  "derived_tranche_count": 8,
+  "extension_manifest_sha256": "18ae7c5b38d566a3b6d709c612323720de165cbeaf0f8cf27f3fc4334052139f",
+  "generated_at_utc": "2026-10-09T05:33:40.174556+00:00",
+  "imports_project_calculation_code": false,
+  "limitations": [
+    "Same agent authored both implementations; shared specification misunderstanding remains possible.",
+    "Same preserved vendor inputs; no independent market source or live execution certification.",
+    "Bootstrap is conditional on the observed history and return-resampling model; it does not remove retrospective design or nonstationarity risk."
+  ],
+  "max_relative_tranche_NAV_error": 2.220446049250313e-16,
+  "monthly_rows_checked": 34800,
+  "passed": true,
+  "private_extension_summary_sha256": "dd9b5122465d68293b009eccee9f26cf11d7acb20057719bcc5bd9da99285520",
+  "public_summary_sha256": "9b727f816af638772cd19b98ee7911cc97bf3290ee9b72dcd79bce4ba5bc6619",
+  "schema_version": 1,
+  "summary_sha256": "dd9b5122465d68293b009eccee9f26cf11d7acb20057719bcc5bd9da99285520",
+  "tranche_daily_states_checked": 53832,
+  "verifier_code_sha256": "382febbb66a450a997fe26c56d510ea66dcb0a6f48916c7ba50f2e7018dda02a"
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-09T06:48:59.948921+00:00",
+  "reviewer": "AI assistant",
+  "independent_human_review": false,
+  "artifact_sha256": {
+    "site/index.html": "e79b28cb569fd05f17588784c5821c5e75bf76faae225be4cbfc79030ec286b8",
+    "site/pilot.html": "406ad60c85027ce36553c9b02a122ea348ae86fc32170ffe4c3c98d7c4024ac7",
+    "site/methods.html": "98fdff42a7f7ed5cba77c450041f59dd44c7a368d7a04853dd7a8260d88483c1",
+    "site/notebook.html": "ec5b01ead3908294a0ae6dfad7d563c02f21bf7a0d5b1ecd192a89c3262f025a",
+    "site/stocks.html": "0b4dba455ce253f421ce8dc54f7e0a79f07b173cf9c78848ad0a5f77cb5f4711",
+    "site/validation.css": "5d1ec427975d091fb87133d94ed8050406c6e8eab6a9b1c7648244c0620fff24",
+    "site/validation.js": "f3caaae5e02c765ab9350cb3c3055da84dca56a6b7e9c51bcb644ff814bdb90b",
+    "site/data/validation-study-summary.json": "9b727f816af638772cd19b98ee7911cc97bf3290ee9b72dcd79bce4ba5bc6619",
+    "notebooks/validation-study.ipynb": "675272523564fefdb34108c48e561ba26fef70020a45f543ef7e79eb56c115a8",
+    "site/downloads/validation-study.ipynb": "675272523564fefdb34108c48e561ba26fef70020a45f543ef7e79eb56c115a8",
+    "site/assets/validation-calendar-costs.png": "2bcd6c3d89a3e31c5450d4e9cd2947c90821a0e32b39913f9473dfda1d5e859d",
+    "site/assets/validation-calendar-costs.svg": "d9370ac4778150902ddb93a625d2e1d2125e16bec5dce238a87e06eb72397dc3",
+    "site/assets/validation-costs.png": "25406283d5c9a9cc21a51945252bcf6309789bd02727ff037acc5e6815db11c3",
+    "site/assets/validation-costs.svg": "1a68fac38fb71ea9b904ec182d176675d7486eb0f080e9020c12e9ebe23bac1e",
+    "site/assets/validation-intervals.png": "a267fc3a757bacb88364c955033f086e980d912f7f6f6aca1cbc1b00e0694406",
+    "site/assets/validation-intervals.svg": "01e6f24d4be7048c21d8f18b7ea008e50d5e43fd1ea24c3690bf300e36fa9ecc",
+    "site/assets/validation-preview.png": "704524f686f5fe6452a83d70cc9a94f435924b0774da52df200c8b671b59fa3a",
+    "site/assets/validation-wealth-drawdown.png": "78fdf032ceeb926c91ab84acdaf9dd663663bb105be5e11dc384684ccd5ee0a6",
+    "site/assets/validation-wealth-drawdown.svg": "59546770dab1069caaa708ed900ae23724f7383dcf16c7c64a84a97cc20dc8a6",
+    "site/assets/rebalance-lab-validation-brief.pdf": "ba9c02a0933cb7fb45c452cfe60d113983df72cc11cf7de0e106dbcdb6dfd6d7",
+    "site/assets/rebalance-lab-validation-memo.pdf": "f571e5d98e173a201786e02aeb67e8ec055b2bbdc8cea138716761dfe824cb28"
+  },
+  "browser": {
+    "desktop_viewport": [
+      1440,
+      950
+    ],
+    "mobile_viewport": [
+      390,
+      844
+    ],
+    "scenario_combinations_checked": 8,
+    "keyboard_select_and_horizontal_scroll": true,
+    "blocked_data_request_fails_closed": true,
+    "javascript_disabled_static_results_available": true,
+    "temporary_emulation_restored": true,
+    "no_page_wide_mobile_overflow": true,
+    "notebook_native_plots": 4,
+    "notebook_broken_images": 0,
+    "methods_exact_window_example_checked": true
+  },
+  "pdf": {
+    "all_pages_rendered_and_visually_reviewed": true,
+    "brief_pages": 4,
+    "memo_pages": 1,
+    "standalone_memo_footer": "1 / 1"
+  },
+  "screenshot_sha256": {
+    "etf-data-failure.jpg": "92f83144ea92ea7b2444b3ae5a7a1b3f4afd6083a55c52c0d86b401e21b03a37",
+    "etf-mobile.jpg": "00764f10a4a4075925907510d9bf4fbad9b57e6b1e0c5670428294f2e112462d",
+    "etf-uncertainty-desktop.jpg": "d15a4b3ab22cf9a833b53c5cd443521d430e714826128cda39345c0a27cc2be1",
+    "home-desktop.jpg": "7f3f2c3777fd32115bae7b21d4b753d8c97d448df2ffa35fca96d6d2bb564b78",
+    "notebook-desktop.jpg": "3466c71bbffe970b1d0195a0ab6cdd27c1e2cb12bacff64c26a6aac44a8df2e0"
+  },
+  "scope": "Presentation and technical usability only; not independent scientific validation or owner mastery."
+}

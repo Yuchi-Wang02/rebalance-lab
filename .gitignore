@@ -7,3 +7,5 @@ data/raw/
 data/processed/
 results/generated/
 .DS_Store
+tmp/
+output/
