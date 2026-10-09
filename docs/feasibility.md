@@ -1,6 +1,6 @@
 # Feasibility, data contract, and release gates
 
-Protocol v0.2 is a research specification. **No backtest engine is implemented, no market-data connection is established for this experiment, and no market dataset has passed an audit.** There are no performance results. Reading provider documentation or passing configuration checks does not change that status.
+Protocol v0.2 is a research specification. **No backtest engine is implemented and no full research dataset has passed an audit. A small unauthenticated Yahoo price request succeeded; that diagnostic does not satisfy the experiment’s data contract.** There are no performance results. Reading provider documentation or passing configuration checks does not change that status.
 
 Daily research on several hundred securities is technically manageable. The limiting work is obtaining historical constituents, usable opening prices, corporate actions, and historical shares with defensible availability dates. See the [source and connection plan](data-sources.md) for candidate providers, access requirements, and unresolved coverage. A licensed export imported into this cloud workspace may be more practical than a native connection; provider access and redistribution rights must be verified separately.
 

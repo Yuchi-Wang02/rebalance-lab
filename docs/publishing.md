@@ -26,3 +26,11 @@ The workflow publishes presentation files, not raw research data. Repository sec
 ## Runtime notes
 
 Future tasks should use the existing `/workspace/SPMO-ETF-test` checkout rather than creating another worktree. The files and Python runtime can persist in an environment snapshot; a local HTTP server does not. Start a new server only when a task needs a preview. No server is required to read or validate the design.
+
+## Current activation blocker
+
+The source and workflow are on `main`, and the configuration validation step succeeded in GitHub Actions. Initial Pages configuration failed because the repository does not yet have a Pages site. A direct attempt to create it returned GitHub HTTP 403, **Resource not accessible by integration**, even though repository metadata reports that the user has admin permission. User permission and the connected integration's granted permission are different.
+
+A repository administrator can finish activation in **Settings → Pages → Source → GitHub Actions**, then rerun **Validate and publish research site** from the Actions tab. No repository visibility change or provider data key is required. GitHub's [official configure-pages input contract](https://github.com/actions/configure-pages/blob/v5/action.yml) states that automatic initial enablement needs a token other than the workflow's default `GITHUB_TOKEN`, with the corresponding Pages/administration permissions. No extra token is requested or embedded here.
+
+At the latest check the target Pages URL returned origin HTTP 404, so the public site is **not yet verified live**. The README image is a screenshot of the tested local site.

@@ -10,19 +10,38 @@ The prior conversation is project context, not a market-data source. Unrelated p
 
 Official/provider-maintained package documentation and source repositories were inspected where reachable. The [connection guide](data-sources.md) and [machine-readable source registry](../configs/data-sources.json) record source-specific evidence. Documentation access must not be reported as authenticated table access, full data coverage, or point-in-time validation.
 
-## Official strategy references still to verify
+## Official strategy references and limitations
 
 - [Invesco SPMO product page](https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-momentum-etf.html)
 - [S&P Momentum Indices methodology PDF](https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-momentum-indices.pdf)
 
-The latest checks of these URLs were refused at the HTTPS proxy CONNECT stage with 403 before origin content could be read. The actual applicable methodology/version has therefore not been independently verified. Our research rules, month-end schedule, price-signal formula and caps are deliberately not advertised as an exact official replication. No current holdings, fee or performance numbers are copied from chat into a dataset.
+The initial checks were refused at the HTTPS proxy CONNECT stage. After a supported network change, the S&P PDF returned HTTP 200 and was read successfully: **August 2026 edition**. The Invesco page also returned HTTP 200, but the retrieved text was primarily a navigation shell; current fund holdings and fee details were not independently established from it.
+
+The S&P document confirms several important differences from our custom experiment:
+
+| Topic | Inspected official methodology | Our experiment |
+|---|---|---|
+| Selection | Highest quintile with a 20% buffer rule; printed page 7 | Fixed Top 75, no buffer |
+| Weighting | Float-adjusted capitalization × transformed momentum score; printed pages 3 and 8 | Security-class total cap square root × raw positive risk-adjusted score |
+| Timing | Third Friday of March/September, with prior month-end reference dates; printed page 10 | March/September month-end signal, next-open fill for the slow control |
+| Signal treatment | Risk-adjusted price momentum, cross-sectional z-score, winsorization and positive score transform; printed pages 18 and 20 | Explicit trading-session windows and unstandardized values; positive raw-score eligibility |
+
+These are reasons to treat SPMO as a product benchmark, not to call our slow arm a replica. The August 2026 document cannot by itself establish every methodology version effective during the 2025 burn-in and earlier 2026 period. A future official-index replication would need applicable historical revisions and supporting documents. No current holdings, fees or fund performance figures are copied into research data.
+
+Inspected PDF SHA-256: `1aeb5efbd5799f49512784f8cab7d0dc275519aabb2bae36fc9d35e64a7eac36`. Only its source URL, hash and factual method comparison are published here; the document is not redistributed.
+
+## Latest access evidence
+
+Nine credential-free documentation probes succeeded. A separate Yahoo chart diagnostic returned five session timestamps (October 2, 5, 6, 7 and 8, 2026), of which four had complete non-null OHLC fields. That small response remains temporary and is not a licensed full-universe extract, a point-in-time audit or input to a reported backtest. Its dates do not extend the fixed October 2 research cutoff.
+
+The source registry distinguishes this sample from authenticated downloads and records more specific product/schema limitations. GitHub API connectivity also recovered; Pages activation nevertheless returned an origin authorization error for the connected integration. Network reachability and application permission are separate gates.
 
 ## Distinct states
 
 | State | What it establishes | Current position |
 |---|---|---|
 | Documentation reviewed | A specific guide or SDK states a capability or requirement | Available for selected sources; see registry |
-| Endpoint reachable | A particular request reached a server | Source-specific; not a subscription or data-quality test |
+| Endpoint reachable | A particular request reached a server | Documentation, a small Yahoo price sample and selected metadata requests succeeded; not a subscription or data-quality test |
 | Licensed extraction completed | Entitled data were retrieved for a named query/window | Not completed |
 | Data audit completed | IDs, time semantics, coverage and actions passed acceptance | Not completed |
 | Engine verified | Deterministic tests establish accounting and timing behavior | No engine implemented |

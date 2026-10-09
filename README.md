@@ -4,7 +4,7 @@
 
 A reproducible research project about faster portfolio rotation within the S&P 500. The aim is to test a plausible idea—not to advertise an ETF, recommend trades, or assume that more trading produces better returns.
 
-**Current release: protocol v0.2 and website preview. No market backtest has been run.** Source documentation has been reviewed, but historical datasets have not been acquired or audited. The repository contains a research design, source registry, validation tools, and a static GitHub Pages site; it does not yet contain a backtest engine.
+**Current release: protocol v0.2 and website preview. No market backtest has been run.** Source documentation has been reviewed and a small unauthenticated Yahoo sample returned five timestamps with four complete OHLC bars. The full historical research dataset has not been acquired or audited. The repository contains a research design, source registry, validation tools, and a static GitHub Pages site; it does not yet contain a backtest engine.
 
 ## The research question
 
@@ -41,7 +41,7 @@ This avoids granting the semiannual strategy an extra January 2026 formation. Re
 
 **Recommended next step:** audit a small institutional export if access already exists. Otherwise start with a clearly labeled free diagnostic and obtain a licensed-data coverage sample before committing to a provider. No subscription purchase or institutional access is assumed.
 
-The [data connection guide](docs/data-sources.md) gives links, SDK entry points, authentication requirements, expected outputs, and unresolved gaps. The [data contract](docs/feasibility.md) defines what must pass before a result can be published. A successful API request is not a data-quality certificate.
+The [data connection guide](docs/data-sources.md) gives links, SDK entry points, authentication requirements, expected outputs, and unresolved gaps. The [data contract](docs/feasibility.md) defines what must pass before a result can be published. A successful API request is not a data-quality certificate. The small price sample is an ingestion diagnostic, not a strategy result.
 
 ## The public site
 

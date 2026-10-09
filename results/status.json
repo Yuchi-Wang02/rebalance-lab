@@ -6,5 +6,13 @@
   "data_audit_completed": false,
   "returns": null,
   "reason": "Protocol, source connection plan and static site exist; audited market data and a validated backtest engine do not.",
-  "protocol_version": "0.2.0"
+  "protocol_version": "0.2.0",
+  "price_ingestion_diagnostic": {
+    "provider": "Yahoo chart API",
+    "authenticated": false,
+    "timestamps_returned": 5,
+    "complete_ohlc_bars": 4,
+    "scope": "connectivity_sample_not_experiment_input",
+    "full_dataset_audited": false
+  }
 }
