@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "experiment_id": "sector-etf-frequency-v1",
+  "scope": "separate_public_market_pilot_not_original_stock_experiment",
+  "data_track": "real_market_adjusted_price_pilot",
+  "universe": [
+    "XLB",
+    "XLE",
+    "XLF",
+    "XLI",
+    "XLK",
+    "XLP",
+    "XLU",
+    "XLV",
+    "XLY"
+  ],
+  "universe_rule": "Original nine Select Sector SPDR ETFs launched in December 1998; later sector ETFs excluded by launch-cohort rule.",
+  "benchmark": "SPY",
+  "request_start": "1998-12-01",
+  "request_end": "2026-10-02",
+  "initial_signal_on_or_before": "1999-12-31",
+  "report_anchor_on_or_before": "2000-12-31",
+  "full_year_end_on_or_before": "2025-12-31",
+  "case_end_on_or_before": "2026-10-02",
+  "signal_price": "vendor_adjusted_close_total_return_proxy",
+  "volatility": "sample_std_of_simple_returns_between_exact_lookback_and_skip_endpoints_times_sqrt252",
+  "slot_weight": 0.3333333333333333,
+  "eligibility": "positive_score_only; zero_volatility_ineligible; missing_inputs_block_run",
+  "ranking": "descending_score_then_ascending_symbol",
+  "cash": "unfilled_slots_and_trading_residual;zero_interest",
+  "phase_pairs": [
+    [
+      1,
+      7
+    ],
+    [
+      2,
+      8
+    ],
+    [
+      3,
+      9
+    ],
+    [
+      4,
+      10
+    ],
+    [
+      5,
+      11
+    ],
+    [
+      6,
+      12
+    ]
+  ],
+  "primary_reference_phase": [
+    3,
+    9
+  ],
+  "cost_bps_per_side_scenarios": [
+    0,
+    5,
+    10,
+    25
+  ],
+  "initial_cash": 1000000,
+  "execution": "next_verified_exchange_session_adjusted_open",
+  "adjusted_open_formula": "vendor_open * vendor_adjusted_close / vendor_close",
+  "accounting": "adjusted_total_return_units; no_separate_dividends; idealized_fractional_fills",
+  "weighting": "each_selected_ETF_one_third_of_post_fee_NAV;unused_slots_cash",
+  "fee_equation": "post_fee_NAV = pretrade_NAV - cost_rate * sum(abs(target_weight * post_fee_NAV - old_value))",
+  "primary_outcome": "M12_minus_MarchSeptember_S12_net_CAGR_and_total_return_over_2001_2025",
+  "secondary_outcomes": [
+    "maximum_drawdown",
+    "annual_paired_returns",
+    "turnover",
+    "cash_exposure",
+    "cost_grid",
+    "all_calendar_phases",
+    "2026_YTD_case"
+  ],
+  "report_all_phases": true,
+  "promote_best_phase": false,
+  "original_stock_protocol_completed": false,
+  "limitations": [
+    "Retrospective hypothesis and window selection",
+    "Sector ETFs differ from top75 stock portfolio",
+    "Total-return signal differs from dividend-excluding original signal",
+    "Adjusted-price execution is a proxy, not raw shares and dividend receivables",
+    "Zero-interest cash; idealized opening fills; no taxes or capacity claims",
+    "Overlapping schedules and annual outcomes are not independent replications"
+  ],
+  "signal": {
+    "lookbacks": [
+      252,
+      126,
+      63
+    ],
+    "skip": 21,
+    "annualization": 252
+  },
+  "arms": {
+    "M12": [
+      1,
+      0,
+      0
+    ],
+    "MMIX": [
+      0.5,
+      0.3,
+      0.2
+    ]
+  },
+  "slots": 3,
+  "base_cost_bps_per_side": 5
+}
