@@ -11,9 +11,13 @@ The repository was renamed on October 9, 2026 to [`Yuchi-Wang02/rebalance-lab`](
 | Repository name | `rebalance-lab` |
 | Description | Empirical research on rebalancing frequency in momentum portfolios, with transparent analysis of returns, drawdowns, transaction costs, and data limitations. |
 | Website | `https://yuchi-wang02.github.io/rebalance-lab/` |
-| Topics | `portfolio-rebalancing`, `momentum-investing`, `quantitative-finance`, `backtesting`, `transaction-costs`, `empirical-finance`, `reproducible-research`, `financial-data`, `python`, `data-visualization`, `etf`, `github-pages` |
+| Topics | `rebalancing-frequency`, `portfolio-rebalancing`, `momentum-investing`, `transaction-costs`, `empirical-finance`, `quantitative-finance`, `backtesting`, `reproducible-research`, `etf` |
 
-The initial connected-app request was rejected with HTTP 403, `Resource not accessible by integration`, despite the account's `ADMIN` role. The rename, description and topics were subsequently applied through the owner's authenticated GitHub interface. The About website field should point to the new Pages address after the deployment is verified. No additional credential or visibility change is required.
+The rename, description and topics were applied through the owner's authenticated GitHub interface. The About website field points to the verified Pages address above. Topics identify the research question, method and asset scope; implementation details remain in the README and automatically detected language summary.
+
+GitHub Topics are discovery labels, distinct from Git release tags. No version tag or release is claimed by this presentation update.
+
+The overview, stock report and ETF report each maintain a page-specific title, description, canonical URL and Open Graph/Twitter preview metadata. Their shared preview image shows the research overview; it is not a publication or peer-review badge. Keep the ETF renderer template aligned with the published page when changing metadata or result labels.
 
 Description, website and topics are maintained through **About → Edit**; the name is under **Settings → General → Repository name**. Visibility and access settings are outside this rebrand.
 

@@ -45,7 +45,7 @@ The site homepage is the research landing page. Existing `stocks.html` and `pilo
 
 Documentation is organized by reader task: `docs/studies/` for findings, `docs/methods/` for rules, `docs/validation/` for replay evidence, `docs/data/` for source and acceptance work, and `docs/project/` for presentation and publishing. Source artifacts retain their historical names and identifiers. The public identity is Rebalance Lab. The [repository](https://github.com/Yuchi-Wang02/rebalance-lab) was renamed through the owner's GitHub interface, and maintained links use the new [site address](https://yuchi-wang02.github.io/rebalance-lab/). Verify the deployed revision after publication before sharing it.
 
-Provider descriptions, raw-file hashes, technical receipts and synthetic-test counts belong in the inspection layer. An investor should find an answer before meeting those details; a reviewer should reach them through a clearly labeled method or reproduction link.
+Provider descriptions, raw-file hashes, technical receipts and synthetic-test counts belong in the inspection layer. Researchers should first encounter the research question, comparison design, principal findings and limitations, with a clearly labeled method or reproduction link leading to the supporting evidence.
 
 ## Visual and interaction design
 
